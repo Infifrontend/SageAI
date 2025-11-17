@@ -1,13 +1,14 @@
 @import '../../../styles/theme.scss';
 
 .cls-auth-container {
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   background-color: $surface-color;
 }
 
 .cls-auth-split-layout {
   display: flex;
-  min-height: 100vh;
+  height: 100%;
 
   @media (max-width: 1023px) {
     flex-direction: column;
@@ -147,6 +148,7 @@
   align-items: center;
   justify-content: center;
   padding: $spacing-xl;
+  overflow-y: auto;
 
   @media (min-width: 1024px) {
     width: 50%;
