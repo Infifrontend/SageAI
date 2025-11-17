@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
-import { Eye, EyeOff, Lock, CheckCircle, X, Check } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import authIllustration from '@assets/generated_images/Auth_page_side_illustration_6a131ae3.png';
-import './reset-password.scss';
+import { useState, useEffect } from "react";
+import { Eye, EyeOff, Lock, CheckCircle, X, Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import authIllustration from "@assets/generated_images/Auth_page_side_illustration_6a131ae3.png";
+import "./reset-password.scss";
 
 interface PasswordRequirement {
   id: string;
@@ -13,53 +13,69 @@ interface PasswordRequirement {
 }
 
 const passwordRequirements: PasswordRequirement[] = [
-  { id: 'length', label: 'At least 8 characters', test: (pwd) => pwd.length >= 8 },
-  { id: 'uppercase', label: 'One uppercase letter', test: (pwd) => /[A-Z]/.test(pwd) },
-  { id: 'lowercase', label: 'One lowercase letter', test: (pwd) => /[a-z]/.test(pwd) },
-  { id: 'number', label: 'One number', test: (pwd) => /\d/.test(pwd) },
+  {
+    id: "length",
+    label: "At least 8 characters",
+    test: (pwd) => pwd.length >= 8,
+  },
+  {
+    id: "uppercase",
+    label: "One uppercase letter",
+    test: (pwd) => /[A-Z]/.test(pwd),
+  },
+  {
+    id: "lowercase",
+    label: "One lowercase letter",
+    test: (pwd) => /[a-z]/.test(pwd),
+  },
+  { id: "number", label: "One number", test: (pwd) => /\d/.test(pwd) },
 ];
 
 export default function ResetPassword() {
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [countdown, setCountdown] = useState(5);
 
-  const passwordStrength = passwordRequirements.filter(req => req.test(newPassword)).length;
-  const passwordsMatch = newPassword === confirmPassword && confirmPassword.length > 0;
-  const isFormValid = passwordStrength === passwordRequirements.length && passwordsMatch;
+  const passwordStrength = passwordRequirements.filter((req) =>
+    req.test(newPassword),
+  ).length;
+  const passwordsMatch =
+    newPassword === confirmPassword && confirmPassword.length > 0;
+  const isFormValid =
+    passwordStrength === passwordRequirements.length && passwordsMatch;
 
   useEffect(() => {
     if (isSubmitted && countdown > 0) {
       const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
       return () => clearTimeout(timer);
     } else if (countdown === 0) {
-      window.location.href = '/login';
+      window.location.href = "/login";
     }
   }, [isSubmitted, countdown]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid) {
-      console.log('Password reset successful');
+      console.log("Password reset successful");
       setIsSubmitted(true);
     }
   };
 
   const getStrengthColor = () => {
-    if (passwordStrength === 0) return 'cls-strength-none';
-    if (passwordStrength <= 2) return 'cls-strength-weak';
-    if (passwordStrength === 3) return 'cls-strength-medium';
-    return 'cls-strength-strong';
+    if (passwordStrength === 0) return "cls-strength-none";
+    if (passwordStrength <= 2) return "cls-strength-weak";
+    if (passwordStrength === 3) return "cls-strength-medium";
+    return "cls-strength-strong";
   };
 
   const getStrengthLabel = () => {
-    if (passwordStrength === 0) return '';
-    if (passwordStrength <= 2) return 'Weak';
-    if (passwordStrength === 3) return 'Medium';
-    return 'Strong';
+    if (passwordStrength === 0) return "";
+    if (passwordStrength <= 2) return "Weak";
+    if (passwordStrength === 3) return "Medium";
+    return "Strong";
   };
 
   return (
@@ -71,23 +87,32 @@ export default function ResetPassword() {
               <div className="cls-illustration-logo">S</div>
               <div className="cls-illustration-brand">
                 <div className="cls-brand-name">SAGE</div>
-                <div className="cls-brand-tagline">Seamless API for Group Engagement</div>
+                <div className="cls-brand-tagline">
+                  Seamless API for Group Engagement
+                </div>
               </div>
             </div>
-            
+
             <div className="cls-illustration-main">
               <h2 className="cls-illustration-title">
-                Unlock powerful insights with the most intuitive API console ever.
+                Unlock powerful insights with the most intuitive API console
+                ever.
               </h2>
               <p className="cls-illustration-subtitle">
-                SAGE provides real-time analytics, AI-driven recommendations, and seamless management tools to optimize your API performance and user engagement.
+                SAGE provides real-time analytics, AI-driven recommendations,
+                and seamless management tools to optimize your API performance
+                and user engagement.
               </p>
-              
+
               <div className="cls-illustration-features">
                 <div className="cls-feature-item">
                   <div className="cls-feature-icon">
                     <svg viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                   </div>
                   <span>Unified 3-Panel Layout</span>
@@ -95,7 +120,11 @@ export default function ResetPassword() {
                 <div className="cls-feature-item">
                   <div className="cls-feature-icon">
                     <svg viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                   </div>
                   <span>Real-Time Dashboard Overview</span>
@@ -103,7 +132,11 @@ export default function ResetPassword() {
                 <div className="cls-feature-item">
                   <div className="cls-feature-icon">
                     <svg viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                   </div>
                   <span>Detailed API Analytics</span>
@@ -111,7 +144,11 @@ export default function ResetPassword() {
                 <div className="cls-feature-item">
                   <div className="cls-feature-icon">
                     <svg viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                   </div>
                   <span>AI-Powered Insights</span>
@@ -119,7 +156,11 @@ export default function ResetPassword() {
                 <div className="cls-feature-item">
                   <div className="cls-feature-icon">
                     <svg viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                   </div>
                   <span>Comprehensive User Management</span>
@@ -127,23 +168,27 @@ export default function ResetPassword() {
                 <div className="cls-feature-item">
                   <div className="cls-feature-icon">
                     <svg viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                   </div>
                   <span>Simplified Billing Management</span>
                 </div>
               </div>
             </div>
-            
+
             <div className="cls-illustration-footer">
               © 2025 SAGE Inc. All rights reserved.
             </div>
-            
-            <img 
+
+            {/* <img 
               src={authIllustration} 
               alt="Sage App" 
               className="cls-illustration-image"
-            />
+            /> */}
           </div>
         </div>
 
@@ -167,7 +212,7 @@ export default function ResetPassword() {
                       <Lock className="cls-input-icon" size={20} />
                       <Input
                         id="new-password"
-                        type={showNewPassword ? 'text' : 'password'}
+                        type={showNewPassword ? "text" : "password"}
                         placeholder="Enter new password"
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
@@ -182,20 +227,28 @@ export default function ResetPassword() {
                         aria-label="Toggle password visibility"
                         data-testid="button-toggle-new-password"
                       >
-                        {showNewPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                        {showNewPassword ? (
+                          <EyeOff size={20} />
+                        ) : (
+                          <Eye size={20} />
+                        )}
                       </button>
                     </div>
-                    
+
                     {newPassword && (
                       <div className="cls-password-strength">
                         <div className="cls-strength-bar-container">
-                          <div 
+                          <div
                             className={`cls-strength-bar ${getStrengthColor()}`}
-                            style={{ width: `${(passwordStrength / passwordRequirements.length) * 100}%` }}
+                            style={{
+                              width: `${(passwordStrength / passwordRequirements.length) * 100}%`,
+                            }}
                           />
                         </div>
                         {getStrengthLabel() && (
-                          <span className={`cls-strength-label ${getStrengthColor()}`}>
+                          <span
+                            className={`cls-strength-label ${getStrengthColor()}`}
+                          >
                             {getStrengthLabel()}
                           </span>
                         )}
@@ -206,9 +259,9 @@ export default function ResetPassword() {
                   {newPassword && (
                     <div className="cls-requirements-list">
                       {passwordRequirements.map((req) => (
-                        <div 
-                          key={req.id} 
-                          className={`cls-requirement ${req.test(newPassword) ? 'cls-requirement-met' : ''}`}
+                        <div
+                          key={req.id}
+                          className={`cls-requirement ${req.test(newPassword) ? "cls-requirement-met" : ""}`}
                         >
                           {req.test(newPassword) ? (
                             <Check size={16} className="cls-requirement-icon" />
@@ -222,14 +275,17 @@ export default function ResetPassword() {
                   )}
 
                   <div className="cls-form-group">
-                    <Label htmlFor="confirm-password" className="cls-form-label">
+                    <Label
+                      htmlFor="confirm-password"
+                      className="cls-form-label"
+                    >
                       Confirm Password
                     </Label>
                     <div className="cls-input-wrapper">
                       <Lock className="cls-input-icon" size={20} />
                       <Input
                         id="confirm-password"
-                        type={showConfirmPassword ? 'text' : 'password'}
+                        type={showConfirmPassword ? "text" : "password"}
                         placeholder="Confirm new password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
@@ -239,16 +295,24 @@ export default function ResetPassword() {
                       />
                       <button
                         type="button"
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
                         className="cls-password-toggle"
                         aria-label="Toggle password visibility"
                         data-testid="button-toggle-confirm-password"
                       >
-                        {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                        {showConfirmPassword ? (
+                          <EyeOff size={20} />
+                        ) : (
+                          <Eye size={20} />
+                        )}
                       </button>
                     </div>
                     {confirmPassword && !passwordsMatch && (
-                      <p className="cls-error-message">Passwords do not match</p>
+                      <p className="cls-error-message">
+                        Passwords do not match
+                      </p>
                     )}
                     {passwordsMatch && (
                       <p className="cls-success-message">Passwords match!</p>
@@ -270,15 +334,19 @@ export default function ResetPassword() {
                 <div className="cls-success-icon">
                   <CheckCircle size={64} />
                 </div>
-                <h2 className="cls-success-title">Password Reset Successful!</h2>
+                <h2 className="cls-success-title">
+                  Password Reset Successful!
+                </h2>
                 <p className="cls-success-message">
-                  Your password has been successfully reset. You can now sign in with your new password.
+                  Your password has been successfully reset. You can now sign in
+                  with your new password.
                 </p>
                 <p className="cls-countdown-text">
-                  Redirecting to login in <strong>{countdown}</strong> seconds...
+                  Redirecting to login in <strong>{countdown}</strong>{" "}
+                  seconds...
                 </p>
                 <Button
-                  onClick={() => window.location.href = '/login'}
+                  onClick={() => (window.location.href = "/login")}
                   className="cls-submit-button"
                   data-testid="button-go-login"
                 >

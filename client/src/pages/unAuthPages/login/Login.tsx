@@ -95,11 +95,11 @@ export default function Login() {
               © 2025 SAGE Inc. All rights reserved.
             </div>
             
-            <img 
+            {/* <img 
               src={authIllustration} 
               alt="Sage App" 
               className="cls-illustration-image"
-            />
+            /> */}
           </div>
         </div>
 

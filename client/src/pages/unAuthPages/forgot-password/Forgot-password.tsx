@@ -1,23 +1,23 @@
-import { useState } from 'react';
-import { Mail, ArrowLeft, CheckCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import authIllustration from '@assets/generated_images/Auth_page_side_illustration_6a131ae3.png';
-import './forgot-password.scss';
+import { useState } from "react";
+import { Mail, ArrowLeft, CheckCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import authIllustration from "@assets/generated_images/Auth_page_side_illustration_6a131ae3.png";
+import "./forgot-password.scss";
 
 export default function ForgotPassword() {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Password reset requested for:', email);
+    console.log("Password reset requested for:", email);
     setIsSubmitted(true);
   };
 
   const handleBackToLogin = () => {
-    window.location.href = '/login';
+    window.location.href = "/login";
   };
 
   return (
@@ -29,23 +29,32 @@ export default function ForgotPassword() {
               <div className="cls-illustration-logo">S</div>
               <div className="cls-illustration-brand">
                 <div className="cls-brand-name">SAGE</div>
-                <div className="cls-brand-tagline">Seamless API for Group Engagement</div>
+                <div className="cls-brand-tagline">
+                  Seamless API for Group Engagement
+                </div>
               </div>
             </div>
-            
+
             <div className="cls-illustration-main">
               <h2 className="cls-illustration-title">
-                Unlock powerful insights with the most intuitive API console ever.
+                Unlock powerful insights with the most intuitive API console
+                ever.
               </h2>
               <p className="cls-illustration-subtitle">
-                SAGE provides real-time analytics, AI-driven recommendations, and seamless management tools to optimize your API performance and user engagement.
+                SAGE provides real-time analytics, AI-driven recommendations,
+                and seamless management tools to optimize your API performance
+                and user engagement.
               </p>
-              
+
               <div className="cls-illustration-features">
                 <div className="cls-feature-item">
                   <div className="cls-feature-icon">
                     <svg viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                   </div>
                   <span>Unified 3-Panel Layout</span>
@@ -53,7 +62,11 @@ export default function ForgotPassword() {
                 <div className="cls-feature-item">
                   <div className="cls-feature-icon">
                     <svg viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                   </div>
                   <span>Real-Time Dashboard Overview</span>
@@ -61,7 +74,11 @@ export default function ForgotPassword() {
                 <div className="cls-feature-item">
                   <div className="cls-feature-icon">
                     <svg viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                   </div>
                   <span>Detailed API Analytics</span>
@@ -69,7 +86,11 @@ export default function ForgotPassword() {
                 <div className="cls-feature-item">
                   <div className="cls-feature-icon">
                     <svg viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                   </div>
                   <span>AI-Powered Insights</span>
@@ -77,7 +98,11 @@ export default function ForgotPassword() {
                 <div className="cls-feature-item">
                   <div className="cls-feature-icon">
                     <svg viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                   </div>
                   <span>Comprehensive User Management</span>
@@ -85,23 +110,27 @@ export default function ForgotPassword() {
                 <div className="cls-feature-item">
                   <div className="cls-feature-icon">
                     <svg viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                   </div>
                   <span>Simplified Billing Management</span>
                 </div>
               </div>
             </div>
-            
+
             <div className="cls-illustration-footer">
               © 2025 SAGE Inc. All rights reserved.
             </div>
-            
-            <img 
+
+            {/* <img 
               src={authIllustration} 
               alt="Sage App" 
               className="cls-illustration-image"
-            />
+            /> */}
           </div>
         </div>
 
@@ -112,7 +141,8 @@ export default function ForgotPassword() {
                 <div className="cls-form-header">
                   <h1 className="cls-page-title">Forgot Password?</h1>
                   <p className="cls-page-subtitle">
-                    No worries! Enter your email address and we'll send you a link to reset your password.
+                    No worries! Enter your email address and we'll send you a
+                    link to reset your password.
                   </p>
                 </div>
 
@@ -164,11 +194,11 @@ export default function ForgotPassword() {
                 </div>
                 <h2 className="cls-success-title">Check Your Email</h2>
                 <p className="cls-success-message">
-                  We've sent a password reset link to <strong>{email}</strong>. 
+                  We've sent a password reset link to <strong>{email}</strong>.
                   Please check your inbox and follow the instructions.
                 </p>
                 <p className="cls-success-note">
-                  Didn't receive the email? Check your spam folder or{' '}
+                  Didn't receive the email? Check your spam folder or{" "}
                   <button
                     type="button"
                     onClick={() => setIsSubmitted(false)}
