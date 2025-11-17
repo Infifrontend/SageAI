@@ -23,17 +23,83 @@ export default function Login() {
       <div className="cls-auth-split-layout">
         <div className="cls-auth-illustration-panel">
           <div className="cls-illustration-content">
+            <div className="cls-illustration-header">
+              <div className="cls-illustration-logo">S</div>
+              <div className="cls-illustration-brand">
+                <div className="cls-brand-name">SAGE</div>
+                <div className="cls-brand-tagline">Seamless API for Group Engagement</div>
+              </div>
+            </div>
+            
+            <div className="cls-illustration-main">
+              <h2 className="cls-illustration-title">
+                Unlock powerful insights with the most intuitive API console ever.
+              </h2>
+              <p className="cls-illustration-subtitle">
+                SAGE provides real-time analytics, AI-driven recommendations, and seamless management tools to optimize your API performance and user engagement.
+              </p>
+              
+              <div className="cls-illustration-features">
+                <div className="cls-feature-item">
+                  <div className="cls-feature-icon">
+                    <svg viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <span>Unified 3-Panel Layout</span>
+                </div>
+                <div className="cls-feature-item">
+                  <div className="cls-feature-icon">
+                    <svg viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <span>Real-Time Dashboard Overview</span>
+                </div>
+                <div className="cls-feature-item">
+                  <div className="cls-feature-icon">
+                    <svg viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <span>Detailed API Analytics</span>
+                </div>
+                <div className="cls-feature-item">
+                  <div className="cls-feature-icon">
+                    <svg viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <span>AI-Powered Insights</span>
+                </div>
+                <div className="cls-feature-item">
+                  <div className="cls-feature-icon">
+                    <svg viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <span>Comprehensive User Management</span>
+                </div>
+                <div className="cls-feature-item">
+                  <div className="cls-feature-icon">
+                    <svg viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <span>Simplified Billing Management</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="cls-illustration-footer">
+              © 2025 SAGE Inc. All rights reserved.
+            </div>
+            
             <img 
               src={authIllustration} 
-              alt="Sage App Authentication" 
+              alt="Sage App" 
               className="cls-illustration-image"
             />
-            <div className="cls-illustration-overlay">
-              <h2 className="cls-illustration-title">Welcome to Sage App</h2>
-              <p className="cls-illustration-subtitle">
-                Secure, intuitive, and designed for your success
-              </p>
-            </div>
           </div>
         </div>
 
