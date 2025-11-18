@@ -133,10 +133,70 @@ export default function ApiKeys() {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
-    organization: "",
+    organization: "TechCorp Solutions",
     environment: "Development" as "Production" | "Development" | "Staging",
-    permissions: "",
+    status: "active" as "active" | "inactive",
+    apiCollection: "GRM-API",
   });
+
+  const [endpointPermissions, setEndpointPermissions] = useState([
+    {
+      endpoint: "/checksession/",
+      description: "Check Session",
+      methods: { GET: true, POST: false, PUT: false },
+    },
+    {
+      endpoint: "/createtoken/",
+      description: "Create Token",
+      methods: { GET: false, POST: true, PUT: false },
+    },
+    {
+      endpoint: "/forgotpassword/",
+      description: "Forgot Password",
+      methods: { GET: true, POST: true, PUT: false },
+    },
+    {
+      endpoint: "/grmapi/corporate/",
+      description: "Corporate API",
+      methods: { GET: true, POST: false, PUT: true },
+    },
+  ]);
+
+  const toggleEndpointMethod = (
+    index: number,
+    method: "GET" | "POST" | "PUT",
+  ) => {
+    setEndpointPermissions((prev) =>
+      prev.map((perm, i) =>
+        i === index
+          ? {
+              ...perm,
+              methods: { ...perm.methods, [method]: !perm.methods[method] },
+            }
+          : perm,
+      ),
+    );
+  };
+
+  const selectAllMethods = () => {
+    setEndpointPermissions((prev) =>
+      prev.map((perm) => ({
+        ...perm,
+        methods: { GET: true, POST: true, PUT: true },
+      })),
+    );
+  };
+
+  const addNewPermission = () => {
+    setEndpointPermissions((prev) => [
+      ...prev,
+      {
+        endpoint: "/new-endpoint/",
+        description: "New Endpoint",
+        methods: { GET: false, POST: false, PUT: false },
+      },
+    ]);
+  };
 
   // Column visibility state
   const [columnVisibility, setColumnVisibility] = useState({
@@ -187,14 +247,37 @@ export default function ApiKeys() {
   };
 
   const handleCreateKey = () => {
-    console.log("Create new API key:", formData);
+    console.log("Create new API key:", formData, endpointPermissions);
     setIsCreateDialogOpen(false);
     setFormData({
       name: "",
-      organization: "",
+      organization: "TechCorp Solutions",
       environment: "Development",
-      permissions: "",
+      status: "active",
+      apiCollection: "GRM-API",
     });
+    setEndpointPermissions([
+      {
+        endpoint: "/checksession/",
+        description: "Check Session",
+        methods: { GET: true, POST: false, PUT: false },
+      },
+      {
+        endpoint: "/createtoken/",
+        description: "Create Token",
+        methods: { GET: false, POST: true, PUT: false },
+      },
+      {
+        endpoint: "/forgotpassword/",
+        description: "Forgot Password",
+        methods: { GET: true, POST: true, PUT: false },
+      },
+      {
+        endpoint: "/grmapi/corporate/",
+        description: "Corporate API",
+        methods: { GET: true, POST: false, PUT: true },
+      },
+    ]);
   };
 
   return (
@@ -522,14 +605,28 @@ export default function ApiKeys() {
 
               <div className="cls-form-field">
                 <Label htmlFor="organization">Organization</Label>
-                <Input
-                  id="organization"
-                  placeholder="e.g., TechCorp Solutions"
+                <Select
                   value={formData.organization}
-                  onChange={(e) =>
-                    setFormData({ ...formData, organization: e.target.value })
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, organization: value })
                   }
-                />
+                >
+                  <SelectTrigger id="organization">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="TechCorp Solutions">
+                      TechCorp Solutions
+                    </SelectItem>
+                    <SelectItem value="DataFlow Systems">
+                      DataFlow Systems
+                    </SelectItem>
+                    <SelectItem value="Cloudify Inc">Cloudify Inc</SelectItem>
+                    <SelectItem value="Infiniti Software Solutions">
+                      Infiniti Software Solutions
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="cls-form-field">
@@ -552,16 +649,120 @@ export default function ApiKeys() {
               </div>
 
               <div className="cls-form-field">
-                <Label htmlFor="permissions">Permissions</Label>
-                <Input
-                  id="permissions"
-                  placeholder="e.g., GRM-API"
-                  value={formData.permissions}
-                  onChange={(e) =>
-                    setFormData({ ...formData, permissions: e.target.value })
+                <Label htmlFor="status">Status</Label>
+                <Select
+                  value={formData.status}
+                  onValueChange={(value: any) =>
+                    setFormData({ ...formData, status: value })
                   }
-                />
+                >
+                  <SelectTrigger id="status">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="active">Active</SelectItem>
+                    <SelectItem value="inactive">Inactive</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
+            </div>
+
+            {/* Permissions Section */}
+            <div className="cls-permissions-section">
+              <h3 className="cls-section-title">Permissions</h3>
+
+              <div className="cls-form-field">
+                <Label htmlFor="api-collection">API Collection</Label>
+                <Select
+                  value={formData.apiCollection}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, apiCollection: value })
+                  }
+                >
+                  <SelectTrigger id="api-collection">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="GRM-API">GRM API</SelectItem>
+                    <SelectItem value="SAMPLE-API">Sample API</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {formData.apiCollection === "GRM-API" && (
+                <div className="cls-endpoint-permissions">
+                  <div className="cls-permissions-header">
+                    <Label>Endpoint Permissions</Label>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={selectAllMethods}
+                      className="cls-select-all-btn"
+                    >
+                      Select All Methods
+                    </Button>
+                  </div>
+
+                  <div className="cls-endpoints-table">
+                    <div className="cls-table-header">
+                      <div className="cls-header-endpoint">Endpoints</div>
+                      <div className="cls-header-methods">
+                        <span className="cls-method-badge">GET</span>
+                        <span className="cls-method-badge">POST</span>
+                        <span className="cls-method-badge">PUT</span>
+                      </div>
+                    </div>
+
+                    {endpointPermissions.map((perm, index) => (
+                      <div key={index} className="cls-table-row">
+                        <div className="cls-endpoint-info">
+                          <code className="cls-endpoint-path">
+                            {perm.endpoint}
+                          </code>
+                          <p className="cls-endpoint-desc">
+                            {perm.description}
+                          </p>
+                        </div>
+                        <div className="cls-method-checkboxes">
+                          <Checkbox
+                            checked={perm.methods.GET}
+                            onCheckedChange={() =>
+                              toggleEndpointMethod(index, "GET")
+                            }
+                            className="cls-method-checkbox"
+                          />
+                          <Checkbox
+                            checked={perm.methods.POST}
+                            onCheckedChange={() =>
+                              toggleEndpointMethod(index, "POST")
+                            }
+                            className="cls-method-checkbox"
+                          />
+                          <Checkbox
+                            checked={perm.methods.PUT}
+                            onCheckedChange={() =>
+                              toggleEndpointMethod(index, "PUT")
+                            }
+                            className="cls-method-checkbox"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={addNewPermission}
+                    className="cls-add-permission-btn"
+                  >
+                    <Plus size={16} />
+                    Add Permission
+                  </Button>
+                </div>
+              )}
             </div>
 
             <DialogFooter>
