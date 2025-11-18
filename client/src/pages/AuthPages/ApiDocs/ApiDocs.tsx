@@ -155,7 +155,7 @@ export default function ApiDocs() {
   const paginatedCollections = filteredCollections.slice(startIndex, endIndex);
 
   const handleViewDocumentation = (collectionId: string) => {
-    console.log("View documentation for:", collectionId);
+    window.location.href = `/api-docs/${collectionId}`;
   };
 
   const handleSave = () => {
