@@ -17,7 +17,7 @@
 
 .cls-auth-illustration-panel {
   display: none;
-  
+
   @media (min-width: 1024px) {
     display: flex;
     width: 50%;
@@ -91,9 +91,9 @@
 }
 
 .cls-illustration-title {
-  font-size: 2.5rem;
+  font-size: 1.5rem;
   font-weight: $font-weight-bold;
-  line-height: 1.2;
+  line-height: 1.0;
   margin-bottom: $spacing-lg;
   color: white;
 }
@@ -127,7 +127,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  
+
   svg {
     width: 14px;
     height: 14px;
@@ -213,7 +213,7 @@
   padding-left: 2.75rem !important;
   height: 3rem;
   font-size: 0.9375rem;
-  
+
   &.cls-password-input {
     padding-right: 2.75rem !important;
   }
