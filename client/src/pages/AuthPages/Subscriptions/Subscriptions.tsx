@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import AppLayout from "@/components/layout/AppLayout";
 import { Card, CardContent } from "@/components/ui/card";
@@ -151,14 +150,14 @@ export default function Subscriptions() {
 
   const totalPlans = subscriptionPlans.length;
   const activePlans = subscriptionPlans.filter(
-    (p) => p.status === "Active"
+    (p) => p.status === "Active",
   ).length;
   const totalSubscribers = subscriptionPlans.reduce(
     (sum, p) => sum + p.subscribers,
-    0
+    0,
   );
   const mostPopularPlan = subscriptionPlans.reduce((prev, current) =>
-    prev.subscribers > current.subscribers ? prev : current
+    prev.subscribers > current.subscribers ? prev : current,
   );
 
   const handleEdit = (planId: string) => {
@@ -243,7 +242,13 @@ export default function Subscriptions() {
         {/* Filters and Actions */}
         <div className="cls-filters-section">
           <div className="cls-search-container">
-            <Search className="cls-search-icon" size={18} />
+            <Search
+              className="cls-search-icon"
+              size={18}
+              onClick={() => {
+                console.log(searchQuery);
+              }}
+            />
             <Input
               placeholder="Search by plan name..."
               value={searchQuery}
@@ -355,7 +360,8 @@ export default function Subscriptions() {
 
                   <div className="cls-plan-overage">
                     <p className="cls-overage-text">
-                      Overage: <span className="cls-overage-price">{plan.overage}</span>
+                      Overage:{" "}
+                      <span className="cls-overage-price">{plan.overage}</span>
                     </p>
                   </div>
 
