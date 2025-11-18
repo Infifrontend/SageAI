@@ -1,5 +1,4 @@
-
-import { useState } from 'react';
+import { useState } from "react";
 import {
   TrendingUp,
   TrendingDown,
@@ -15,22 +14,22 @@ import {
   HardDrive,
   Wifi,
   ChevronDown,
-} from 'lucide-react';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+} from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import './Dashboard.scss';
+} from "@/components/ui/select";
+import "./Dashboard.scss";
 
 export default function Dashboard() {
-  const [selectedEndpoint, setSelectedEndpoint] = useState('all');
-  const [selectedTimePeriod, setSelectedTimePeriod] = useState('30');
+  const [selectedEndpoint, setSelectedEndpoint] = useState("all");
+  const [selectedTimePeriod, setSelectedTimePeriod] = useState("30");
 
   return (
     <div className="cls-dashboard-container">
@@ -155,7 +154,7 @@ export default function Dashboard() {
                   <Badge className="cls-badge-urgent">Urgent</Badge>
                 </h3>
                 <p className="cls-insight-description">
-                  Detected spikes > 25% above average. Consider adding rate
+                  Detected spikes 25% above average. Consider adding rate
                   limits.
                 </p>
               </div>
@@ -231,7 +230,10 @@ export default function Dashboard() {
           <div className="cls-chart-header">
             <h3 className="cls-chart-title">API Calls Over Time</h3>
             <div className="cls-chart-filters">
-              <Select value={selectedEndpoint} onValueChange={setSelectedEndpoint}>
+              <Select
+                value={selectedEndpoint}
+                onValueChange={setSelectedEndpoint}
+              >
                 <SelectTrigger className="cls-select-trigger">
                   <SelectValue />
                 </SelectTrigger>
@@ -241,7 +243,10 @@ export default function Dashboard() {
                   <SelectItem value="analytics">Analytics</SelectItem>
                 </SelectContent>
               </Select>
-              <Select value={selectedTimePeriod} onValueChange={setSelectedTimePeriod}>
+              <Select
+                value={selectedTimePeriod}
+                onValueChange={setSelectedTimePeriod}
+              >
                 <SelectTrigger className="cls-select-trigger">
                   <SelectValue />
                 </SelectTrigger>
@@ -547,7 +552,10 @@ export default function Dashboard() {
               </div>
               <div className="cls-resource-metrics">
                 <div className="cls-progress-bar">
-                  <div className="cls-progress-fill" style={{ width: '45%' }}></div>
+                  <div
+                    className="cls-progress-fill"
+                    style={{ width: "45%" }}
+                  ></div>
                 </div>
                 <span className="cls-resource-percent">45%</span>
               </div>
@@ -560,7 +568,10 @@ export default function Dashboard() {
               </div>
               <div className="cls-resource-metrics">
                 <div className="cls-progress-bar">
-                  <div className="cls-progress-fill" style={{ width: '62%' }}></div>
+                  <div
+                    className="cls-progress-fill"
+                    style={{ width: "62%" }}
+                  ></div>
                 </div>
                 <span className="cls-resource-percent">62%</span>
               </div>
@@ -573,7 +584,10 @@ export default function Dashboard() {
               </div>
               <div className="cls-resource-metrics">
                 <div className="cls-progress-bar">
-                  <div className="cls-progress-fill cls-warning" style={{ width: '78%' }}></div>
+                  <div
+                    className="cls-progress-fill cls-warning"
+                    style={{ width: "78%" }}
+                  ></div>
                 </div>
                 <span className="cls-resource-percent">78%</span>
               </div>
@@ -586,7 +600,10 @@ export default function Dashboard() {
               </div>
               <div className="cls-resource-metrics">
                 <div className="cls-progress-bar">
-                  <div className="cls-progress-fill" style={{ width: '34%' }}></div>
+                  <div
+                    className="cls-progress-fill"
+                    style={{ width: "34%" }}
+                  ></div>
                 </div>
                 <span className="cls-resource-percent">34%</span>
               </div>
@@ -621,7 +638,9 @@ export default function Dashboard() {
 
             <div className="cls-incident-item">
               <div className="cls-incident-info">
-                <p className="cls-incident-title">Database Connection Pool Full</p>
+                <p className="cls-incident-title">
+                  Database Connection Pool Full
+                </p>
                 <p className="cls-incident-description">
                   Temporary connection pool exhaustion
                 </p>
