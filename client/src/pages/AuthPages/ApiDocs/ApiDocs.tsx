@@ -27,6 +27,8 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { TablePagination } from "@/components/ui/table-pagination";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import "./ApiDocs.scss";
 
 interface ApiCollection {
@@ -117,6 +119,14 @@ export default function ApiDocs() {
   const [viewMode, setViewMode] = useState<"card" | "list">("card");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(6);
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    title: "",
+    version: "1.0.0",
+    filename: "",
+    description: "",
+    status: "active" as "active" | "inactive",
+  });
 
   // Filter API collections
   const filteredCollections = apiCollectionsData.filter((collection) => {
@@ -138,6 +148,18 @@ export default function ApiDocs() {
 
   const handleViewDocumentation = (collectionId: string) => {
     console.log("View documentation for:", collectionId);
+  };
+
+  const handleSave = () => {
+    console.log("Creating new API collection:", formData);
+    setIsCreateDialogOpen(false);
+    setFormData({
+      title: "",
+      version: "1.0.0",
+      filename: "",
+      description: "",
+      status: "active",
+    });
   };
 
   return (
@@ -214,7 +236,10 @@ export default function ApiDocs() {
               </div>
 
               {/* New Collection Button */}
-              <Button className="cls-new-collection-btn">
+              <Button 
+                className="cls-new-collection-btn"
+                onClick={() => setIsCreateDialogOpen(true)}
+              >
                 <Plus size={16} />
                 New API Collection
               </Button>
@@ -347,6 +372,114 @@ export default function ApiDocs() {
             endIndex={endIndex}
           />
         )}
+
+        {/* Create API Specification Dialog */}
+        <Dialog open={isCreateDialogOpen} onOpenChange={(open) => {
+          setIsCreateDialogOpen(open);
+          if (!open) {
+            setFormData({
+              title: "",
+              version: "1.0.0",
+              filename: "",
+              description: "",
+              status: "active",
+            });
+          }
+        }}>
+          <DialogContent className="cls-create-dialog">
+            <DialogHeader>
+              <DialogTitle>Create API Specification</DialogTitle>
+              <DialogDescription>
+                Enter the details for the new API spec.
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="cls-dialog-form">
+              <div className="cls-form-field-full">
+                <Label htmlFor="title">Title</Label>
+                <Input
+                  id="title"
+                  value={formData.title}
+                  onChange={(e) =>
+                    setFormData({ ...formData, title: e.target.value })
+                  }
+                  placeholder="Enter API title"
+                />
+              </div>
+
+              <div className="cls-form-row">
+                <div className="cls-form-field">
+                  <Label htmlFor="version">Version</Label>
+                  <Input
+                    id="version"
+                    value={formData.version}
+                    onChange={(e) =>
+                      setFormData({ ...formData, version: e.target.value })
+                    }
+                    placeholder="1.0.0"
+                  />
+                </div>
+                <div className="cls-form-field">
+                  <Label htmlFor="filename">Filename</Label>
+                  <div className="cls-filename-input">
+                    <Input
+                      id="filename"
+                      value={formData.filename}
+                      onChange={(e) =>
+                        setFormData({ ...formData, filename: e.target.value })
+                      }
+                      placeholder=""
+                      className="cls-filename-field"
+                    />
+                    <span className="cls-filename-extension">.yaml</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="cls-form-field-full">
+                <Label htmlFor="description">Description</Label>
+                <Textarea
+                  id="description"
+                  value={formData.description}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
+                  placeholder="Enter API description"
+                  className="cls-description-textarea"
+                  rows={4}
+                />
+              </div>
+
+              <div className="cls-form-field-full">
+                <Label htmlFor="status">Status</Label>
+                <Select
+                  value={formData.status}
+                  onValueChange={(value: "active" | "inactive") =>
+                    setFormData({ ...formData, status: value })
+                  }
+                >
+                  <SelectTrigger id="status">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="active">Active</SelectItem>
+                    <SelectItem value="inactive">Inactive</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setIsCreateDialogOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button onClick={handleSave}>Save</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </AppLayout>
   );

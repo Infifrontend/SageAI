@@ -1,5 +1,57 @@
 @import '../../../styles/theme.scss';
 
+// Create Dialog
+.cls-create-dialog {
+  max-width: 900px;
+
+  .cls-dialog-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    .cls-form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .cls-form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .cls-form-field-full {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .cls-filename-input {
+      position: relative;
+      display: flex;
+      align-items: center;
+
+      .cls-filename-field {
+        padding-right: 60px;
+      }
+
+      .cls-filename-extension {
+        position: absolute;
+        right: 12px;
+        color: hsl(var(--muted-foreground));
+        pointer-events: none;
+        font-size: 0.875rem;
+      }
+    }
+
+    .cls-description-textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+  }
+}
+
 .cls-apidocs-container {
   padding: 2rem;
   background-color: #f8fafc;
