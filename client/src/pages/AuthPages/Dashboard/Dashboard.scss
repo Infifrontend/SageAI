@@ -3,7 +3,8 @@
 .cls-dashboard-container {
   padding: 2rem;
   background-color: #f8fafc;
-  min-height: calc(100vh - 73px);
+  width: 100%;
+  max-width: 100%;
 }
 
 .cls-dashboard-header {
