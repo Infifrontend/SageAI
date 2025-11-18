@@ -131,6 +131,7 @@ export default function ApiKeys() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(6);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [editingKey, setEditingKey] = useState<ApiKey | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     organization: "TechCorp Solutions",
@@ -307,9 +308,36 @@ export default function ApiKeys() {
     console.log("Delete API key:", id);
   };
 
+  const handleEdit = (apiKey: ApiKey) => {
+    setEditingKey(apiKey);
+    setFormData({
+      name: apiKey.name,
+      organization: apiKey.organization,
+      environment: apiKey.environment,
+      status: apiKey.status,
+    });
+    
+    // Set up API collections based on the permissions
+    const collections = [{
+      id: Date.now().toString(),
+      collection: apiKey.permissions,
+      endpoints: apiCollectionEndpoints[apiKey.permissions]?.map((ep) => ({
+        ...ep,
+      })) || [],
+    }];
+    setApiCollections(collections);
+    
+    setIsCreateDialogOpen(true);
+  };
+
   const handleCreateKey = () => {
-    console.log("Create new API key:", formData, apiCollections);
+    if (editingKey) {
+      console.log("Update API key:", editingKey.id, formData, apiCollections);
+    } else {
+      console.log("Create new API key:", formData, apiCollections);
+    }
     setIsCreateDialogOpen(false);
+    setEditingKey(null);
     setFormData({
       name: "",
       organization: "TechCorp Solutions",
@@ -581,11 +609,17 @@ export default function ApiKeys() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem className="cls-menu-item">
+                            <DropdownMenuItem 
+                              onClick={() => handleCopyKey(apiKey.apiKey)}
+                              className="cls-menu-item"
+                            >
                               <Copy size={16} />
                               Copy Key
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="cls-menu-item">
+                            <DropdownMenuItem 
+                              onClick={() => handleEdit(apiKey)}
+                              className="cls-menu-item"
+                            >
                               <Edit size={16} />
                               Edit
                             </DropdownMenuItem>
@@ -620,12 +654,24 @@ export default function ApiKeys() {
         />
 
         {/* Create API Key Dialog */}
-        <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+        <Dialog open={isCreateDialogOpen} onOpenChange={(open) => {
+          setIsCreateDialogOpen(open);
+          if (!open) {
+            setEditingKey(null);
+            setFormData({
+              name: "",
+              organization: "TechCorp Solutions",
+              environment: "Development",
+              status: "active",
+            });
+            setApiCollections([]);
+          }
+        }}>
           <DialogContent className="cls-create-dialog">
             <DialogHeader>
-              <DialogTitle>Create New API Key</DialogTitle>
+              <DialogTitle>{editingKey ? "Edit API Key" : "Create New API Key"}</DialogTitle>
               <DialogDescription>
-                Generate a new API key for your application
+                {editingKey ? "Update the API key details" : "Generate a new API key for your application"}
               </DialogDescription>
             </DialogHeader>
 
@@ -851,11 +897,23 @@ export default function ApiKeys() {
             <DialogFooter>
               <Button
                 variant="outline"
-                onClick={() => setIsCreateDialogOpen(false)}
+                onClick={() => {
+                  setIsCreateDialogOpen(false);
+                  setEditingKey(null);
+                  setFormData({
+                    name: "",
+                    organization: "TechCorp Solutions",
+                    environment: "Development",
+                    status: "active",
+                  });
+                  setApiCollections([]);
+                }}
               >
                 Cancel
               </Button>
-              <Button onClick={handleCreateKey}>Create API Key</Button>
+              <Button onClick={handleCreateKey}>
+                {editingKey ? "Update API Key" : "Create API Key"}
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
