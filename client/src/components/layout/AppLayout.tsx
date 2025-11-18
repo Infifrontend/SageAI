@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import {
@@ -88,15 +87,22 @@ interface AppLayoutProps {
   subtitle?: string;
 }
 
-export default function AppLayout({ children, title, subtitle }: AppLayoutProps) {
+export default function AppLayout({
+  children,
+  title,
+  subtitle,
+}: AppLayoutProps) {
   const [location] = useLocation();
-  const [openMenus, setOpenMenus] = useState<string[]>(["API Management", "User Management"]);
+  const [openMenus, setOpenMenus] = useState<string[]>([
+    "API Management",
+    "User Management",
+  ]);
 
   const toggleMenu = (title: string) => {
     setOpenMenus((prev) =>
       prev.includes(title)
         ? prev.filter((item) => item !== title)
-        : [...prev, title]
+        : [...prev, title],
     );
   };
 
@@ -111,16 +117,13 @@ export default function AppLayout({ children, title, subtitle }: AppLayoutProps)
           <SidebarHeader className="cls-sidebar-header">
             <div className="cls-logo">
               <div className="cls-logo-icon">
-                <Plane />
+                <ChevronLeft />
               </div>
               <div className="cls-logo-text">
-                <h1>OfferSense</h1>
-                <p>Airline Offer Management</p>
+                <h1>SAGE</h1>
+                <p>Seamless API for Group Engagement</p>
               </div>
             </div>
-            <SidebarTrigger className="cls-collapse-button">
-              <ChevronLeft />
-            </SidebarTrigger>
           </SidebarHeader>
 
           <SidebarContent className="cls-sidebar-content">
