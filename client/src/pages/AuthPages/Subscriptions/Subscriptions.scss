@@ -340,12 +340,21 @@
 }
 
 // Pagination Section
+// .cls-pagination-section {
+//   margin-top: 2rem;
+//   display: flex;
+//   flex-direction: column;
+//   gap: 1.5rem;
+//   align-items: center;
+// }
+
 .cls-pagination-section {
-  margin-top: 2rem;
   display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
   align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 20px;
+  width: 100%;
 }
 
 .cls-pagination-info {
@@ -357,19 +366,27 @@
   color: #6b7280;
 }
 
+// .cls-pagination-controls {
+//   display: flex;
+//   gap: 2rem;
+//   align-items: center;
+//   flex-wrap: wrap;
+//   justify-content: center;
+// }
+
+
 .cls-pagination-controls {
   display: flex;
-  gap: 2rem;
   align-items: center;
-  flex-wrap: wrap;
-  justify-content: center;
+  gap: 20px;
+  white-space: nowrap;
 }
 
 .cls-items-per-page,
 .cls-go-to-page {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 8px;
 
   label {
     font-size: 0.875rem;

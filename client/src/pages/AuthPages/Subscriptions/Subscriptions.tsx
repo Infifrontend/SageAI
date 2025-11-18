@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import AppLayout from "@/components/layout/AppLayout";
 import { Card, CardContent } from "@/components/ui/card";
@@ -282,7 +281,7 @@ export default function Subscriptions() {
             >
               {i}
             </PaginationLink>
-          </PaginationItem>
+          </PaginationItem>,
         );
       }
     } else {
@@ -295,14 +294,14 @@ export default function Subscriptions() {
           >
             1
           </PaginationLink>
-        </PaginationItem>
+        </PaginationItem>,
       );
 
       if (currentPage > 3) {
         items.push(
           <PaginationItem key="ellipsis-start">
             <PaginationEllipsis />
-          </PaginationItem>
+          </PaginationItem>,
         );
       }
 
@@ -319,7 +318,7 @@ export default function Subscriptions() {
             >
               {i}
             </PaginationLink>
-          </PaginationItem>
+          </PaginationItem>,
         );
       }
 
@@ -327,7 +326,7 @@ export default function Subscriptions() {
         items.push(
           <PaginationItem key="ellipsis-end">
             <PaginationEllipsis />
-          </PaginationItem>
+          </PaginationItem>,
         );
       }
 
@@ -340,7 +339,7 @@ export default function Subscriptions() {
           >
             {totalPages}
           </PaginationLink>
-        </PaginationItem>
+        </PaginationItem>,
       );
     }
 
@@ -539,7 +538,9 @@ export default function Subscriptions() {
                     <div className="cls-plan-overage">
                       <p className="cls-overage-text">
                         Overage:{" "}
-                        <span className="cls-overage-price">{plan.overage}</span>
+                        <span className="cls-overage-price">
+                          {plan.overage}
+                        </span>
                       </p>
                     </div>
 
@@ -661,34 +662,56 @@ export default function Subscriptions() {
         )}
 
         {/* Pagination Controls */}
-        <div className="cls-pagination-section">
+
+        <div className="cls-pagination-section mt-4 pt-4">
+          {/* 1. Pagination Info */}
           <div className="cls-pagination-info">
             <span className="cls-pagination-text">
-              Showing {startIndex + 1} to {Math.min(endIndex, filteredPlans.length)} of {filteredPlans.length} plans
+              Showing {startIndex + 1} to{" "}
+              {Math.min(endIndex, filteredPlans.length)} of{" "}
+              {filteredPlans.length} plans
             </span>
           </div>
 
+          {/* 2. Pagination Buttons */}
           <Pagination>
             <PaginationContent>
               <PaginationItem>
                 <PaginationPrevious
-                  onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-                  className={currentPage === 1 ? "pointer-events-none opacity-50 cursor-not-allowed" : "cursor-pointer"}
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(1, prev - 1))
+                  }
+                  className={
+                    currentPage === 1
+                      ? "pointer-events-none opacity-50 cursor-not-allowed"
+                      : "cursor-pointer"
+                  }
                 />
               </PaginationItem>
+
               {renderPaginationItems()}
+
               <PaginationItem>
                 <PaginationNext
-                  onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
-                  className={currentPage === totalPages ? "pointer-events-none opacity-50 cursor-not-allowed" : "cursor-pointer"}
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+                  }
+                  className={
+                    currentPage === totalPages
+                      ? "pointer-events-none opacity-50 cursor-not-allowed"
+                      : "cursor-pointer"
+                  }
                 />
               </PaginationItem>
             </PaginationContent>
           </Pagination>
 
+          {/* 3 & 4. Items-per-Page + Go-to-Page */}
           <div className="cls-pagination-controls">
+            {/* Items Per Page */}
             <div className="cls-items-per-page">
               <Label htmlFor="items-per-page">Items per page:</Label>
+
               <Select
                 value={itemsPerPage.toString()}
                 onValueChange={(value) => {
@@ -699,6 +722,7 @@ export default function Subscriptions() {
                 <SelectTrigger id="items-per-page" className="cls-items-select">
                   <SelectValue />
                 </SelectTrigger>
+
                 <SelectContent>
                   <SelectItem value="3">3</SelectItem>
                   <SelectItem value="6">6</SelectItem>
@@ -708,8 +732,10 @@ export default function Subscriptions() {
               </Select>
             </div>
 
+            {/* Go To Page */}
             <div className="cls-go-to-page">
               <Label htmlFor="go-to-page">Go to page:</Label>
+
               <Input
                 id="go-to-page"
                 type="number"
@@ -721,6 +747,7 @@ export default function Subscriptions() {
                 placeholder={`1-${totalPages}`}
                 className="cls-page-input"
               />
+
               <Button
                 variant="outline"
                 size="sm"
