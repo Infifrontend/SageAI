@@ -136,66 +136,124 @@ export default function ApiKeys() {
     organization: "TechCorp Solutions",
     environment: "Development" as "Production" | "Development" | "Staging",
     status: "active" as "active" | "inactive",
-    apiCollection: "GRM-API",
   });
 
-  const [endpointPermissions, setEndpointPermissions] = useState([
-    {
-      endpoint: "/checksession/",
-      description: "Check Session",
-      methods: { GET: true, POST: false, PUT: false },
-    },
-    {
-      endpoint: "/createtoken/",
-      description: "Create Token",
-      methods: { GET: false, POST: true, PUT: false },
-    },
-    {
-      endpoint: "/forgotpassword/",
-      description: "Forgot Password",
-      methods: { GET: true, POST: true, PUT: false },
-    },
-    {
-      endpoint: "/grmapi/corporate/",
-      description: "Corporate API",
-      methods: { GET: true, POST: false, PUT: true },
-    },
-  ]);
+  // Available endpoint permissions for each API collection
+  const apiCollectionEndpoints: Record<string, any[]> = {
+    "GRM-API": [
+      {
+        endpoint: "/checksession/",
+        description: "Check Session",
+        methods: { GET: true, POST: false, PUT: false },
+      },
+      {
+        endpoint: "/createtoken/",
+        description: "Create Token",
+        methods: { GET: false, POST: true, PUT: false },
+      },
+      {
+        endpoint: "/forgotpassword/",
+        description: "Forgot Password",
+        methods: { GET: true, POST: true, PUT: false },
+      },
+      {
+        endpoint: "/grmapi/corporate/",
+        description: "Corporate API",
+        methods: { GET: true, POST: false, PUT: true },
+      },
+    ],
+    "SAMPLE-API": [
+      {
+        endpoint: "/ping",
+        description: "Ping",
+        methods: { GET: true, POST: false, PUT: false },
+      },
+    ],
+  };
+
+  const [apiCollections, setApiCollections] = useState<
+    Array<{
+      id: string;
+      collection: string;
+      endpoints: any[];
+    }>
+  >([]);
 
   const toggleEndpointMethod = (
-    index: number,
+    collectionId: string,
+    endpointIndex: number,
     method: "GET" | "POST" | "PUT",
   ) => {
-    setEndpointPermissions((prev) =>
-      prev.map((perm, i) =>
-        i === index
+    setApiCollections((prev) =>
+      prev.map((collection) =>
+        collection.id === collectionId
           ? {
-              ...perm,
-              methods: { ...perm.methods, [method]: !perm.methods[method] },
+              ...collection,
+              endpoints: collection.endpoints.map((perm, i) =>
+                i === endpointIndex
+                  ? {
+                      ...perm,
+                      methods: {
+                        ...perm.methods,
+                        [method]: !perm.methods[method],
+                      },
+                    }
+                  : perm,
+              ),
             }
-          : perm,
+          : collection,
       ),
     );
   };
 
-  const selectAllMethods = () => {
-    setEndpointPermissions((prev) =>
-      prev.map((perm) => ({
-        ...perm,
-        methods: { GET: true, POST: true, PUT: true },
-      })),
+  const selectAllMethods = (collectionId: string) => {
+    setApiCollections((prev) =>
+      prev.map((collection) =>
+        collection.id === collectionId
+          ? {
+              ...collection,
+              endpoints: collection.endpoints.map((perm) => ({
+                ...perm,
+                methods: { GET: true, POST: true, PUT: true },
+              })),
+            }
+          : collection,
+      ),
     );
   };
 
-  const addNewPermission = () => {
-    setEndpointPermissions((prev) => [
+  const addNewApiCollection = () => {
+    setApiCollections((prev) => [
       ...prev,
       {
-        endpoint: "/new-endpoint/",
-        description: "New Endpoint",
-        methods: { GET: false, POST: false, PUT: false },
+        id: Date.now().toString(),
+        collection: "",
+        endpoints: [],
       },
     ]);
+  };
+
+  const removeApiCollection = (collectionId: string) => {
+    setApiCollections((prev) =>
+      prev.filter((collection) => collection.id !== collectionId),
+    );
+  };
+
+  const updateApiCollection = (collectionId: string, collectionName: string) => {
+    setApiCollections((prev) =>
+      prev.map((collection) =>
+        collection.id === collectionId
+          ? {
+              ...collection,
+              collection: collectionName,
+              endpoints:
+                apiCollectionEndpoints[collectionName]?.map((ep) => ({
+                  ...ep,
+                })) || [],
+            }
+          : collection,
+      ),
+    );
   };
 
   // Column visibility state
@@ -247,37 +305,15 @@ export default function ApiKeys() {
   };
 
   const handleCreateKey = () => {
-    console.log("Create new API key:", formData, endpointPermissions);
+    console.log("Create new API key:", formData, apiCollections);
     setIsCreateDialogOpen(false);
     setFormData({
       name: "",
       organization: "TechCorp Solutions",
       environment: "Development",
       status: "active",
-      apiCollection: "GRM-API",
     });
-    setEndpointPermissions([
-      {
-        endpoint: "/checksession/",
-        description: "Check Session",
-        methods: { GET: true, POST: false, PUT: false },
-      },
-      {
-        endpoint: "/createtoken/",
-        description: "Create Token",
-        methods: { GET: false, POST: true, PUT: false },
-      },
-      {
-        endpoint: "/forgotpassword/",
-        description: "Forgot Password",
-        methods: { GET: true, POST: true, PUT: false },
-      },
-      {
-        endpoint: "/grmapi/corporate/",
-        description: "Corporate API",
-        methods: { GET: true, POST: false, PUT: true },
-      },
-    ]);
+    setApiCollections([]);
   };
 
   return (
@@ -669,100 +705,143 @@ export default function ApiKeys() {
 
             {/* Permissions Section */}
             <div className="cls-permissions-section">
-              <h3 className="cls-section-title">Permissions</h3>
-
-              <div className="cls-form-field">
-                <Label htmlFor="api-collection">API Collection</Label>
-                <Select
-                  value={formData.apiCollection}
-                  onValueChange={(value) =>
-                    setFormData({ ...formData, apiCollection: value })
-                  }
+              <div className="cls-permissions-header">
+                <h3 className="cls-section-title">Permissions</h3>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={addNewApiCollection}
+                  className="cls-add-collection-btn"
                 >
-                  <SelectTrigger id="api-collection">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="GRM-API">GRM API</SelectItem>
-                    <SelectItem value="SAMPLE-API">Sample API</SelectItem>
-                  </SelectContent>
-                </Select>
+                  <Plus size={16} />
+                  Add Permission
+                </Button>
               </div>
 
-              {formData.apiCollection === "GRM-API" && (
-                <div className="cls-endpoint-permissions">
-                  <div className="cls-permissions-header">
-                    <Label>Endpoint Permissions</Label>
+              {apiCollections.length === 0 && (
+                <p className="cls-empty-state">
+                  Click "Add Permission" to add API collections and configure
+                  endpoint permissions.
+                </p>
+              )}
+
+              {apiCollections.map((collection) => (
+                <div key={collection.id} className="cls-api-collection-block">
+                  <div className="cls-collection-header">
+                    <div className="cls-form-field">
+                      <Label htmlFor={`api-collection-${collection.id}`}>
+                        API Collection
+                      </Label>
+                      <Select
+                        value={collection.collection}
+                        onValueChange={(value) =>
+                          updateApiCollection(collection.id, value)
+                        }
+                      >
+                        <SelectTrigger id={`api-collection-${collection.id}`}>
+                          <SelectValue placeholder="Select an API collection" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="GRM-API">GRM API</SelectItem>
+                          <SelectItem value="SAMPLE-API">Sample API</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                     <Button
                       type="button"
                       variant="ghost"
-                      size="sm"
-                      onClick={selectAllMethods}
-                      className="cls-select-all-btn"
+                      size="icon"
+                      onClick={() => removeApiCollection(collection.id)}
+                      className="cls-remove-collection-btn"
                     >
-                      Select All Methods
+                      <Trash2 size={16} />
                     </Button>
                   </div>
 
-                  <div className="cls-endpoints-table">
-                    <div className="cls-table-header">
-                      <div className="cls-header-endpoint">Endpoints</div>
-                      <div className="cls-header-methods">
-                        <span className="cls-method-badge">GET</span>
-                        <span className="cls-method-badge">POST</span>
-                        <span className="cls-method-badge">PUT</span>
+                  {collection.collection && collection.endpoints.length > 0 && (
+                    <div className="cls-endpoint-permissions">
+                      <div className="cls-permissions-header">
+                        <Label>Endpoint Permissions</Label>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => selectAllMethods(collection.id)}
+                          className="cls-select-all-btn"
+                        >
+                          Select All Methods
+                        </Button>
+                      </div>
+
+                      <div className="cls-endpoints-table">
+                        <div className="cls-table-header">
+                          <div className="cls-header-endpoint">Endpoints</div>
+                          <div className="cls-header-methods">
+                            <span className="cls-method-badge">GET</span>
+                            <span className="cls-method-badge">POST</span>
+                            <span className="cls-method-badge">PUT</span>
+                          </div>
+                        </div>
+
+                        {collection.endpoints.map((perm, index) => (
+                          <div key={index} className="cls-table-row">
+                            <div className="cls-endpoint-info">
+                              <code className="cls-endpoint-path">
+                                {perm.endpoint}
+                              </code>
+                              <p className="cls-endpoint-desc">
+                                {perm.description}
+                              </p>
+                            </div>
+                            <div className="cls-method-checkboxes">
+                              <Checkbox
+                                checked={perm.methods.GET}
+                                onCheckedChange={() =>
+                                  toggleEndpointMethod(
+                                    collection.id,
+                                    index,
+                                    "GET",
+                                  )
+                                }
+                                className="cls-method-checkbox"
+                              />
+                              <Checkbox
+                                checked={perm.methods.POST}
+                                onCheckedChange={() =>
+                                  toggleEndpointMethod(
+                                    collection.id,
+                                    index,
+                                    "POST",
+                                  )
+                                }
+                                className="cls-method-checkbox"
+                              />
+                              <Checkbox
+                                checked={perm.methods.PUT}
+                                onCheckedChange={() =>
+                                  toggleEndpointMethod(
+                                    collection.id,
+                                    index,
+                                    "PUT",
+                                  )
+                                }
+                                className="cls-method-checkbox"
+                              />
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
+                  )}
 
-                    {endpointPermissions.map((perm, index) => (
-                      <div key={index} className="cls-table-row">
-                        <div className="cls-endpoint-info">
-                          <code className="cls-endpoint-path">
-                            {perm.endpoint}
-                          </code>
-                          <p className="cls-endpoint-desc">
-                            {perm.description}
-                          </p>
-                        </div>
-                        <div className="cls-method-checkboxes">
-                          <Checkbox
-                            checked={perm.methods.GET}
-                            onCheckedChange={() =>
-                              toggleEndpointMethod(index, "GET")
-                            }
-                            className="cls-method-checkbox"
-                          />
-                          <Checkbox
-                            checked={perm.methods.POST}
-                            onCheckedChange={() =>
-                              toggleEndpointMethod(index, "POST")
-                            }
-                            className="cls-method-checkbox"
-                          />
-                          <Checkbox
-                            checked={perm.methods.PUT}
-                            onCheckedChange={() =>
-                              toggleEndpointMethod(index, "PUT")
-                            }
-                            className="cls-method-checkbox"
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={addNewPermission}
-                    className="cls-add-permission-btn"
-                  >
-                    <Plus size={16} />
-                    Add Permission
-                  </Button>
+                  {collection.collection && collection.endpoints.length === 0 && (
+                    <p className="cls-no-endpoints">
+                      Select an API collection to see available endpoints.
+                    </p>
+                  )}
                 </div>
-              )}
+              ))}
             </div>
 
             <DialogFooter>
