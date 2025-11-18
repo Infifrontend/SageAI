@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useToast } from '@/hooks/use-toast';
 import authIllustration from '@assets/generated_images/Auth_page_side_illustration_6a131ae3.png';
 import './login.scss';
 
@@ -12,10 +13,55 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Login submitted:', { email, password, rememberMe });
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        toast({
+          title: "Login Successful",
+          description: "Redirecting to dashboard...",
+        });
+        
+        // Store user data if remember me is checked
+        if (rememberMe) {
+          localStorage.setItem('user', JSON.stringify(data.user));
+        }
+        
+        // Redirect to dashboard
+        setTimeout(() => {
+          window.location.href = '/dashboard';
+        }, 500);
+      } else {
+        toast({
+          title: "Login Failed",
+          description: data.message || "Invalid credentials",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An error occurred during login",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -181,8 +227,9 @@ export default function Login() {
                 type="submit"
                 className="cls-submit-button"
                 data-testid="button-signin"
+                disabled={isLoading}
               >
-                Sign In
+                {isLoading ? 'Signing In...' : 'Sign In'}
               </Button>
 
               <div className="cls-form-footer">
