@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useLocation } from "wouter";
 import AppLayout from "@/components/layout/AppLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -101,7 +101,7 @@ const mockApiData = {
 
 export default function ApiDocDetail() {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedEndpoint, setSelectedEndpoint] = useState("ping");
   const [selectedResponse, setSelectedResponse] = useState("200");
@@ -116,7 +116,7 @@ export default function ApiDocDetail() {
           <Card>
             <CardContent className="p-6">
               <p>API documentation not found.</p>
-              <Button onClick={() => navigate("/api-docs")} className="mt-4">
+              <Button onClick={() => setLocation("/api-docs")} className="mt-4">
                 <ArrowLeft size={16} />
                 Back to API Collections
               </Button>
@@ -163,7 +163,7 @@ export default function ApiDocDetail() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => navigate("/api-docs")}
+                  onClick={() => setLocation("/api-docs")}
                   className="cls-back-btn"
                 >
                   <ArrowLeft size={20} />
