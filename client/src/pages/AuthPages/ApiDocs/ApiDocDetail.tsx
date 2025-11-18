@@ -296,7 +296,7 @@ export default function ApiDocDetail() {
                           {currentEndpoint.method}
                         </Badge>
                         <code className="cls-endpoint-path-lg">{currentEndpoint.path}</code>
-                        <Button variant="ghost" size="icon" className="cls-copy-btn" title="Copy endpoint path">
+                        <Button variant="ghost" size="icon" className="cls-copy-btn">
                           <Copy size={16} />
                         </Button>
                       </div>
