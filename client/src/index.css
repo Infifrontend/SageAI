@@ -173,6 +173,31 @@
   body {
     @apply font-sans antialiased bg-background text-foreground;
   }
+
+  /* Custom Scrollbar Styles */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #1d2f7e #e5e7eb;
+  }
+
+  *::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #e5e7eb;
+    border-radius: 3px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: #1d2f7e;
+    border-radius: 3px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: #152461;
+  }
 }
 
 /**
