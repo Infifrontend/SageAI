@@ -249,8 +249,6 @@ export default function Subscriptions() {
     });
   };
 
-  
-
   return (
     <AppLayout
       title="Subscription Plans"
@@ -323,13 +321,13 @@ export default function Subscriptions() {
         {/* Filters and Actions */}
         <div className="cls-filters-section">
           <div className="cls-search-container">
-            <Search
+            {/* <Search
               className="cls-search-icon"
               size={18}
               onClick={() => {
                 console.log(searchQuery);
               }}
-            />
+            /> */}
             <Input
               placeholder="Search by plan name..."
               value={searchQuery}

@@ -190,7 +190,6 @@ export default function ApiDocs() {
             <div className="cls-filter-actions flex items-center gap-4 w-full flex-nowrap">
               {/* Search */}
               <div className="cls-search-container">
-                <Search className="cls-search-icon" />
                 <Input
                   type="text"
                   placeholder="Search collections..."
@@ -244,7 +243,7 @@ export default function ApiDocs() {
               </div>
 
               {/* New Collection Button */}
-              <Button 
+              <Button
                 className="cls-new-collection-btn"
                 onClick={() => setIsCreateDialogOpen(true)}
               >
@@ -382,18 +381,21 @@ export default function ApiDocs() {
         )}
 
         {/* Create API Specification Dialog */}
-        <Dialog open={isCreateDialogOpen} onOpenChange={(open) => {
-          setIsCreateDialogOpen(open);
-          if (!open) {
-            setFormData({
-              title: "",
-              version: "1.0.0",
-              filename: "",
-              description: "",
-              status: "active",
-            });
-          }
-        }}>
+        <Dialog
+          open={isCreateDialogOpen}
+          onOpenChange={(open) => {
+            setIsCreateDialogOpen(open);
+            if (!open) {
+              setFormData({
+                title: "",
+                version: "1.0.0",
+                filename: "",
+                description: "",
+                status: "active",
+              });
+            }
+          }}
+        >
           <DialogContent className="cls-create-dialog">
             <DialogHeader>
               <DialogTitle>Create API Specification</DialogTitle>
