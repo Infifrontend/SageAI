@@ -344,6 +344,9 @@
 // Edit Dialog
 .cls-edit-dialog {
   max-width: 600px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .cls-dialog-form {
@@ -351,6 +354,9 @@
   flex-direction: column;
   gap: 1.25rem;
   margin: 1rem 0;
+  overflow-y: auto;
+  max-height: calc(90vh - 200px);
+  padding-right: 0.5rem;
 }
 
 .cls-form-row {
