@@ -10,12 +10,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { email, password } = req.body;
 
       // Check credentials
-      if (email === "Admin" && password === "admin@123") {
+      if (email === "admin@sage.com" && password === "Infi@123") {
         res.json({
           success: true,
           message: "Login successful",
           user: {
-            email: "Admin",
+            email: "admin@sage.com",
             name: "Admin User"
           }
         });
