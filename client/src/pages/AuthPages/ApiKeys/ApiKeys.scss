@@ -150,6 +150,17 @@
   width: 100%;
 }
 
+.cls-customize-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid #e5e7eb;
+
+  &:hover {
+    background-color: #f9fafb;
+  }
+}
+
 .cls-new-key-button {
   background-color: #1d2f7e;
   color: white;
@@ -162,13 +173,63 @@
   }
 }
 
+// Customize Popover
+.cls-customize-popover {
+  width: 240px;
+  padding: 0;
+}
+
+.cls-customize-header {
+  padding: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+
+  h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 0 0 0.25rem 0;
+  }
+
+  p {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin: 0;
+  }
+}
+
+.cls-column-options {
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cls-column-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  label {
+    font-size: 0.875rem;
+    color: #374151;
+    cursor: pointer;
+    user-select: none;
+  }
+}
+
 // Table
 .cls-table-wrapper {
-  overflow-x: auto;
+  width: 100%;
+  
+  table {
+    table-layout: auto;
+    width: 100%;
+  }
 }
 
 .cls-name-cell {
-  min-width: 180px;
+  min-width: 160px;
+  max-width: 200px;
 }
 
 .cls-key-name {
@@ -188,7 +249,8 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  min-width: 180px;
+  min-width: 160px;
+  max-width: 200px;
 }
 
 .cls-api-key-code {
@@ -261,7 +323,8 @@
 }
 
 .cls-permissions-cell {
-  min-width: 140px;
+  min-width: 120px;
+  max-width: 160px;
 }
 
 .cls-permission-name {
@@ -278,7 +341,8 @@
 }
 
 .cls-usage-cell {
-  min-width: 120px;
+  min-width: 100px;
+  max-width: 140px;
 }
 
 .cls-usage-count {
@@ -300,7 +364,8 @@
   gap: 0.5rem;
   font-size: 0.875rem;
   color: #6b7280;
-  min-width: 140px;
+  min-width: 120px;
+  max-width: 150px;
 }
 
 .cls-clock-icon {

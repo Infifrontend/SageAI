@@ -27,6 +27,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -47,6 +53,7 @@ import {
   Code,
   Shield,
   Clock,
+  Settings2,
 } from "lucide-react";
 import { TablePagination } from "@/components/ui/table-pagination";
 import "./ApiKeys.scss";
@@ -131,6 +138,22 @@ export default function ApiKeys() {
     environment: "Development" as "Production" | "Development" | "Staging",
     permissions: "",
   });
+  
+  // Column visibility state
+  const [columnVisibility, setColumnVisibility] = useState({
+    environment: true,
+    status: true,
+    permissions: true,
+    usage: true,
+    lastUsed: true,
+  });
+
+  const toggleColumn = (column: keyof typeof columnVisibility) => {
+    setColumnVisibility((prev) => ({
+      ...prev,
+      [column]: !prev[column],
+    }));
+  };
 
   // Filter API keys based on search
   const filteredKeys = apiKeysData.filter(
@@ -254,6 +277,67 @@ export default function ApiKeys() {
                     className="cls-search-input"
                   />
                 </div>
+                
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="cls-customize-button"
+                    >
+                      <Settings2 size={16} />
+                      Customize
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="cls-customize-popover" align="end">
+                    <div className="cls-customize-header">
+                      <h4>Customize Columns</h4>
+                      <p>Select columns to display</p>
+                    </div>
+                    <div className="cls-column-options">
+                      <div className="cls-column-option">
+                        <Checkbox
+                          id="col-environment"
+                          checked={columnVisibility.environment}
+                          onCheckedChange={() => toggleColumn("environment")}
+                        />
+                        <Label htmlFor="col-environment">Environment</Label>
+                      </div>
+                      <div className="cls-column-option">
+                        <Checkbox
+                          id="col-status"
+                          checked={columnVisibility.status}
+                          onCheckedChange={() => toggleColumn("status")}
+                        />
+                        <Label htmlFor="col-status">Status</Label>
+                      </div>
+                      <div className="cls-column-option">
+                        <Checkbox
+                          id="col-permissions"
+                          checked={columnVisibility.permissions}
+                          onCheckedChange={() => toggleColumn("permissions")}
+                        />
+                        <Label htmlFor="col-permissions">Permissions</Label>
+                      </div>
+                      <div className="cls-column-option">
+                        <Checkbox
+                          id="col-usage"
+                          checked={columnVisibility.usage}
+                          onCheckedChange={() => toggleColumn("usage")}
+                        />
+                        <Label htmlFor="col-usage">Usage Today</Label>
+                      </div>
+                      <div className="cls-column-option">
+                        <Checkbox
+                          id="col-lastused"
+                          checked={columnVisibility.lastUsed}
+                          onCheckedChange={() => toggleColumn("lastUsed")}
+                        />
+                        <Label htmlFor="col-lastused">Last Used</Label>
+                      </div>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+
                 <Button
                   onClick={() => setIsCreateDialogOpen(true)}
                   className="cls-new-key-button"
@@ -271,11 +355,11 @@ export default function ApiKeys() {
                   <TableRow>
                     <TableHead>Name & Organization</TableHead>
                     <TableHead>API Key</TableHead>
-                    <TableHead>Environment</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Permissions</TableHead>
-                    <TableHead>Usage Today</TableHead>
-                    <TableHead>Last Used</TableHead>
+                    {columnVisibility.environment && <TableHead>Environment</TableHead>}
+                    {columnVisibility.status && <TableHead>Status</TableHead>}
+                    {columnVisibility.permissions && <TableHead>Permissions</TableHead>}
+                    {columnVisibility.usage && <TableHead>Usage Today</TableHead>}
+                    {columnVisibility.lastUsed && <TableHead>Last Used</TableHead>}
                     <TableHead className="cls-actions-head"></TableHead>
                   </TableRow>
                 </TableHeader>
@@ -304,46 +388,56 @@ export default function ApiKeys() {
                           </button>
                         </div>
                       </TableCell>
-                      <TableCell>
-                        <Badge
-                          className={`cls-env-badge cls-env-${apiKey.environment.toLowerCase()}`}
-                        >
-                          {apiKey.environment}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Badge
-                          className={`cls-status-badge cls-status-${apiKey.status}`}
-                        >
-                          {apiKey.status}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <div className="cls-permissions-cell">
-                          <p className="cls-permission-name">
-                            {apiKey.permissions}
-                          </p>
-                          <p className="cls-endpoints-count">
-                            {apiKey.endpoints} endpoint(s)
-                          </p>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="cls-usage-cell">
-                          <p className="cls-usage-count">
-                            {apiKey.usageToday.toLocaleString()}
-                          </p>
-                          <p className="cls-usage-limit">
-                            / {(apiKey.usageLimit / 1000).toFixed(0)}k/hour
-                          </p>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="cls-last-used-cell">
-                          <Clock size={14} className="cls-clock-icon" />
-                          <span>{apiKey.lastUsed}</span>
-                        </div>
-                      </TableCell>
+                      {columnVisibility.environment && (
+                        <TableCell>
+                          <Badge
+                            className={`cls-env-badge cls-env-${apiKey.environment.toLowerCase()}`}
+                          >
+                            {apiKey.environment}
+                          </Badge>
+                        </TableCell>
+                      )}
+                      {columnVisibility.status && (
+                        <TableCell>
+                          <Badge
+                            className={`cls-status-badge cls-status-${apiKey.status}`}
+                          >
+                            {apiKey.status}
+                          </Badge>
+                        </TableCell>
+                      )}
+                      {columnVisibility.permissions && (
+                        <TableCell>
+                          <div className="cls-permissions-cell">
+                            <p className="cls-permission-name">
+                              {apiKey.permissions}
+                            </p>
+                            <p className="cls-endpoints-count">
+                              {apiKey.endpoints} endpoint(s)
+                            </p>
+                          </div>
+                        </TableCell>
+                      )}
+                      {columnVisibility.usage && (
+                        <TableCell>
+                          <div className="cls-usage-cell">
+                            <p className="cls-usage-count">
+                              {apiKey.usageToday.toLocaleString()}
+                            </p>
+                            <p className="cls-usage-limit">
+                              / {(apiKey.usageLimit / 1000).toFixed(0)}k/hour
+                            </p>
+                          </div>
+                        </TableCell>
+                      )}
+                      {columnVisibility.lastUsed && (
+                        <TableCell>
+                          <div className="cls-last-used-cell">
+                            <Clock size={14} className="cls-clock-icon" />
+                            <span>{apiKey.lastUsed}</span>
+                          </div>
+                        </TableCell>
+                      )}
                       <TableCell>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
