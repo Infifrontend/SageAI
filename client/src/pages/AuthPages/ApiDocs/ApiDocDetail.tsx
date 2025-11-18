@@ -1,6 +1,7 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useLocation } from "wouter";
+import yaml from "js-yaml";
 import AppLayout from "@/components/layout/AppLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -26,6 +27,16 @@ import {
   ExternalLink,
 } from "lucide-react";
 import "./ApiDocDetail.scss";
+
+// Mock data for API collections with YAML file paths
+const apiCollectionsMetadata: Record<string, { yamlPath?: string }> = {
+  "1": {
+    yamlPath: undefined // GRM API uses mock data
+  },
+  "2": {
+    yamlPath: "/api-specs/simple-api.yaml" // Sample API uses YAML
+  }
+};
 
 // Mock data for API collections
 const apiCollectionsData = {
@@ -68,29 +79,6 @@ const apiCollectionsData = {
         }
       }
     ]
-  },
-  "2": {
-    id: "2",
-    name: "Sample API",
-    version: "1.0.0",
-    status: "inactive" as const,
-    description: "A sample API to illustrate OpenAPI concepts.",
-    baseUrl: "https://api.sample.com/v1",
-    endpoints: [
-      {
-        id: "ping",
-        name: "Ping",
-        method: "GET",
-        path: "/ping",
-        description: "Health check endpoint",
-        responses: {
-          "200": {
-            description: "Success",
-            example: '{\n  "status": "healthy"\n}'
-          }
-        }
-      }
-    ]
   }
 };
 
@@ -98,10 +86,93 @@ export default function ApiDocDetail() {
   const { id } = useParams<{ id: string }>();
   const [, setLocation] = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedEndpoint, setSelectedEndpoint] = useState("ping");
+  const [selectedEndpoint, setSelectedEndpoint] = useState("");
   const [selectedResponse, setSelectedResponse] = useState("200");
+  const [apiDoc, setApiDoc] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const apiDoc = apiCollectionsData[id as keyof typeof apiCollectionsData];
+  useEffect(() => {
+    const loadApiDoc = async () => {
+      setIsLoading(true);
+      const metadata = apiCollectionsMetadata[id as string];
+      
+      if (metadata?.yamlPath) {
+        try {
+          const response = await fetch(metadata.yamlPath);
+          const yamlText = await response.text();
+          const parsedYaml: any = yaml.load(yamlText);
+          
+          // Transform OpenAPI spec to our format
+          const endpoints = Object.entries(parsedYaml.paths || {}).flatMap(([path, methods]: [string, any]) => {
+            return Object.entries(methods).map(([method, details]: [string, any]) => {
+              const responses: any = {};
+              Object.entries(details.responses || {}).forEach(([code, responseData]: [string, any]) => {
+                responses[code] = {
+                  description: responseData.description || "",
+                  example: JSON.stringify(
+                    responseData.content?.["application/json"]?.examples?.foo?.value || {},
+                    null,
+                    2
+                  )
+                };
+              });
+              
+              return {
+                id: details.operationId || `${method}-${path}`,
+                name: details.summary || `${method.toUpperCase()} ${path}`,
+                method: method.toUpperCase(),
+                path: path,
+                description: details.summary || details.description || "",
+                responses
+              };
+            });
+          });
+          
+          setApiDoc({
+            id: id,
+            name: parsedYaml.info?.title || "API Documentation",
+            version: parsedYaml.info?.version || "1.0.0",
+            status: "active",
+            description: parsedYaml.info?.description || parsedYaml.info?.title || "",
+            baseUrl: parsedYaml.servers?.[0]?.url || "https://api.example.com",
+            endpoints
+          });
+          
+          if (endpoints.length > 0) {
+            setSelectedEndpoint(endpoints[0].id);
+          }
+        } catch (error) {
+          console.error("Error loading YAML:", error);
+          setApiDoc(null);
+        }
+      } else {
+        // Use mock data
+        const mockData = apiCollectionsData[id as keyof typeof apiCollectionsData];
+        setApiDoc(mockData);
+        if (mockData?.endpoints?.length > 0) {
+          setSelectedEndpoint(mockData.endpoints[0].id);
+        }
+      }
+      
+      setIsLoading(false);
+    };
+    
+    loadApiDoc();
+  }, [id]);
+
+  if (isLoading) {
+    return (
+      <AppLayout title="API Documentation" subtitle="Loading...">
+        <div className="cls-apidoc-detail-container">
+          <Card>
+            <CardContent className="p-6">
+              <p>Loading API documentation...</p>
+            </CardContent>
+          </Card>
+        </div>
+      </AppLayout>
+    );
+  }
 
   if (!apiDoc) {
     return (
