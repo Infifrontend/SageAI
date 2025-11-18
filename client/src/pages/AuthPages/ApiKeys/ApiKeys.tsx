@@ -316,17 +316,20 @@ export default function ApiKeys() {
       environment: apiKey.environment,
       status: apiKey.status,
     });
-    
+
     // Set up API collections based on the permissions
-    const collections = [{
-      id: Date.now().toString(),
-      collection: apiKey.permissions,
-      endpoints: apiCollectionEndpoints[apiKey.permissions]?.map((ep) => ({
-        ...ep,
-      })) || [],
-    }];
+    const collections = [
+      {
+        id: Date.now().toString(),
+        collection: apiKey.permissions,
+        endpoints:
+          apiCollectionEndpoints[apiKey.permissions]?.map((ep) => ({
+            ...ep,
+          })) || [],
+      },
+    ];
     setApiCollections(collections);
-    
+
     setIsCreateDialogOpen(true);
   };
 
@@ -414,12 +417,12 @@ export default function ApiKeys() {
               </div>
               <div className="cls-header-actions">
                 <div className="cls-search-container">
-                  <Search
+                  {/* <Search
                     className="cls-search-icon"
                     onClick={() => {
                       console.log(searchQuery);
                     }}
-                  />
+                  /> */}
                   <Input
                     type="text"
                     placeholder="Search API keys..."
@@ -609,14 +612,14 @@ export default function ApiKeys() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem 
+                            <DropdownMenuItem
                               onClick={() => handleCopyKey(apiKey.apiKey)}
                               className="cls-menu-item"
                             >
                               <Copy size={16} />
                               Copy Key
                             </DropdownMenuItem>
-                            <DropdownMenuItem 
+                            <DropdownMenuItem
                               onClick={() => handleEdit(apiKey)}
                               className="cls-menu-item"
                             >
@@ -654,24 +657,31 @@ export default function ApiKeys() {
         />
 
         {/* Create API Key Dialog */}
-        <Dialog open={isCreateDialogOpen} onOpenChange={(open) => {
-          setIsCreateDialogOpen(open);
-          if (!open) {
-            setEditingKey(null);
-            setFormData({
-              name: "",
-              organization: "TechCorp Solutions",
-              environment: "Development",
-              status: "active",
-            });
-            setApiCollections([]);
-          }
-        }}>
+        <Dialog
+          open={isCreateDialogOpen}
+          onOpenChange={(open) => {
+            setIsCreateDialogOpen(open);
+            if (!open) {
+              setEditingKey(null);
+              setFormData({
+                name: "",
+                organization: "TechCorp Solutions",
+                environment: "Development",
+                status: "active",
+              });
+              setApiCollections([]);
+            }
+          }}
+        >
           <DialogContent className="cls-create-dialog">
             <DialogHeader>
-              <DialogTitle>{editingKey ? "Edit API Key" : "Create New API Key"}</DialogTitle>
+              <DialogTitle>
+                {editingKey ? "Edit API Key" : "Create New API Key"}
+              </DialogTitle>
               <DialogDescription>
-                {editingKey ? "Update the API key details" : "Generate a new API key for your application"}
+                {editingKey
+                  ? "Update the API key details"
+                  : "Generate a new API key for your application"}
               </DialogDescription>
             </DialogHeader>
 
