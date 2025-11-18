@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import AppLayout from "@/components/layout/AppLayout";
 import { Card, CardContent } from "@/components/ui/card";
@@ -138,7 +137,7 @@ export default function ApiKeys() {
     environment: "Development" as "Production" | "Development" | "Staging",
     permissions: "",
   });
-  
+
   // Column visibility state
   const [columnVisibility, setColumnVisibility] = useState({
     environment: true,
@@ -160,17 +159,17 @@ export default function ApiKeys() {
     (key) =>
       key.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       key.organization.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      key.apiKey.toLowerCase().includes(searchQuery.toLowerCase())
+      key.apiKey.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   // Calculate stats
   const totalKeys = apiKeysData.length;
   const activeKeys = apiKeysData.filter((k) => k.status === "active").length;
   const productionKeys = apiKeysData.filter(
-    (k) => k.environment === "Production"
+    (k) => k.environment === "Production",
   ).length;
   const developmentKeys = apiKeysData.filter(
-    (k) => k.environment === "Development"
+    (k) => k.environment === "Development",
   ).length;
 
   // Pagination
@@ -265,7 +264,12 @@ export default function ApiKeys() {
               </div>
               <div className="cls-header-actions">
                 <div className="cls-search-container">
-                  <Search className="cls-search-icon" />
+                  <Search
+                    className="cls-search-icon"
+                    onClick={() => {
+                      console.log(searchQuery);
+                    }}
+                  />
                   <Input
                     type="text"
                     placeholder="Search API keys..."
@@ -277,13 +281,10 @@ export default function ApiKeys() {
                     className="cls-search-input"
                   />
                 </div>
-                
+
                 <Popover>
                   <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="cls-customize-button"
-                    >
+                    <Button variant="outline" className="cls-customize-button">
                       <Settings2 size={16} />
                       Customize
                     </Button>
@@ -355,11 +356,19 @@ export default function ApiKeys() {
                   <TableRow>
                     <TableHead>Name & Organization</TableHead>
                     <TableHead>API Key</TableHead>
-                    {columnVisibility.environment && <TableHead>Environment</TableHead>}
+                    {columnVisibility.environment && (
+                      <TableHead>Environment</TableHead>
+                    )}
                     {columnVisibility.status && <TableHead>Status</TableHead>}
-                    {columnVisibility.permissions && <TableHead>Permissions</TableHead>}
-                    {columnVisibility.usage && <TableHead>Usage Today</TableHead>}
-                    {columnVisibility.lastUsed && <TableHead>Last Used</TableHead>}
+                    {columnVisibility.permissions && (
+                      <TableHead>Permissions</TableHead>
+                    )}
+                    {columnVisibility.usage && (
+                      <TableHead>Usage Today</TableHead>
+                    )}
+                    {columnVisibility.lastUsed && (
+                      <TableHead>Last Used</TableHead>
+                    )}
                     <TableHead className="cls-actions-head"></TableHead>
                   </TableRow>
                 </TableHeader>

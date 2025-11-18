@@ -121,8 +121,7 @@ export default function AppLayout({
 }: AppLayoutProps) {
   const [location] = useLocation();
   const [openMenus, setOpenMenus] = useState<string[]>([
-    "API Management",
-    "User Management",
+
   ]);
 
   const toggleMenu = (title: string) => {
