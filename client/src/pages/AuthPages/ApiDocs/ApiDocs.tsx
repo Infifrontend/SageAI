@@ -149,74 +149,76 @@ export default function ApiDocs() {
       <div className="cls-apidocs-container">
         <Card className="cls-collections-card">
           <CardContent className="cls-collections-content">
-            {/* Header */}
-            <div className="cls-collections-header">
+            {/* Page Header - First Row */}
+            <div className="cls-page-header">
               <div className="cls-header-left">
                 <BookOpen className="cls-header-icon" />
                 <h2 className="cls-header-title">API Collections</h2>
               </div>
-              <div className="cls-header-actions">
-                {/* Search */}
-                <div className="cls-search-container">
-                  <Search className="cls-search-icon" />
-                  <Input
-                    type="text"
-                    placeholder="Search collections..."
-                    value={searchQuery}
-                    onChange={(e) => {
-                      setSearchQuery(e.target.value);
-                      setCurrentPage(1);
-                    }}
-                    className="cls-search-input"
-                  />
-                </div>
+            </div>
 
-                {/* Status Filter */}
-                <Select
-                  value={statusFilter}
-                  onValueChange={(value) => {
-                    setStatusFilter(value);
+            {/* Filter Actions - Second Row */}
+            <div className="cls-filter-actions">
+              {/* Search */}
+              <div className="cls-search-container">
+                <Search className="cls-search-icon" />
+                <Input
+                  type="text"
+                  placeholder="Search collections..."
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
                     setCurrentPage(1);
                   }}
+                  className="cls-search-input"
+                />
+              </div>
+
+              {/* Status Filter */}
+              <Select
+                value={statusFilter}
+                onValueChange={(value) => {
+                  setStatusFilter(value);
+                  setCurrentPage(1);
+                }}
+              >
+                <SelectTrigger className="cls-filter-select">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Statuses</SelectItem>
+                  <SelectItem value="active">Active</SelectItem>
+                  <SelectItem value="inactive">Inactive</SelectItem>
+                </SelectContent>
+              </Select>
+
+              {/* View Toggle */}
+              <div className="cls-view-toggle">
+                <Button
+                  variant={viewMode === "card" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setViewMode("card")}
+                  className="cls-view-btn"
                 >
-                  <SelectTrigger className="cls-filter-select">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Statuses</SelectItem>
-                    <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="inactive">Inactive</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                {/* View Toggle */}
-                <div className="cls-view-toggle">
-                  <Button
-                    variant={viewMode === "card" ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setViewMode("card")}
-                    className="cls-view-btn"
-                  >
-                    <LayoutGrid size={16} />
-                    Card View
-                  </Button>
-                  <Button
-                    variant={viewMode === "list" ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setViewMode("list")}
-                    className="cls-view-btn"
-                  >
-                    <List size={16} />
-                    List View
-                  </Button>
-                </div>
-
-                {/* New Collection Button */}
-                <Button className="cls-new-collection-btn">
-                  <Plus size={16} />
-                  New API Collection
+                  <LayoutGrid size={16} />
+                  Card View
+                </Button>
+                <Button
+                  variant={viewMode === "list" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setViewMode("list")}
+                  className="cls-view-btn"
+                >
+                  <List size={16} />
+                  List View
                 </Button>
               </div>
+
+              {/* New Collection Button */}
+              <Button className="cls-new-collection-btn">
+                <Plus size={16} />
+                New API Collection
+              </Button>
             </div>
 
             {/* Collections Grid/List */}
