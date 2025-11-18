@@ -405,19 +405,19 @@ export default function ApiDocs() {
             </DialogHeader>
 
             <div className="cls-dialog-form">
-              <div className="cls-form-field-full">
-                <Label htmlFor="title">Title</Label>
-                <Input
-                  id="title"
-                  value={formData.title}
-                  onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
-                  }
-                  placeholder="Enter API title"
-                />
-              </div>
-
+              {/* First row: Title and Version */}
               <div className="cls-form-row">
+                <div className="cls-form-field">
+                  <Label htmlFor="title">Title</Label>
+                  <Input
+                    id="title"
+                    value={formData.title}
+                    onChange={(e) =>
+                      setFormData({ ...formData, title: e.target.value })
+                    }
+                    placeholder="Enter API title"
+                  />
+                </div>
                 <div className="cls-form-field">
                   <Label htmlFor="version">Version</Label>
                   <Input
@@ -429,6 +429,10 @@ export default function ApiDocs() {
                     placeholder="1.0.0"
                   />
                 </div>
+              </div>
+
+              {/* Second row: Filename and Status */}
+              <div className="cls-form-row">
                 <div className="cls-form-field">
                   <Label htmlFor="filename">Filename</Label>
                   <div className="cls-filename-input">
@@ -444,8 +448,26 @@ export default function ApiDocs() {
                     <span className="cls-filename-extension">.yaml</span>
                   </div>
                 </div>
+                <div className="cls-form-field">
+                  <Label htmlFor="status">Status</Label>
+                  <Select
+                    value={formData.status}
+                    onValueChange={(value: "active" | "inactive") =>
+                      setFormData({ ...formData, status: value })
+                    }
+                  >
+                    <SelectTrigger id="status">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="active">Active</SelectItem>
+                      <SelectItem value="inactive">Inactive</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
 
+              {/* Description field */}
               <div className="cls-form-field-full">
                 <Label htmlFor="description">Description</Label>
                 <Textarea
@@ -458,24 +480,6 @@ export default function ApiDocs() {
                   className="cls-description-textarea"
                   rows={4}
                 />
-              </div>
-
-              <div className="cls-form-field-full">
-                <Label htmlFor="status">Status</Label>
-                <Select
-                  value={formData.status}
-                  onValueChange={(value: "active" | "inactive") =>
-                    setFormData({ ...formData, status: value })
-                  }
-                >
-                  <SelectTrigger id="status">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="inactive">Inactive</SelectItem>
-                  </SelectContent>
-                </Select>
               </div>
             </div>
 
