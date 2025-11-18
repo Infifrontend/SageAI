@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import AppLayout from "@/components/layout/AppLayout";
 import { Card, CardContent } from "@/components/ui/card";
@@ -148,7 +147,7 @@ export default function ApiDocs() {
     >
       <div className="cls-apidocs-container">
         <Card className="cls-collections-card">
-          <CardContent className="cls-collections-content">
+          <CardContent className="cls-collections-content pt-6">
             {/* Page Header - First Row */}
             <div className="cls-page-header">
               <div className="cls-header-left">
@@ -158,7 +157,7 @@ export default function ApiDocs() {
             </div>
 
             {/* Filter Actions - Second Row */}
-            <div className="cls-filter-actions">
+            <div className="cls-filter-actions flex items-center gap-4 w-full flex-nowrap">
               {/* Search */}
               <div className="cls-search-container">
                 <Search className="cls-search-icon" />
@@ -250,8 +249,8 @@ export default function ApiDocs() {
                     <CardContent
                       className={
                         viewMode === "card"
-                          ? "cls-collection-card-content"
-                          : "cls-collection-list-content"
+                          ? "cls-collection-card-content pt-6"
+                          : "cls-collection-list-content pt-6"
                       }
                     >
                       <div className="cls-collection-header">
@@ -263,7 +262,7 @@ export default function ApiDocs() {
                             <h3 className="cls-collection-name">
                               {collection.name}
                             </h3>
-                            <Badge
+                            {/* <Badge
                               className={
                                 collection.status === "active"
                                   ? "cls-status-badge-active"
@@ -271,10 +270,19 @@ export default function ApiDocs() {
                               }
                             >
                               {collection.status}
-                            </Badge>
+                            </Badge> */}
                           </div>
                           <p className="cls-collection-version">
                             Version {collection.version}
+                            <Badge
+                              className={
+                                collection.status === "active"
+                                  ? "ml-3 cls-status-badge-active"
+                                  : "ml-3 cls-status-badge-inactive"
+                              }
+                            >
+                              {collection.status}
+                            </Badge>
                           </p>
                         </div>
                         <DropdownMenu>
