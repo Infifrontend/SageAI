@@ -10,7 +10,6 @@ import ResetPassword from "@/pages/unAuthPages/reset-password/Reset-password";
 import Dashboard from "@/pages/AuthPages/Dashboard/Dashboard";
 import ApiKeys from "@/pages/AuthPages/ApiKeys/ApiKeys";
 import ApiDocs from "@/pages/AuthPages/ApiDocs/ApiDocs";
-import ApiDocDetail from "@/pages/AuthPages/ApiDocs/ApiDocDetail";
 import Users from "@/pages/AuthPages/Users/Users";
 import Roles from "@/pages/AuthPages/Roles/Roles";
 import Organizations from "@/pages/AuthPages/Organizations/Organizations";
@@ -27,7 +26,6 @@ function Router() {
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/api-keys" component={ApiKeys} />
       <Route path="/api-docs" component={ApiDocs} />
-      <Route path="/api-docs/:id" component={<ApiDocDetail />} />
       <Route path="/users" component={Users} />
       <Route path="/roles" component={Roles} />
       <Route path="/organizations" component={Organizations} />
