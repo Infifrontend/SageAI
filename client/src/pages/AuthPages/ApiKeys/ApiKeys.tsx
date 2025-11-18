@@ -239,7 +239,10 @@ export default function ApiKeys() {
     );
   };
 
-  const updateApiCollection = (collectionId: string, collectionName: string) => {
+  const updateApiCollection = (
+    collectionId: string,
+    collectionName: string,
+  ) => {
     setApiCollections((prev) =>
       prev.map((collection) =>
         collection.id === collectionId
@@ -260,8 +263,8 @@ export default function ApiKeys() {
   const [columnVisibility, setColumnVisibility] = useState({
     environment: true,
     status: true,
-    permissions: true,
-    usage: true,
+    permissions: false,
+    usage: false,
     lastUsed: true,
   });
 
@@ -835,11 +838,12 @@ export default function ApiKeys() {
                     </div>
                   )}
 
-                  {collection.collection && collection.endpoints.length === 0 && (
-                    <p className="cls-no-endpoints">
-                      Select an API collection to see available endpoints.
-                    </p>
-                  )}
+                  {collection.collection &&
+                    collection.endpoints.length === 0 && (
+                      <p className="cls-no-endpoints">
+                        Select an API collection to see available endpoints.
+                      </p>
+                    )}
                 </div>
               ))}
             </div>
