@@ -153,7 +153,10 @@ export default function AppLayout({
                       onOpenChange={() => toggleMenu(item.title)}
                     >
                       <CollapsibleTrigger asChild>
-                        <SidebarMenuButton className="cls-menu-button">
+                        <SidebarMenuButton 
+                          className="cls-menu-button"
+                          tooltip={item.title}
+                        >
                           <item.icon className="cls-menu-icon" />
                           <span>{item.title}</span>
                           {openMenus.includes(item.title) ? (
@@ -181,6 +184,7 @@ export default function AppLayout({
                       <SidebarMenuButton
                         isActive={location === item.href}
                         className="cls-menu-button"
+                        tooltip={item.title}
                       >
                         <item.icon className="cls-menu-icon" />
                         <span>{item.title}</span>
