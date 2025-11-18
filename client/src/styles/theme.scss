@@ -2,9 +2,11 @@
 // Primary color: #1d2f7e
 
 // Color Palette
+$primary: #1d2f7e;
 $primary-color: #1d2f7e;
 $primary-hover: #152461;
 $primary-light: #e8ebf7;
+$primary-background: #e8ebf7;
 
 $success-color: #10b981;
 $error-color: #ef4444;
@@ -17,6 +19,10 @@ $border-color: #e5e7eb;
 $text-primary: #111827;
 $text-secondary: #6b7280;
 $text-muted: #9ca3af;
+
+// Card & UI Elements
+$card-background: #ffffff;
+$hover-background: #f9fafb;
 
 // Typography
 $font-family-primary: 'Roboto', sans-serif;
