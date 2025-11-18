@@ -9,6 +9,10 @@
   color: white;
   border-right: none;
 
+  &[data-state="collapsed"] {
+    padding: 0 3px;
+  }
+
   .cls-sidebar-header {
     padding: 1.25rem 1rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -178,8 +182,14 @@
 // Collapsed state styles using group-data selector
 :global(.group\/sidebar-wrapper[data-state="collapsed"]) {
   .cls-sidebar-header {
+    padding: 1.25rem 0.5rem;
+    
     .cls-logo {
       justify-content: center;
+    }
+    
+    .cls-logo-icon {
+      margin: 0 auto;
     }
 
     .cls-logo-text {
