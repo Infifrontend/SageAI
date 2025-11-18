@@ -94,70 +94,55 @@
 // Filters Section
 .cls-filters-section {
   display: flex;
-  justify-content: space-between;
   gap: 1rem;
   margin-bottom: 2rem;
+  flex-wrap: nowrap;
   align-items: center;
-}
-
-.cls-left-filters {
-  display: flex;
-  gap: 0.75rem;
-  align-items: center;
-  flex: 1;
 }
 
 .cls-search-container {
   position: relative;
-  min-width: 250px;
-  max-width: 400px;
   flex: 1;
+  min-width: 200px;
+  max-width: 400px;
 }
 
 .cls-search-icon {
   position: absolute;
-  left: 0.75rem;
+  right: 0.75rem;
   top: 50%;
   transform: translateY(-50%);
   color: #9ca3af;
-  pointer-events: none;
 }
 
 .cls-search-input {
   padding-left: 2.5rem;
 }
 
+.cls-actions-container {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+}
+
 .cls-filter-select {
   min-width: 150px;
 }
 
-.cls-right-actions {
+.cls-view-toggle {
   display: flex;
   gap: 0.5rem;
-  align-items: center;
-  flex-shrink: 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+  background-color: white;
 }
 
 .cls-view-button {
   gap: 0.5rem;
   border-radius: 0.375rem;
-  background-color: white;
-  border: 1px solid #e5e7eb;
-  color: #374151;
-
-  &[data-state="default"] {
-    background-color: #7c3aed;
-    color: white;
-    border-color: #7c3aed;
-  }
-
-  &:hover {
-    background-color: #f3f4f6;
-  }
-
-  &[data-state="default"]:hover {
-    background-color: #6d28d9;
-  }
 }
 
 .cls-new-plan-button {
@@ -456,16 +441,16 @@
 @media (max-width: 1200px) {
   .cls-filters-section {
     flex-wrap: wrap;
-    gap: 1rem;
   }
 
-  .cls-left-filters {
+  .cls-search-container {
     flex: 1 1 100%;
+    max-width: 100%;
   }
 
-  .cls-right-actions {
+  .cls-actions-container {
     flex: 1 1 100%;
-    justify-content: flex-end;
+    justify-content: space-between;
   }
 }
 
@@ -483,12 +468,6 @@
   .cls-filters-section {
     flex-direction: column;
     align-items: stretch;
-    gap: 0.75rem;
-  }
-
-  .cls-left-filters {
-    flex-direction: column;
-    width: 100%;
   }
 
   .cls-search-container {
@@ -496,11 +475,7 @@
     max-width: 100%;
   }
 
-  .cls-filter-select {
-    width: 100%;
-  }
-
-  .cls-right-actions {
+  .cls-actions-container {
     width: 100%;
     flex-wrap: wrap;
     justify-content: space-between;

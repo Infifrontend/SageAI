@@ -322,17 +322,23 @@ export default function Subscriptions() {
 
         {/* Filters and Actions */}
         <div className="cls-filters-section">
-          <div className="cls-left-filters">
-            <div className="cls-search-container">
-              <Search className="cls-search-icon" size={18} />
-              <Input
-                placeholder="Search by plan name..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="cls-search-input"
-              />
-            </div>
+          <div className="cls-search-container">
+            <Search
+              className="cls-search-icon"
+              size={18}
+              onClick={() => {
+                console.log(searchQuery);
+              }}
+            />
+            <Input
+              placeholder="Search by plan name..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="cls-search-input"
+            />
+          </div>
 
+          <div className="cls-actions-container">
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="cls-filter-select">
                 <SelectValue placeholder="All Statuses" />
@@ -343,27 +349,27 @@ export default function Subscriptions() {
                 <SelectItem value="inactive">Inactive</SelectItem>
               </SelectContent>
             </Select>
-          </div>
 
-          <div className="cls-right-actions">
-            <Button
-              variant={viewMode === "card" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setViewMode("card")}
-              className="cls-view-button"
-            >
-              <LayoutGrid size={16} />
-              Card View
-            </Button>
-            <Button
-              variant={viewMode === "table" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setViewMode("table")}
-              className="cls-view-button"
-            >
-              <List size={16} />
-              List View
-            </Button>
+            <div className="cls-view-toggle">
+              <Button
+                variant={viewMode === "card" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setViewMode("card")}
+                className="cls-view-button"
+              >
+                <LayoutGrid size={16} />
+                Card View
+              </Button>
+              <Button
+                variant={viewMode === "table" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setViewMode("table")}
+                className="cls-view-button"
+              >
+                <List size={16} />
+                List View
+              </Button>
+            </div>
 
             <Button className="cls-new-plan-button" onClick={handleAddPlan}>
               <Plus size={16} />
