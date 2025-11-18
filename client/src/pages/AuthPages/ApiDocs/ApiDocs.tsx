@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "wouter";
 import AppLayout from "@/components/layout/AppLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -122,6 +123,7 @@ const apiCollectionsData: ApiCollection[] = [
 ];
 
 export default function ApiDocs() {
+  const [, setLocation] = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [viewMode, setViewMode] = useState<"card" | "list">("card");
@@ -155,7 +157,7 @@ export default function ApiDocs() {
   const paginatedCollections = filteredCollections.slice(startIndex, endIndex);
 
   const handleViewDocumentation = (collectionId: string) => {
-    console.log("View documentation for:", collectionId);
+    setLocation(`/api-docs/${collectionId}`);
   };
 
   const handleSave = () => {
