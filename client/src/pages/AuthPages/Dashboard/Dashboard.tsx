@@ -25,6 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import AppLayout from "@/components/layout/AppLayout";
 import "./Dashboard.scss";
 
 export default function Dashboard() {
@@ -32,7 +33,11 @@ export default function Dashboard() {
   const [selectedTimePeriod, setSelectedTimePeriod] = useState("30");
 
   return (
-    <div className="cls-dashboard-container">
+    <AppLayout
+      title="Dashboard"
+      subtitle="Real-time analytics, AI insights, and system health monitoring"
+    >
+      <div className="cls-dashboard-container">
       {/* Header */}
       <div className="cls-dashboard-header">
         <div>
@@ -672,6 +677,6 @@ export default function Dashboard() {
           </div>
         </Card>
       </div>
-    </div>
+    </AppLayout>
   );
 }
