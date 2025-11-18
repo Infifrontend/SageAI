@@ -178,54 +178,51 @@ export function TablePagination({
         </PaginationContent>
       </Pagination>
 
-      {/* Items Per Page & Go To Page */}
-      <div className="cls-pagination-controls">
-        {/* Items Per Page */}
-        <div className="cls-items-per-page">
-          <Label htmlFor="items-per-page">Items per page:</Label>
-          <Select
-            value={itemsPerPage.toString()}
-            onValueChange={(value) => {
-              onItemsPerPageChange(parseInt(value));
-              onPageChange(1);
-            }}
-          >
-            <SelectTrigger id="items-per-page" className="cls-items-select">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {itemsPerPageOptions.map((option) => (
-                <SelectItem key={option} value={option.toString()}>
-                  {option}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+      {/* Items Per Page */}
+      <div className="cls-items-per-page">
+        <Label htmlFor="items-per-page">Items per page:</Label>
+        <Select
+          value={itemsPerPage.toString()}
+          onValueChange={(value) => {
+            onItemsPerPageChange(parseInt(value));
+            onPageChange(1);
+          }}
+        >
+          <SelectTrigger id="items-per-page" className="cls-items-select">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {itemsPerPageOptions.map((option) => (
+              <SelectItem key={option} value={option.toString()}>
+                {option}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
-        {/* Go To Page */}
-        <div className="cls-go-to-page">
-          <Label htmlFor="go-to-page">Go to page:</Label>
-          <Input
-            id="go-to-page"
-            type="number"
-            min="1"
-            max={totalPages}
-            value={goToPage}
-            onChange={(e) => setGoToPage(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleGoToPage()}
-            placeholder={`1-${totalPages}`}
-            className="cls-page-input"
-          />
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleGoToPage}
-            disabled={!goToPage}
-          >
-            Go
-          </Button>
-        </div>
+      {/* Go To Page */}
+      <div className="cls-go-to-page">
+        <Label htmlFor="go-to-page">Go to page:</Label>
+        <Input
+          id="go-to-page"
+          type="number"
+          min="1"
+          max={totalPages}
+          value={goToPage}
+          onChange={(e) => setGoToPage(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleGoToPage()}
+          placeholder={`1-${totalPages}`}
+          className="cls-page-input"
+        />
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleGoToPage}
+          disabled={!goToPage}
+        >
+          Go
+        </Button>
       </div>
     </div>
   );
