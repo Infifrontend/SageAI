@@ -16,6 +16,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 0.75rem;
+    position: relative;
 
     .cls-logo {
       display: flex;
@@ -23,7 +24,6 @@
       gap: 0.75rem;
       flex: 1;
       min-width: 0;
-      transition: all 0.2s;
 
       .cls-logo-icon {
         width: 2.5rem;
@@ -45,7 +45,7 @@
       .cls-logo-text {
         flex: 1;
         min-width: 0;
-        transition: opacity 0.2s, width 0.2s;
+        transition: opacity 0.2s ease, visibility 0.2s ease;
 
         h1 {
           font-size: 1.125rem;
@@ -81,7 +81,8 @@
       border: none;
       cursor: pointer;
       flex-shrink: 0;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
+      z-index: 100;
 
       &:hover {
         background-color: rgba(255, 255, 255, 0.2);
@@ -90,48 +91,6 @@
       svg {
         width: 1.125rem;
         height: 1.125rem;
-      }
-    }
-  }
-
-  &[data-state="collapsed"] {
-    .cls-sidebar-header {
-      .cls-logo-text {
-        opacity: 0;
-        width: 0;
-        overflow: hidden;
-      }
-    }
-
-    .cls-sidebar-content {
-      .cls-menu-button {
-        span {
-          opacity: 0;
-          width: 0;
-        }
-
-        .cls-chevron {
-          display: none;
-        }
-      }
-
-      .cls-submenu {
-        display: none;
-      }
-    }
-
-    .cls-sidebar-footer {
-      .cls-user-info {
-        opacity: 0;
-        width: 0;
-        overflow: hidden;
-      }
-
-      .cls-logout-button {
-        span {
-          opacity: 0;
-          width: 0;
-        }
       }
     }
   }
@@ -149,7 +108,7 @@
     padding: 0.875rem 1rem;
     color: rgba(255, 255, 255, 0.9);
     font-weight: 500;
-    transition: all 0.2s;
+    transition: all 0.2s ease;
     border-radius: 0.5rem;
     font-size: 0.9375rem;
 
@@ -159,10 +118,15 @@
       flex-shrink: 0;
     }
 
+    span {
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+    }
+
     .cls-chevron {
       width: 1rem;
       height: 1rem;
       margin-left: auto;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
     }
 
     &:hover {
@@ -179,6 +143,7 @@
   .cls-submenu {
     margin-top: 0.25rem;
     padding-left: 0;
+    transition: opacity 0.2s ease, visibility 0.2s ease, max-height 0.2s ease;
 
     .cls-submenu-button {
       padding: 0.75rem 1rem 0.75rem 3rem;
@@ -194,6 +159,58 @@
       &[data-active="true"] {
         background-color: #5B6FA8;
         color: white;
+      }
+    }
+  }
+}
+
+// Collapsed state styles using group-data selector
+:global(.group\/sidebar-wrapper[data-state="collapsed"]) {
+  .cls-sidebar-header {
+    .cls-logo-text {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  .cls-sidebar-content {
+    .cls-menu-button {
+      justify-content: center;
+      
+      span {
+        opacity: 0;
+        visibility: hidden;
+        width: 0;
+      }
+
+      .cls-chevron {
+        opacity: 0;
+        visibility: hidden;
+        width: 0;
+      }
+    }
+
+    .cls-submenu {
+      opacity: 0;
+      visibility: hidden;
+      max-height: 0;
+      overflow: hidden;
+    }
+  }
+
+  .cls-sidebar-footer {
+    .cls-user-info {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .cls-logout-button {
+      justify-content: center;
+      
+      span {
+        opacity: 0;
+        visibility: hidden;
+        width: 0;
       }
     }
   }
@@ -221,6 +238,7 @@
     .cls-user-info {
       flex: 1;
       min-width: 0;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
 
       .cls-user-name {
         font-size: 0.875rem;
@@ -228,6 +246,7 @@
         color: white;
         margin: 0;
         line-height: 1.2;
+        white-space: nowrap;
       }
 
       .cls-user-role {
@@ -235,6 +254,7 @@
         color: rgba(255, 255, 255, 0.7);
         margin: 0;
         line-height: 1.2;
+        white-space: nowrap;
       }
     }
   }
@@ -248,10 +268,16 @@
     font-weight: 500;
     padding: 0.75rem;
     border-radius: 0.5rem;
+    transition: all 0.2s ease;
 
     .cls-logout-icon {
       width: 1.125rem;
       height: 1.125rem;
+      flex-shrink: 0;
+    }
+
+    span {
+      transition: opacity 0.2s ease, visibility 0.2s ease;
     }
 
     &:hover {
