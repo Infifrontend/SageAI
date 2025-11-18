@@ -16,6 +16,8 @@ import {
   LogOut,
   ChevronDown,
   ChevronRight,
+  ChevronLeft,
+  Plane,
 } from "lucide-react";
 import {
   Sidebar,
@@ -109,15 +111,16 @@ export default function AppLayout({ children, title, subtitle }: AppLayoutProps)
           <SidebarHeader className="cls-sidebar-header">
             <div className="cls-logo">
               <div className="cls-logo-icon">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <circle cx="12" cy="12" r="10" />
-                </svg>
+                <Plane />
               </div>
               <div className="cls-logo-text">
-                <h1>SAGE</h1>
-                <p>Seamless API for Group Engagement</p>
+                <h1>OfferSense</h1>
+                <p>Airline Offer Management</p>
               </div>
             </div>
+            <SidebarTrigger className="cls-collapse-button">
+              <ChevronLeft />
+            </SidebarTrigger>
           </SidebarHeader>
 
           <SidebarContent className="cls-sidebar-content">
@@ -172,10 +175,10 @@ export default function AppLayout({ children, title, subtitle }: AppLayoutProps)
           <SidebarFooter className="cls-sidebar-footer">
             <div className="cls-user-profile">
               <Avatar className="cls-avatar">
-                <AvatarFallback>N</AvatarFallback>
+                <AvatarFallback>A</AvatarFallback>
               </Avatar>
               <div className="cls-user-info">
-                <p className="cls-user-name">Admin User</p>
+                <p className="cls-user-name">admin</p>
                 <p className="cls-user-role">Admin</p>
               </div>
             </div>
