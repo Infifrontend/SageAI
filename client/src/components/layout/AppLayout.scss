@@ -48,7 +48,7 @@
         transition: opacity 0.2s ease, visibility 0.2s ease;
 
         h1 {
-          font-size: 1.125rem;
+          font-size: 1.250rem;
           font-weight: 600;
           color: white;
           margin: 0;
@@ -100,13 +100,16 @@
   flex: 1;
   overflow-y: auto;
   // padding: 0.5rem;
-  
+
   /* Hide scrollbar but keep scrollable */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-  
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+
   &::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
+    display: none;
+    /* Chrome, Safari, Opera */
   }
 
   .cls-menu-button {
@@ -178,7 +181,7 @@
     .cls-logo {
       justify-content: center;
     }
-    
+
     .cls-logo-text {
       opacity: 0;
       visibility: hidden;
