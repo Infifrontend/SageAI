@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import AppLayout from "@/components/layout/AppLayout";
 import { Card, CardContent } from "@/components/ui/card";
@@ -24,7 +25,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { Badge } from "@/components/ui/badge";
+import { Label } from "@/components/ui/label";
 import {
   Package,
   Search,
@@ -39,6 +58,8 @@ import {
   Users,
   TrendingUp,
   Check,
+  X,
+  PlusCircle,
 } from "lucide-react";
 import "./Subscriptions.scss";
 
@@ -138,6 +159,22 @@ export default function Subscriptions() {
   const [viewMode, setViewMode] = useState<"card" | "table">("card");
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(6);
+  const [goToPage, setGoToPage] = useState("");
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [editingPlan, setEditingPlan] = useState<SubscriptionPlan | null>(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    price: "",
+    apiCalls: "",
+    overage: "",
+    status: "Active" as "Active" | "Inactive",
+    subscribers: "",
+    features: [] as string[],
+  });
+  const [newFeature, setNewFeature] = useState("");
 
   const filteredPlans = subscriptionPlans.filter((plan) => {
     const matchesSearch = plan.name
@@ -147,6 +184,11 @@ export default function Subscriptions() {
       statusFilter === "all" || plan.status.toLowerCase() === statusFilter;
     return matchesSearch && matchesStatus;
   });
+
+  const totalPages = Math.ceil(filteredPlans.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedPlans = filteredPlans.slice(startIndex, endIndex);
 
   const totalPlans = subscriptionPlans.length;
   const activePlans = subscriptionPlans.filter(
@@ -160,14 +202,149 @@ export default function Subscriptions() {
     prev.subscribers > current.subscribers ? prev : current,
   );
 
-  const handleEdit = (planId: string) => {
-    console.log("Edit plan:", planId);
-    // TODO: Implement edit functionality
+  const handleEdit = (plan: SubscriptionPlan) => {
+    setEditingPlan(plan);
+    setFormData({
+      name: plan.name,
+      price: plan.price.toString(),
+      apiCalls: plan.apiCalls.toString(),
+      overage: plan.overage,
+      status: plan.status,
+      subscribers: plan.subscribers.toString(),
+      features: [...plan.features],
+    });
+    setIsEditDialogOpen(true);
+  };
+
+  const handleAddPlan = () => {
+    setEditingPlan(null);
+    setFormData({
+      name: "",
+      price: "",
+      apiCalls: "",
+      overage: "",
+      status: "Active",
+      subscribers: "0",
+      features: [],
+    });
+    setIsAddDialogOpen(true);
   };
 
   const handleDelete = (planId: string) => {
     console.log("Delete plan:", planId);
     // TODO: Implement delete functionality
+  };
+
+  const handleSave = () => {
+    console.log("Saving plan:", formData);
+    // TODO: Implement save functionality
+    setIsEditDialogOpen(false);
+    setIsAddDialogOpen(false);
+  };
+
+  const handleAddFeature = () => {
+    if (newFeature.trim()) {
+      setFormData({
+        ...formData,
+        features: [...formData.features, newFeature.trim()],
+      });
+      setNewFeature("");
+    }
+  };
+
+  const handleRemoveFeature = (index: number) => {
+    setFormData({
+      ...formData,
+      features: formData.features.filter((_, i) => i !== index),
+    });
+  };
+
+  const handleGoToPage = () => {
+    const pageNum = parseInt(goToPage);
+    if (pageNum >= 1 && pageNum <= totalPages) {
+      setCurrentPage(pageNum);
+      setGoToPage("");
+    }
+  };
+
+  const renderPaginationItems = () => {
+    const items = [];
+    const maxVisible = 5;
+
+    if (totalPages <= maxVisible) {
+      for (let i = 1; i <= totalPages; i++) {
+        items.push(
+          <PaginationItem key={i}>
+            <PaginationLink
+              isActive={currentPage === i}
+              onClick={() => setCurrentPage(i)}
+              className="cursor-pointer"
+            >
+              {i}
+            </PaginationLink>
+          </PaginationItem>
+        );
+      }
+    } else {
+      items.push(
+        <PaginationItem key={1}>
+          <PaginationLink
+            isActive={currentPage === 1}
+            onClick={() => setCurrentPage(1)}
+            className="cursor-pointer"
+          >
+            1
+          </PaginationLink>
+        </PaginationItem>
+      );
+
+      if (currentPage > 3) {
+        items.push(
+          <PaginationItem key="ellipsis-start">
+            <PaginationEllipsis />
+          </PaginationItem>
+        );
+      }
+
+      const start = Math.max(2, currentPage - 1);
+      const end = Math.min(totalPages - 1, currentPage + 1);
+
+      for (let i = start; i <= end; i++) {
+        items.push(
+          <PaginationItem key={i}>
+            <PaginationLink
+              isActive={currentPage === i}
+              onClick={() => setCurrentPage(i)}
+              className="cursor-pointer"
+            >
+              {i}
+            </PaginationLink>
+          </PaginationItem>
+        );
+      }
+
+      if (currentPage < totalPages - 2) {
+        items.push(
+          <PaginationItem key="ellipsis-end">
+            <PaginationEllipsis />
+          </PaginationItem>
+        );
+      }
+
+      items.push(
+        <PaginationItem key={totalPages}>
+          <PaginationLink
+            isActive={currentPage === totalPages}
+            onClick={() => setCurrentPage(totalPages)}
+            className="cursor-pointer"
+          >
+            {totalPages}
+          </PaginationLink>
+        </PaginationItem>
+      );
+    }
+
+    return items;
   };
 
   return (
@@ -290,7 +467,7 @@ export default function Subscriptions() {
               </Button>
             </div>
 
-            <Button className="cls-new-plan-button">
+            <Button className="cls-new-plan-button" onClick={handleAddPlan}>
               <Plus size={16} />
               New Plan
             </Button>
@@ -299,185 +476,549 @@ export default function Subscriptions() {
 
         {/* Card View */}
         {viewMode === "card" && (
-          <div className="cls-plans-grid">
-            {filteredPlans.map((plan) => (
-              <Card key={plan.id} className="cls-plan-card">
-                <CardContent className="cls-plan-content">
-                  <div className="cls-plan-header">
-                    <div className="cls-plan-title-row">
-                      <div className="cls-plan-icon">
-                        {plan.icon === "star" && <Star size={20} />}
-                        {plan.icon === "award" && <Package size={20} />}
-                        {plan.icon === "building" && <Package size={20} />}
-                        {plan.icon === "server" && <Package size={20} />}
+          <>
+            <div className="cls-plans-grid">
+              {paginatedPlans.map((plan) => (
+                <Card key={plan.id} className="cls-plan-card">
+                  <CardContent className="cls-plan-content">
+                    <div className="cls-plan-header">
+                      <div className="cls-plan-title-row">
+                        <div className="cls-plan-icon">
+                          {plan.icon === "star" && <Star size={20} />}
+                          {plan.icon === "award" && <Package size={20} />}
+                          {plan.icon === "building" && <Package size={20} />}
+                          {plan.icon === "server" && <Package size={20} />}
+                        </div>
+                        <h3 className="cls-plan-name">{plan.name}</h3>
                       </div>
-                      <h3 className="cls-plan-name">{plan.name}</h3>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="cls-menu-button"
+                          >
+                            <MoreVertical size={18} />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => handleEdit(plan)}>
+                            <Edit size={16} />
+                            Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => handleDelete(plan.id)}
+                            className="cls-delete-item"
+                          >
+                            <Trash2 size={16} />
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="cls-menu-button"
-                        >
-                          <MoreVertical size={18} />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => handleEdit(plan.id)}>
-                          <Edit size={16} />
-                          Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => handleDelete(plan.id)}
-                          className="cls-delete-item"
-                        >
-                          <Trash2 size={16} />
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
 
-                  <div className="cls-plan-pricing">
-                    <h2 className="cls-plan-price">
-                      {typeof plan.price === "number"
-                        ? `$${plan.price.toFixed(2)}`
-                        : plan.price}
-                    </h2>
-                    <p className="cls-plan-period">
-                      {typeof plan.price === "number" ? "/month" : ""}
-                    </p>
-                  </div>
+                    <div className="cls-plan-pricing">
+                      <h2 className="cls-plan-price">
+                        {typeof plan.price === "number"
+                          ? `$${plan.price.toFixed(2)}`
+                          : plan.price}
+                      </h2>
+                      <p className="cls-plan-period">
+                        {typeof plan.price === "number" ? "/month" : ""}
+                      </p>
+                    </div>
 
-                  <div className="cls-plan-api">
-                    <p className="cls-api-calls">
-                      {typeof plan.apiCalls === "number"
-                        ? `${plan.apiCalls.toLocaleString()} SAGE API calls`
-                        : `${plan.apiCalls} SAGE API calls`}
-                    </p>
-                  </div>
+                    <div className="cls-plan-api">
+                      <p className="cls-api-calls">
+                        {typeof plan.apiCalls === "number"
+                          ? `${plan.apiCalls.toLocaleString()} SAGE API calls`
+                          : `${plan.apiCalls} SAGE API calls`}
+                      </p>
+                    </div>
 
-                  <div className="cls-plan-overage">
-                    <p className="cls-overage-text">
-                      Overage:{" "}
-                      <span className="cls-overage-price">{plan.overage}</span>
-                    </p>
-                  </div>
+                    <div className="cls-plan-overage">
+                      <p className="cls-overage-text">
+                        Overage:{" "}
+                        <span className="cls-overage-price">{plan.overage}</span>
+                      </p>
+                    </div>
 
-                  <div className="cls-plan-features">
-                    {plan.features.map((feature, index) => (
-                      <div key={index} className="cls-feature-item">
-                        <Check size={16} className="cls-feature-check" />
-                        <span className="cls-feature-text">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
+                    <div className="cls-plan-features">
+                      {plan.features.map((feature, index) => (
+                        <div key={index} className="cls-feature-item">
+                          <Check size={16} className="cls-feature-check" />
+                          <span className="cls-feature-text">{feature}</span>
+                        </div>
+                      ))}
+                    </div>
 
-                  <div className="cls-plan-footer">
-                    <Badge
-                      className={
-                        plan.status === "Active"
-                          ? "cls-badge-active"
-                          : "cls-badge-inactive"
-                      }
-                    >
-                      {plan.status}
-                    </Badge>
-                    <p className="cls-subscribers">
-                      {plan.subscribers} subscribers
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                    <div className="cls-plan-footer">
+                      <Badge
+                        className={
+                          plan.status === "Active"
+                            ? "cls-badge-active"
+                            : "cls-badge-inactive"
+                        }
+                      >
+                        {plan.status}
+                      </Badge>
+                      <p className="cls-subscribers">
+                        {plan.subscribers} subscribers
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </>
         )}
 
         {/* Table View */}
         {viewMode === "table" && (
-          <Card className="cls-table-card">
-            <CardContent className="cls-table-content">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>S.No.</TableHead>
-                    <TableHead>Plan Name</TableHead>
-                    <TableHead>Price</TableHead>
-                    <TableHead>API Calls</TableHead>
-                    <TableHead>Overage</TableHead>
-                    <TableHead>Features</TableHead>
-                    <TableHead>Subscribers</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="cls-actions-head"></TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredPlans.map((plan, index) => (
-                    <TableRow key={plan.id}>
-                      <TableCell>{index + 1}</TableCell>
-                      <TableCell className="cls-plan-name-cell">
-                        {plan.name}
-                      </TableCell>
-                      <TableCell>
-                        {typeof plan.price === "number"
-                          ? `$${plan.price.toFixed(2)}/month`
-                          : plan.price}
-                      </TableCell>
-                      <TableCell>
-                        {typeof plan.apiCalls === "number"
-                          ? plan.apiCalls.toLocaleString()
-                          : plan.apiCalls}
-                      </TableCell>
-                      <TableCell>{plan.overage}</TableCell>
-                      <TableCell>{plan.features.length} features</TableCell>
-                      <TableCell>{plan.subscribers}</TableCell>
-                      <TableCell>
-                        <Badge
-                          className={
-                            plan.status === "Active"
-                              ? "cls-badge-active"
-                              : "cls-badge-inactive"
-                          }
-                        >
-                          {plan.status}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="cls-menu-button"
-                            >
-                              <MoreVertical size={18} />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                              onClick={() => handleEdit(plan.id)}
-                            >
-                              <Edit size={16} />
-                              Edit
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => handleDelete(plan.id)}
-                              className="cls-delete-item"
-                            >
-                              <Trash2 size={16} />
-                              Delete
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
+          <>
+            <Card className="cls-table-card">
+              <CardContent className="cls-table-content">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>S.No.</TableHead>
+                      <TableHead>Plan Name</TableHead>
+                      <TableHead>Price</TableHead>
+                      <TableHead>API Calls</TableHead>
+                      <TableHead>Overage</TableHead>
+                      <TableHead>Features</TableHead>
+                      <TableHead>Subscribers</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead className="cls-actions-head"></TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
+                  </TableHeader>
+                  <TableBody>
+                    {paginatedPlans.map((plan, index) => (
+                      <TableRow key={plan.id}>
+                        <TableCell>{startIndex + index + 1}</TableCell>
+                        <TableCell className="cls-plan-name-cell">
+                          {plan.name}
+                        </TableCell>
+                        <TableCell>
+                          {typeof plan.price === "number"
+                            ? `$${plan.price.toFixed(2)}/month`
+                            : plan.price}
+                        </TableCell>
+                        <TableCell>
+                          {typeof plan.apiCalls === "number"
+                            ? plan.apiCalls.toLocaleString()
+                            : plan.apiCalls}
+                        </TableCell>
+                        <TableCell>{plan.overage}</TableCell>
+                        <TableCell>{plan.features.length} features</TableCell>
+                        <TableCell>{plan.subscribers}</TableCell>
+                        <TableCell>
+                          <Badge
+                            className={
+                              plan.status === "Active"
+                                ? "cls-badge-active"
+                                : "cls-badge-inactive"
+                            }
+                          >
+                            {plan.status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="cls-menu-button"
+                              >
+                                <MoreVertical size={18} />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem
+                                onClick={() => handleEdit(plan)}
+                              >
+                                <Edit size={16} />
+                                Edit
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => handleDelete(plan.id)}
+                                className="cls-delete-item"
+                              >
+                                <Trash2 size={16} />
+                                Delete
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </>
         )}
+
+        {/* Pagination Controls */}
+        <div className="cls-pagination-section">
+          <div className="cls-pagination-info">
+            <span className="cls-pagination-text">
+              Showing {startIndex + 1} to {Math.min(endIndex, filteredPlans.length)} of {filteredPlans.length} plans
+            </span>
+          </div>
+
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                  className={currentPage === 1 ? "pointer-events-none opacity-50 cursor-not-allowed" : "cursor-pointer"}
+                />
+              </PaginationItem>
+              {renderPaginationItems()}
+              <PaginationItem>
+                <PaginationNext
+                  onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                  className={currentPage === totalPages ? "pointer-events-none opacity-50 cursor-not-allowed" : "cursor-pointer"}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+
+          <div className="cls-pagination-controls">
+            <div className="cls-items-per-page">
+              <Label htmlFor="items-per-page">Items per page:</Label>
+              <Select
+                value={itemsPerPage.toString()}
+                onValueChange={(value) => {
+                  setItemsPerPage(parseInt(value));
+                  setCurrentPage(1);
+                }}
+              >
+                <SelectTrigger id="items-per-page" className="cls-items-select">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="3">3</SelectItem>
+                  <SelectItem value="6">6</SelectItem>
+                  <SelectItem value="9">9</SelectItem>
+                  <SelectItem value="12">12</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="cls-go-to-page">
+              <Label htmlFor="go-to-page">Go to page:</Label>
+              <Input
+                id="go-to-page"
+                type="number"
+                min="1"
+                max={totalPages}
+                value={goToPage}
+                onChange={(e) => setGoToPage(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleGoToPage()}
+                placeholder={`1-${totalPages}`}
+                className="cls-page-input"
+              />
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleGoToPage}
+                disabled={!goToPage}
+              >
+                Go
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Edit Plan Dialog */}
+        <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+          <DialogContent className="cls-edit-dialog">
+            <DialogHeader>
+              <DialogTitle>Edit Subscription Plan</DialogTitle>
+              <DialogDescription>
+                Update the details for this subscription plan.
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="cls-dialog-form">
+              <div className="cls-form-row">
+                <div className="cls-form-field">
+                  <Label htmlFor="plan-name">Plan Name</Label>
+                  <Input
+                    id="plan-name"
+                    value={formData.name}
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="cls-form-field">
+                  <Label htmlFor="status">Status</Label>
+                  <Select
+                    value={formData.status}
+                    onValueChange={(value: "Active" | "Inactive") =>
+                      setFormData({ ...formData, status: value })
+                    }
+                  >
+                    <SelectTrigger id="status">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Active">Active</SelectItem>
+                      <SelectItem value="Inactive">Inactive</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="cls-form-row">
+                <div className="cls-form-field">
+                  <Label htmlFor="price">Price ($)</Label>
+                  <Input
+                    id="price"
+                    type="number"
+                    value={formData.price}
+                    onChange={(e) =>
+                      setFormData({ ...formData, price: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="cls-form-field">
+                  <Label htmlFor="subscribers">Subscribers</Label>
+                  <Input
+                    id="subscribers"
+                    type="number"
+                    value={formData.subscribers}
+                    onChange={(e) =>
+                      setFormData({ ...formData, subscribers: e.target.value })
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className="cls-form-row">
+                <div className="cls-form-field">
+                  <Label htmlFor="api-calls">API Calls</Label>
+                  <Input
+                    id="api-calls"
+                    type="number"
+                    value={formData.apiCalls}
+                    onChange={(e) =>
+                      setFormData({ ...formData, apiCalls: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="cls-form-field">
+                  <Label htmlFor="overage">Overage ($)</Label>
+                  <Input
+                    id="overage"
+                    value={formData.overage}
+                    onChange={(e) =>
+                      setFormData({ ...formData, overage: e.target.value })
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className="cls-form-field-full">
+                <Label>Features</Label>
+                <div className="cls-features-list">
+                  {formData.features.map((feature, index) => (
+                    <div key={index} className="cls-feature-row">
+                      <Input value={feature} readOnly />
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleRemoveFeature(index)}
+                        className="cls-remove-feature"
+                      >
+                        <Trash2 size={16} />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+                <div className="cls-add-feature-row">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleAddFeature}
+                    className="cls-add-feature-button"
+                  >
+                    <PlusCircle size={16} />
+                    Add Feature
+                  </Button>
+                </div>
+                {formData.features.length > 0 && (
+                  <div className="cls-new-feature-input">
+                    <Input
+                      placeholder="Enter new feature"
+                      value={newFeature}
+                      onChange={(e) => setNewFeature(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && handleAddFeature()}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setIsEditDialogOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button onClick={handleSave}>Save</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Add Plan Dialog */}
+        <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+          <DialogContent className="cls-edit-dialog">
+            <DialogHeader>
+              <DialogTitle>Add New Subscription Plan</DialogTitle>
+              <DialogDescription>
+                Create a new subscription plan with custom features.
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="cls-dialog-form">
+              <div className="cls-form-row">
+                <div className="cls-form-field">
+                  <Label htmlFor="add-plan-name">Plan Name</Label>
+                  <Input
+                    id="add-plan-name"
+                    value={formData.name}
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
+                    placeholder="Enter plan name"
+                  />
+                </div>
+                <div className="cls-form-field">
+                  <Label htmlFor="add-status">Status</Label>
+                  <Select
+                    value={formData.status}
+                    onValueChange={(value: "Active" | "Inactive") =>
+                      setFormData({ ...formData, status: value })
+                    }
+                  >
+                    <SelectTrigger id="add-status">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Active">Active</SelectItem>
+                      <SelectItem value="Inactive">Inactive</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="cls-form-row">
+                <div className="cls-form-field">
+                  <Label htmlFor="add-price">Price ($)</Label>
+                  <Input
+                    id="add-price"
+                    type="number"
+                    value={formData.price}
+                    onChange={(e) =>
+                      setFormData({ ...formData, price: e.target.value })
+                    }
+                    placeholder="0.00"
+                  />
+                </div>
+                <div className="cls-form-field">
+                  <Label htmlFor="add-subscribers">Subscribers</Label>
+                  <Input
+                    id="add-subscribers"
+                    type="number"
+                    value={formData.subscribers}
+                    onChange={(e) =>
+                      setFormData({ ...formData, subscribers: e.target.value })
+                    }
+                    placeholder="0"
+                  />
+                </div>
+              </div>
+
+              <div className="cls-form-row">
+                <div className="cls-form-field">
+                  <Label htmlFor="add-api-calls">API Calls</Label>
+                  <Input
+                    id="add-api-calls"
+                    type="number"
+                    value={formData.apiCalls}
+                    onChange={(e) =>
+                      setFormData({ ...formData, apiCalls: e.target.value })
+                    }
+                    placeholder="25000"
+                  />
+                </div>
+                <div className="cls-form-field">
+                  <Label htmlFor="add-overage">Overage ($)</Label>
+                  <Input
+                    id="add-overage"
+                    value={formData.overage}
+                    onChange={(e) =>
+                      setFormData({ ...formData, overage: e.target.value })
+                    }
+                    placeholder="0.10"
+                  />
+                </div>
+              </div>
+
+              <div className="cls-form-field-full">
+                <Label>Features</Label>
+                <div className="cls-features-list">
+                  {formData.features.map((feature, index) => (
+                    <div key={index} className="cls-feature-row">
+                      <Input value={feature} readOnly />
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleRemoveFeature(index)}
+                        className="cls-remove-feature"
+                      >
+                        <Trash2 size={16} />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+                <div className="cls-new-feature-input">
+                  <Input
+                    placeholder="Enter feature and press Enter or click Add"
+                    value={newFeature}
+                    onChange={(e) => setNewFeature(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleAddFeature()}
+                  />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleAddFeature}
+                    className="cls-add-feature-button"
+                  >
+                    <PlusCircle size={16} />
+                    Add
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setIsAddDialogOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button onClick={handleSave}>Save</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </AppLayout>
   );

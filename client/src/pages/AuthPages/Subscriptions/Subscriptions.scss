@@ -339,6 +339,149 @@
   }
 }
 
+// Pagination Section
+.cls-pagination-section {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.cls-pagination-info {
+  text-align: center;
+}
+
+.cls-pagination-text {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.cls-pagination-controls {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.cls-items-per-page,
+.cls-go-to-page {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  label {
+    font-size: 0.875rem;
+    color: #374151;
+    white-space: nowrap;
+  }
+}
+
+.cls-items-select {
+  width: 80px;
+}
+
+.cls-page-input {
+  width: 80px;
+}
+
+// Edit Dialog
+.cls-edit-dialog {
+  max-width: 600px;
+}
+
+.cls-dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin: 1rem 0;
+}
+
+.cls-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.cls-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+  }
+}
+
+.cls-form-field-full {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+  }
+}
+
+.cls-features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 0.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  background-color: #f9fafb;
+}
+
+.cls-feature-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+
+  input {
+    flex: 1;
+    background-color: white;
+  }
+}
+
+.cls-remove-feature {
+  color: #ef4444;
+  flex-shrink: 0;
+
+  &:hover {
+    background-color: #fef2f2;
+  }
+}
+
+.cls-add-feature-row {
+  margin-top: 0.5rem;
+}
+
+.cls-add-feature-button {
+  gap: 0.5rem;
+}
+
+.cls-new-feature-input {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+
+  input {
+    flex: 1;
+  }
+
+  button {
+    gap: 0.5rem;
+  }
+}
+
 // Responsive
 @media (max-width: 1200px) {
   .cls-filters-section {
@@ -385,5 +528,14 @@
 
   .cls-plans-grid {
     grid-template-columns: 1fr;
+  }
+
+  .cls-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .cls-pagination-controls {
+    flex-direction: column;
+    gap: 1rem;
   }
 }
