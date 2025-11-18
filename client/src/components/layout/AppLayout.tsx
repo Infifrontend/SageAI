@@ -16,7 +16,8 @@ import {
   ChevronDown,
   ChevronRight,
   ChevronLeft,
-  Plane,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from "lucide-react";
 import {
   Sidebar,
@@ -29,6 +30,7 @@ import {
   SidebarProvider,
   SidebarInset,
   SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import {
   Collapsible,
@@ -87,6 +89,31 @@ interface AppLayoutProps {
   subtitle?: string;
 }
 
+function SidebarHeaderComponent() {
+  const { state, toggleSidebar } = useSidebar();
+  
+  return (
+    <SidebarHeader className="cls-sidebar-header">
+      <div className="cls-logo">
+        <div className="cls-logo-icon">
+          {state === "collapsed" ? <PanelLeftOpen /> : <PanelLeftClose />}
+        </div>
+        <div className="cls-logo-text">
+          <h1>SAGE</h1>
+          <p>Seamless API for Group Engagement</p>
+        </div>
+      </div>
+      <button 
+        className="cls-collapse-button"
+        onClick={toggleSidebar}
+        aria-label={state === "collapsed" ? "Expand sidebar" : "Collapse sidebar"}
+      >
+        {state === "collapsed" ? <ChevronRight /> : <ChevronLeft />}
+      </button>
+    </SidebarHeader>
+  );
+}
+
 export default function AppLayout({
   children,
   title,
@@ -113,18 +140,8 @@ export default function AppLayout({
   return (
     <SidebarProvider>
       <div className="cls-app-layout">
-        <Sidebar className="cls-sidebar">
-          <SidebarHeader className="cls-sidebar-header">
-            <div className="cls-logo">
-              <div className="cls-logo-icon">
-                <ChevronLeft />
-              </div>
-              <div className="cls-logo-text">
-                <h1>SAGE</h1>
-                <p>Seamless API for Group Engagement</p>
-              </div>
-            </div>
-          </SidebarHeader>
+        <Sidebar className="cls-sidebar" collapsible="icon">
+          <SidebarHeaderComponent />
 
           <SidebarContent className="cls-sidebar-content">
             <SidebarMenu>
