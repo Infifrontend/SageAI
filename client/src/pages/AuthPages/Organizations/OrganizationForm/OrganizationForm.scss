@@ -124,16 +124,20 @@
 
 // Subscription Plans
 .cls-subscription-plans {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .cls-plan-card {
   position: relative;
   border: 2px solid hsl(var(--border));
   border-radius: 0.75rem;
-  padding: 1.5rem;
+  padding: 1.25rem;
   background: hsl(var(--background));
   cursor: pointer;
   transition: all $transition-fast;
@@ -197,7 +201,7 @@
   }
 
   .cls-plan-price {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: hsl(var(--foreground));
     margin-bottom: 0.25rem;
