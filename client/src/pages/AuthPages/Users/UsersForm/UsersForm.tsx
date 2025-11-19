@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -87,7 +87,7 @@ export default function UsersForm({ open, onOpenChange, onSubmit, editData, isEd
   });
 
   // Update form data when editData changes
-  useState(() => {
+  useEffect(() => {
     if (editData && isEdit) {
       setFormData({
         fullName: editData.name || "",
@@ -99,8 +99,20 @@ export default function UsersForm({ open, onOpenChange, onSubmit, editData, isEd
         notes: "",
         status: editData.status || "Pending",
       });
+    } else if (!isEdit) {
+      // Reset form when creating new user
+      setFormData({
+        fullName: "",
+        email: "",
+        organization: "",
+        role: "",
+        sendInvitation: true,
+        requirePasswordReset: true,
+        notes: "",
+        status: "Pending",
+      });
     }
-  });
+  }, [editData, isEdit]);
 
   const [errors, setErrors] = useState({
     fullName: false,
