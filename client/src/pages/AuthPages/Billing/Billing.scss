@@ -124,36 +124,25 @@
   font-weight: 500;
 }
 
-.cls-performance-banner {
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 1rem 1.5rem;
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  margin-top: 1rem;
+.cls-performance-text-section {
+  text-align: center;
+  margin-top: 1.5rem;
+  padding: 0 1rem;
 }
 
-.cls-performance-icon {
-  color: #10b981;
-  flex-shrink: 0;
+.cls-performance-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
 }
 
-.cls-performance-text {
-  strong {
-    display: block;
-    color: #111827;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-  }
-
-  p {
-    color: #6b7280;
-    font-size: 0.875rem;
-    margin: 0;
-  }
+.cls-performance-description {
+  font-size: 0.9375rem;
+  color: #111827;
+  font-weight: 500;
+  margin: 0;
+  line-height: 1.5;
 }
 
 // Plan & Billing Grid

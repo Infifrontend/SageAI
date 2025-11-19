@@ -16,7 +16,6 @@ import {
 import {
   AlertTriangle,
   Download,
-  TrendingUp,
   CreditCard,
   CheckCircle2,
   Info,
@@ -300,15 +299,11 @@ export default function Billing() {
             </Card>
           </div>
 
-          <div className="cls-performance-banner">
-            <TrendingUp className="cls-performance-icon" />
-            <div className="cls-performance-text">
-              <strong>Group Engagement Performance</strong>
-              <p>
-                Your SAGE API is enabling seamless group interactions with 84%
-                efficiency
-              </p>
-            </div>
+          <div className="cls-performance-text-section">
+            <p className="cls-performance-label">Group Engagement Performance</p>
+            <p className="cls-performance-description">
+              Your SAGE API is enabling seamless group interactions with 84% efficiency
+            </p>
           </div>
         </div>
 
