@@ -162,6 +162,7 @@ const invoices: Invoice[] = [
 
 export default function Billing() {
   const invoicesSectionRef = useRef<HTMLDivElement>(null);
+  const plansSectionRef = useRef<HTMLDivElement>(null);
   const currentPlanName = "Enterprise"; // The actual current plan
   const [selectedPlan, setSelectedPlan] = useState("Enterprise");
   const [invoiceSearchQuery, setInvoiceSearchQuery] = useState("");
@@ -179,6 +180,14 @@ export default function Billing() {
   // Scroll to invoices section
   const scrollToInvoices = () => {
     invoicesSectionRef.current?.scrollIntoView({ 
+      behavior: 'smooth',
+      block: 'start'
+    });
+  };
+
+  // Scroll to plans section
+  const scrollToPlans = () => {
+    plansSectionRef.current?.scrollIntoView({ 
       behavior: 'smooth',
       block: 'start'
     });
@@ -346,7 +355,7 @@ export default function Billing() {
               </p>
             </div>
           </div>
-          <Button variant="outline" className="cls-alert-button">
+          <Button variant="outline" className="cls-alert-button" onClick={scrollToPlans}>
             Upgrade Plan
           </Button>
         </div>
@@ -576,7 +585,7 @@ export default function Billing() {
         </Card>
 
         {/* Available Plans */}
-        <div className="cls-plans-section">
+        <div className="cls-plans-section" ref={plansSectionRef}>
           <h2 className="cls-section-title">Available SAGE Plans</h2>
           <p className="cls-section-subtitle">
             Compare all SAGE tiers that best fit your group engagement API needs
