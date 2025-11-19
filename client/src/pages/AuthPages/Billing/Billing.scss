@@ -476,10 +476,12 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   cursor: pointer;
+  border: 2px solid transparent;
 
   &:hover {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
     transform: translateY(-2px);
+    border-color: #e5e7eb;
   }
 
   &.cls-plan-highlighted {
@@ -490,7 +492,7 @@
   &.cls-plan-selected {
     border: 2px solid #1d2f7e;
     box-shadow: 0 4px 12px rgba(29, 47, 126, 0.3);
-    background: #f8f9ff;
+    background: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
   }
 }
 
@@ -511,6 +513,15 @@
 
 .cls-plan-card-content {
   padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.cls-plan-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .cls-plan-card-header {
@@ -552,6 +563,7 @@
 
 .cls-plan-card-features {
   margin-bottom: 1.5rem;
+  flex: 1;
 }
 
 .cls-feature-item {
@@ -571,6 +583,7 @@
 
 .cls-plan-select-btn {
   width: 100%;
+  margin-top: auto;
 }
 
 // Invoices

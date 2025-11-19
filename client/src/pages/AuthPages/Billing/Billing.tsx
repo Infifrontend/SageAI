@@ -522,31 +522,37 @@ export default function Billing() {
                     </div>
                   )}
 
-                  <div className="cls-plan-card-header">
-                    <div className="cls-plan-card-name">{plan.name}</div>
-                    <div className="cls-plan-card-price">{plan.price}</div>
-                    {plan.priceValue > 0 && (
-                      <div className="cls-plan-card-period">per month</div>
+                  <div className="cls-plan-card-body">
+                    <div className="cls-plan-card-header">
+                      <div className="cls-plan-card-name">{plan.name}</div>
+                      <div className="cls-plan-card-price">{plan.price}</div>
+                      {plan.priceValue > 0 && (
+                        <div className="cls-plan-card-period">per month</div>
+                      )}
+                    </div>
+
+                    <div className="cls-plan-card-calls">{plan.apiCalls}</div>
+                    {plan.overage && (
+                      <div className="cls-plan-card-overage">{plan.overage}</div>
                     )}
-                  </div>
 
-                  <div className="cls-plan-card-calls">{plan.apiCalls}</div>
-                  {plan.overage && (
-                    <div className="cls-plan-card-overage">{plan.overage}</div>
-                  )}
-
-                  <div className="cls-plan-card-features">
-                    {plan.features.map((feature, index) => (
-                      <div key={index} className="cls-feature-item">
-                        <CheckCircle2 size={16} className="cls-feature-icon" />
-                        <span>{feature}</span>
-                      </div>
-                    ))}
+                    <div className="cls-plan-card-features">
+                      {plan.features.map((feature, index) => (
+                        <div key={index} className="cls-feature-item">
+                          <CheckCircle2 size={16} className="cls-feature-icon" />
+                          <span>{feature}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
                   <Button
                     className="cls-plan-select-btn"
                     variant={plan.highlighted ? "default" : "outline"}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedPlan(plan.name);
+                    }}
                   >
                     {plan.name === "Custom/On-Premise"
                       ? "Contact SAGE Sales"
