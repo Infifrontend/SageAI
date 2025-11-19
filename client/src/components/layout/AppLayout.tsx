@@ -81,6 +81,11 @@ const menuItems: MenuItem[] = [
     icon: Package,
     href: "/subscriptions",
   },
+  {
+    title: "Settings",
+    icon: Settings,
+    href: "/settings",
+  },
 ];
 
 interface AppLayoutProps {
