@@ -26,6 +26,9 @@ import {
 import "./Settings.scss";
 
 export default function Settings() {
+  // Active section state
+  const [activeSection, setActiveSection] = useState<string>("api");
+
   // Quick Actions handlers
   const handleRestartServices = () => {
     console.log("Restarting services...");
@@ -180,19 +183,31 @@ export default function Settings() {
           {/* Left Sidebar */}
           <div className="cls-settings-sidebar">
             <nav className="cls-settings-nav">
-              <button className="cls-nav-item cls-nav-item-active">
+              <button 
+                className={`cls-nav-item ${activeSection === "api" ? "cls-nav-item-active" : ""}`}
+                onClick={() => setActiveSection("api")}
+              >
                 <SettingsIcon size={16} />
                 <span>API</span>
               </button>
-              <button className="cls-nav-item">
+              <button 
+                className={`cls-nav-item ${activeSection === "security" ? "cls-nav-item-active" : ""}`}
+                onClick={() => setActiveSection("security")}
+              >
                 <Shield size={16} />
                 <span>Security</span>
               </button>
-              <button className="cls-nav-item">
+              <button 
+                className={`cls-nav-item ${activeSection === "monitoring" ? "cls-nav-item-active" : ""}`}
+                onClick={() => setActiveSection("monitoring")}
+              >
                 <Activity size={16} />
                 <span>Monitoring</span>
               </button>
-              <button className="cls-nav-item">
+              <button 
+                className={`cls-nav-item ${activeSection === "notifications" ? "cls-nav-item-active" : ""}`}
+                onClick={() => setActiveSection("notifications")}
+              >
                 <Bell size={16} />
                 <span>Notifications</span>
               </button>
@@ -202,6 +217,7 @@ export default function Settings() {
           {/* Main Content */}
           <div className="cls-settings-main">
             {/* API Configuration */}
+            {activeSection === "api" && (
             <Card className="cls-settings-card">
               <CardContent className="cls-settings-card-content">
                 <div className="cls-settings-card-header">
@@ -295,8 +311,10 @@ export default function Settings() {
                 </div>
               </CardContent>
             </Card>
+            )}
 
             {/* Security Settings */}
+            {activeSection === "security" && (
             <Card className="cls-settings-card">
               <CardContent className="cls-settings-card-content">
                 <div className="cls-settings-card-header">
@@ -393,8 +411,10 @@ export default function Settings() {
                 </div>
               </CardContent>
             </Card>
+            )}
 
             {/* Monitoring Configuration */}
+            {activeSection === "monitoring" && (
             <Card className="cls-settings-card">
               <CardContent className="cls-settings-card-content">
                 <div className="cls-settings-card-header">
@@ -501,8 +521,10 @@ export default function Settings() {
                 </div>
               </CardContent>
             </Card>
+            )}
 
             {/* Notification Settings */}
+            {activeSection === "notifications" && (
             <Card className="cls-settings-card">
               <CardContent className="cls-settings-card-content">
                 <div className="cls-settings-card-header">
@@ -629,6 +651,7 @@ export default function Settings() {
                 </div>
               </CardContent>
             </Card>
+            )}
           </div>
         </div>
       </div>
