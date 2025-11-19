@@ -32,6 +32,7 @@ import {
   Pencil,
   Trash2,
 } from "lucide-react";
+import OrganizationForm from "./OrganizationForm/OrganizationForm";
 import "./Organizations.scss";
 
 interface Organization {
@@ -55,6 +56,8 @@ export default function Organizations() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(6);
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [editingOrganization, setEditingOrganization] = useState<Organization | null>(null);
 
   const organizations: Organization[] = [
     {
@@ -226,13 +229,24 @@ export default function Organizations() {
   );
 
   const handleEditOrganization = (org: Organization) => {
-    console.log("Edit organization:", org);
+    setEditingOrganization(org);
+    setIsCreateDialogOpen(true);
   };
 
   const handleDeleteOrganization = (orgId: number) => {
     if (window.confirm("Are you sure you want to delete this organization?")) {
       console.log("Delete organization:", orgId);
     }
+  };
+
+  const handleCreateOrganization = () => {
+    setEditingOrganization(null);
+    setIsCreateDialogOpen(true);
+  };
+
+  const handleFormSubmit = (data: any) => {
+    console.log("Form submitted:", data);
+    // Handle create/update logic here
   };
 
   return (
@@ -327,7 +341,7 @@ export default function Organizations() {
                   className="cls-search-input"
                 />
               </div>
-              <Button className="cls-create-btn">
+              <Button className="cls-create-btn" onClick={handleCreateOrganization}>
                 <Plus size={18} />
                 New Organization
               </Button>
@@ -465,6 +479,14 @@ export default function Organizations() {
             }}
           />
         </Card>
+
+        <OrganizationForm
+          open={isCreateDialogOpen}
+          onOpenChange={setIsCreateDialogOpen}
+          onSubmit={handleFormSubmit}
+          editData={editingOrganization}
+          isEdit={!!editingOrganization}
+        />
       </div>
     </AppLayout>
   );
