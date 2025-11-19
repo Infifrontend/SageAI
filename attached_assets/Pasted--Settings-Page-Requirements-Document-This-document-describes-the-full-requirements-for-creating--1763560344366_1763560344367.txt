@@ -1,0 +1,120 @@
+# Settings Page – Requirements Document
+
+This document describes the full requirements for creating the **Settings Page** as per the shared sample design.
+
+---
+
+## 🧩 Overview
+
+Create a Settings page following the existing coding standards in the project.  
+The page will include the following sections:
+
+1. **API Settings**
+2. **Security Settings**
+3. **Monitoring Configuration**
+4. **Notification Settings**
+
+Each section contains multiple configuration fields such as **select dropdowns**, **switch toggles**, and **input fields**.
+
+> **Important Rule**:  
+> The **Save / Update** button in each section must stay **disabled** until any value inside that section is changed.
+
+---
+
+## 1. API Settings
+
+### **Fields**
+- **Default Rate Limit** (Select dropdown)  
+  Options:  
+  - 1000 requests/min  
+  - 5000 requests/min  
+  - 10000 requests/min  
+
+- **API Version** (Select dropdown)  
+  Options:  
+  - V1  
+  - V2 (beta)
+
+- **API Key Rotation** (Switch)
+
+- **Request Logging** (Switch)
+
+### **Button Behavior**
+- Button enabled **only when any field value is changed**.
+
+---
+
+## 2. Security Settings
+
+### **Fields**
+- **Session Timeout** (Select dropdown)  
+  Options:  
+  - 15 minutes  
+  - 30 minutes  
+  - 1 hour  
+
+- **Two-Factor Authentication** (Switch)
+
+- **IP Whitelisting** (Switch)
+
+- **Failed Login Protection** (Switch)
+
+### **Button Behavior**
+- Button enabled **only when values change**.
+
+---
+
+## 3. Monitoring Configuration
+
+### **Fields**
+- **Health Check Interval** (Select dropdown)  
+  Options:  
+  - 1 minute  
+  - 5 minutes  
+  - 15 minutes  
+
+- **Alert Threshold** (Select dropdown)  
+  Options:  
+  - 90%  
+  - 95%  
+  - 98%  
+
+- **Real-time Monitoring** (Switch)
+
+- **Performance Analytics** (Switch)
+
+### **Button Behavior**
+- Button enabled **only when changes are made**.
+
+---
+
+## 4. Notification Settings
+
+### **Fields**
+- **Alert Email**  
+  - Text input  
+  - Email validation required  
+
+- **System Health Alerts** (Switch)
+
+- **Error Rate Alerts** (Switch)
+
+- **Performance Alerts** (Switch)
+
+- **Usage Threshold Alerts** (Switch)
+
+### **Button Behavior**
+- Button enabled **only when values change**.
+
+---
+
+## General Requirements
+
+- Follow the **existing coding standards**, folder structure, naming conventions, SCSS pattern, and component standards.
+- Use the existing reusable components wherever applicable (switch, select, button, input, etc.).
+- Each settings card must match the shared **UI design and color codes**.
+- Ensure good spacing, responsiveness, and consistent layout across all sections.
+- Validation error messages should follow the existing design system.
+
+---
+
