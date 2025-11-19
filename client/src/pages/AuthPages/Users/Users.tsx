@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { useLocation } from "wouter";
 import {
   Table,
   TableBody,
@@ -542,8 +543,6 @@ export default function UsersPage() {
           startIndex={startIndex}
           endIndex={endIndex}
         />
-
-        
       </div>
     </AppLayout>
   );
