@@ -1,0 +1,184 @@
+
+.cls-billing-payment-dialog {
+  max-width: 480px;
+  padding: 1.5rem;
+}
+
+.cls-dialog-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.cls-dialog-subtitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-top: 0.5rem;
+}
+
+.cls-payment-content {
+  margin-top: 1.5rem;
+}
+
+.cls-payment-accordion {
+  width: 100%;
+}
+
+.cls-accordion-item {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.cls-accordion-trigger {
+  padding: 1rem 1.25rem;
+  font-weight: 500;
+  color: #111827;
+  background: #f9fafb;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #f3f4f6;
+  }
+
+  &[data-state="open"] {
+    background: #7c3aed;
+    color: #ffffff;
+    font-weight: 600;
+  }
+}
+
+.cls-accordion-content {
+  padding: 1.5rem 1.25rem;
+  background: #ffffff;
+}
+
+.cls-card-form,
+.cls-upi-form,
+.cls-netbanking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cls-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+  }
+
+  input {
+    padding: 0.625rem 0.875rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    transition: border-color 0.2s;
+
+    &:focus {
+      outline: none;
+      border-color: #7c3aed;
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+    }
+
+    &::placeholder {
+      color: #9ca3af;
+    }
+  }
+}
+
+.cls-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.cls-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.cls-wallets-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cls-section-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.cls-wallets-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.cls-wallet-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: #7c3aed;
+    background: #f5f3ff;
+  }
+
+  &.cls-selected {
+    border-color: #7c3aed;
+    background: #7c3aed;
+    color: #ffffff;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.cls-bank-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .cls-billing-payment-dialog {
+    max-width: 95vw;
+  }
+
+  .cls-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .cls-wallets-grid {
+    grid-template-columns: 1fr;
+  }
+}

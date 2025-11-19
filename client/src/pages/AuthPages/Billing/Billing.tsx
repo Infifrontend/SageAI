@@ -37,6 +37,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { TablePagination } from "@/components/ui/table-pagination";
+import BillingPayment from "./BillingPayment/BillingPayment";
 import "./Billing.scss";
 
 interface Invoice {
@@ -176,6 +177,7 @@ export default function Billing() {
     amount: true,
     status: true,
   });
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
 
   // Scroll to invoices section
   const scrollToInvoices = () => {
@@ -519,12 +521,16 @@ export default function Billing() {
               </div>
 
               <div className="cls-billing-actions">
-                <Button variant="outline" className="cls-billing-action-btn">
+                <Button 
+                  variant="default" 
+                  className="cls-billing-action-btn"
+                  onClick={() => setIsPaymentModalOpen(true)}
+                >
                   <CreditCard size={16} />
                   Update Payment Method
                 </Button>
                 <Button 
-                  variant="outline" 
+                  variant="secondary" 
                   className="cls-billing-action-btn"
                   onClick={scrollToInvoices}
                 >
@@ -909,6 +915,12 @@ export default function Billing() {
             endIndex={endIndex}
           />
         )}
+
+        {/* Payment Modal */}
+        <BillingPayment
+          open={isPaymentModalOpen}
+          onOpenChange={setIsPaymentModalOpen}
+        />
       </div>
     </AppLayout>
   );
