@@ -38,7 +38,7 @@ import {
 } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import TablePagination from "@/components/ui/table-pagination";
+import { TablePagination } from "@/components/ui/table-pagination";
 import "./Billing.scss";
 
 interface Invoice {
