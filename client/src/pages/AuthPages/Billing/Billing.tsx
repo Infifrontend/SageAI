@@ -163,7 +163,7 @@ const invoices: Invoice[] = [
 export default function Billing() {
   const invoicesSectionRef = useRef<HTMLDivElement>(null);
   const plansSectionRef = useRef<HTMLDivElement>(null);
-  const currentPlanName = "Enterprise"; // The actual current plan
+  const [currentPlanName, setCurrentPlanName] = useState("Enterprise"); // The actual current plan
   const [selectedPlan, setSelectedPlan] = useState("Enterprise");
   const [invoiceSearchQuery, setInvoiceSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -191,6 +191,14 @@ export default function Billing() {
       behavior: 'smooth',
       block: 'start'
     });
+  };
+
+  // Handle plan switching
+  const handleSwitchPlan = (planName: string) => {
+    if (planName !== currentPlanName && planName !== "Custom/On-Premise") {
+      setCurrentPlanName(planName);
+      setSelectedPlan(planName);
+    }
   };
 
   const currentPlan = {
@@ -649,7 +657,12 @@ export default function Billing() {
                       onClick={(e) => {
                         e.stopPropagation();
                         if (!isCurrentPlan) {
-                          setSelectedPlan(plan.name);
+                          if (plan.name === "Custom/On-Premise") {
+                            // Handle custom plan contact
+                            alert("Please contact SAGE Sales for custom pricing");
+                          } else {
+                            handleSwitchPlan(plan.name);
+                          }
                         }
                       }}
                     >
