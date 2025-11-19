@@ -246,10 +246,7 @@
     }
 
     .cls-submenu {
-      opacity: 0;
-      visibility: hidden;
-      max-height: 0;
-      overflow: hidden;
+      display: none;
     }
   }
 

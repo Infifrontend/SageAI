@@ -114,13 +114,14 @@ function SidebarHeaderComponent() {
   );
 }
 
-export default function AppLayout({
+function AppLayoutContent({
   children,
   title,
   subtitle,
 }: AppLayoutProps) {
   const [location] = useLocation();
   const [openMenus, setOpenMenus] = useState<string[]>([]);
+  const { state: sidebarState } = useSidebar();
 
   // Initialize open menu based on current location
   React.useEffect(() => {
@@ -148,8 +149,7 @@ export default function AppLayout({
   };
 
   return (
-    <SidebarProvider>
-      <div className="cls-app-layout">
+    <div className="cls-app-layout">
         <Sidebar className="cls-sidebar" collapsible="icon">
           <SidebarHeaderComponent />
 
@@ -159,7 +159,7 @@ export default function AppLayout({
                 <SidebarMenuItem key={item.title}>
                   {item.items ? (
                     <Collapsible
-                      open={openMenus.includes(item.title)}
+                      open={sidebarState !== "collapsed" && openMenus.includes(item.title)}
                       onOpenChange={() => toggleMenu(item.title)}
                     >
                       <CollapsibleTrigger asChild>
@@ -176,18 +176,20 @@ export default function AppLayout({
                           )}
                         </SidebarMenuButton>
                       </CollapsibleTrigger>
-                      <CollapsibleContent className="cls-submenu">
-                        {item.items.map((subItem) => (
-                          <Link key={subItem.href} href={subItem.href}>
-                            <SidebarMenuButton
-                              isActive={location === subItem.href}
-                              className="cls-submenu-button"
-                            >
-                              <span>{subItem.title}</span>
-                            </SidebarMenuButton>
-                          </Link>
-                        ))}
-                      </CollapsibleContent>
+                      {sidebarState !== "collapsed" && (
+                        <CollapsibleContent className="cls-submenu">
+                          {item.items.map((subItem) => (
+                            <Link key={subItem.href} href={subItem.href}>
+                              <SidebarMenuButton
+                                isActive={location === subItem.href}
+                                className="cls-submenu-button"
+                              >
+                                <span>{subItem.title}</span>
+                              </SidebarMenuButton>
+                            </Link>
+                          ))}
+                        </CollapsibleContent>
+                      )}
                     </Collapsible>
                   ) : (
                     <Link href={item.href!}>
@@ -250,6 +252,13 @@ export default function AppLayout({
           <main className="cls-content">{children}</main>
         </SidebarInset>
       </div>
+  );
+}
+
+export default function AppLayout(props: AppLayoutProps) {
+  return (
+    <SidebarProvider>
+      <AppLayoutContent {...props} />
     </SidebarProvider>
   );
 }
