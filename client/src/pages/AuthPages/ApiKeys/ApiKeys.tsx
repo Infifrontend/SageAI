@@ -1095,9 +1095,14 @@ export default function ApiKeys() {
         {/* Delete Confirmation Dialog */}
         <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
           <AlertDialogContent>
+            <div className="flex flex-col items-center justify-center py-4">
+              <div className="rounded-full bg-red-100 p-3 mb-4">
+                <Trash2 className="h-6 w-6 text-red-600" />
+              </div>
+            </div>
             <AlertDialogHeader>
-              <AlertDialogTitle>Warning!</AlertDialogTitle>
-              <AlertDialogDescription>
+              <AlertDialogTitle className="text-center">Warning!</AlertDialogTitle>
+              <AlertDialogDescription className="text-center">
                 Do you want to delete this API key? This action cannot be undone.
               </AlertDialogDescription>
             </AlertDialogHeader>
