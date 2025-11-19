@@ -20,7 +20,25 @@ import {
   CreditCard,
   CheckCircle2,
   Info,
+  Search,
+  Settings2,
+  FileDown,
 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import TablePagination from "@/components/ui/table-pagination";
 import "./Billing.scss";
 
 interface Invoice {
@@ -83,6 +101,17 @@ const invoices: Invoice[] = [
 
 export default function Billing() {
   const [selectedPlan, setSelectedPlan] = useState("Enterprise");
+  const [invoiceSearchQuery, setInvoiceSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(6);
+  const [columnVisibility, setColumnVisibility] = useState({
+    billingDate: true,
+    paidDate: true,
+    paymentMethod: true,
+    amount: true,
+    status: true,
+  });
 
   const currentPlan = {
     name: "SAGE Enterprise",
@@ -95,6 +124,53 @@ export default function Billing() {
     estimatedAmount: "$20,000.00",
     paymentMethod: "Visa **** 4532",
     overageStatus: "$0.00/call",
+  };
+
+  // Filter invoices
+  const filteredInvoices = invoices.filter((invoice) => {
+    const matchesSearch =
+      invoice.invoiceId.toLowerCase().includes(invoiceSearchQuery.toLowerCase()) ||
+      invoice.paymentMethod.toLowerCase().includes(invoiceSearchQuery.toLowerCase());
+    const matchesStatus =
+      statusFilter === "all" || invoice.status.toLowerCase() === statusFilter.toLowerCase();
+    return matchesSearch && matchesStatus;
+  });
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredInvoices.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, filteredInvoices.length);
+  const paginatedInvoices = filteredInvoices.slice(startIndex, endIndex);
+
+  // Export all invoices
+  const handleExportAllInvoices = () => {
+    const csvContent = [
+      ["Invoice ID", "Billing Date", "Paid Date", "Payment Method", "Amount", "Status"],
+      ...invoices.map((inv) => [
+        inv.invoiceId,
+        inv.billingDate,
+        inv.paidDate,
+        inv.paymentMethod,
+        `$${inv.amount.toLocaleString()}`,
+        inv.status,
+      ]),
+    ]
+      .map((row) => row.join(","))
+      .join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "sage-invoices.csv";
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+
+  // Download single invoice PDF
+  const handleDownloadPDF = (invoice: Invoice) => {
+    // Simulate PDF download
+    alert(`Downloading PDF for ${invoice.invoiceId}`);
   };
 
   const plans = [
@@ -421,6 +497,7 @@ export default function Billing() {
                 className={`cls-plan-card ${
                   plan.highlighted ? "cls-plan-highlighted" : ""
                 } ${selectedPlan === plan.name ? "cls-plan-selected" : ""}`}
+                onClick={() => setSelectedPlan(plan.name)}
               >
                 <CardContent className="cls-plan-card-content">
                   {plan.highlighted && (
@@ -470,11 +547,130 @@ export default function Billing() {
         <Card className="cls-invoices-card">
           <CardContent className="cls-invoices-content">
             <div className="cls-invoices-header">
-              <h3 className="cls-invoices-title">Recent SAGE Invoices</h3>
-              <Button variant="outline" size="sm">
-                <Download size={16} />
-                Export All Invoices
-              </Button>
+              <div className="cls-invoices-header-left">
+                <h3 className="cls-invoices-title">Recent SAGE Invoices</h3>
+                <p className="cls-invoices-subtitle">View and manage your billing history</p>
+              </div>
+              <div className="cls-invoices-header-right">
+                <div className="cls-search-wrapper">
+                  <Search className="cls-search-icon" />
+                  <input
+                    type="text"
+                    placeholder="Search invoices..."
+                    value={invoiceSearchQuery}
+                    onChange={(e) => {
+                      setInvoiceSearchQuery(e.target.value);
+                      setCurrentPage(1);
+                    }}
+                    className="cls-search-input"
+                  />
+                </div>
+
+                <Select
+                  value={statusFilter}
+                  onValueChange={(value) => {
+                    setStatusFilter(value);
+                    setCurrentPage(1);
+                  }}
+                >
+                  <SelectTrigger className="cls-filter-select">
+                    <SelectValue placeholder="All Statuses" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Statuses</SelectItem>
+                    <SelectItem value="paid">Paid</SelectItem>
+                    <SelectItem value="pending">Pending</SelectItem>
+                    <SelectItem value="overdue">Overdue</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" className="cls-customize-button">
+                      <Settings2 size={16} />
+                      Customize
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="cls-customize-popover" align="end">
+                    <div className="cls-customize-header">
+                      <h4>Customize Columns</h4>
+                      <p>Select columns to display</p>
+                    </div>
+                    <div className="cls-customize-options">
+                      <div className="cls-customize-option">
+                        <Checkbox
+                          id="billingDate"
+                          checked={columnVisibility.billingDate}
+                          onCheckedChange={(checked) =>
+                            setColumnVisibility((prev) => ({
+                              ...prev,
+                              billingDate: checked as boolean,
+                            }))
+                          }
+                        />
+                        <Label htmlFor="billingDate">Billing Date</Label>
+                      </div>
+                      <div className="cls-customize-option">
+                        <Checkbox
+                          id="paidDate"
+                          checked={columnVisibility.paidDate}
+                          onCheckedChange={(checked) =>
+                            setColumnVisibility((prev) => ({
+                              ...prev,
+                              paidDate: checked as boolean,
+                            }))
+                          }
+                        />
+                        <Label htmlFor="paidDate">Paid Date</Label>
+                      </div>
+                      <div className="cls-customize-option">
+                        <Checkbox
+                          id="paymentMethod"
+                          checked={columnVisibility.paymentMethod}
+                          onCheckedChange={(checked) =>
+                            setColumnVisibility((prev) => ({
+                              ...prev,
+                              paymentMethod: checked as boolean,
+                            }))
+                          }
+                        />
+                        <Label htmlFor="paymentMethod">Payment Method</Label>
+                      </div>
+                      <div className="cls-customize-option">
+                        <Checkbox
+                          id="amount"
+                          checked={columnVisibility.amount}
+                          onCheckedChange={(checked) =>
+                            setColumnVisibility((prev) => ({
+                              ...prev,
+                              amount: checked as boolean,
+                            }))
+                          }
+                        />
+                        <Label htmlFor="amount">Amount</Label>
+                      </div>
+                      <div className="cls-customize-option">
+                        <Checkbox
+                          id="status"
+                          checked={columnVisibility.status}
+                          onCheckedChange={(checked) =>
+                            setColumnVisibility((prev) => ({
+                              ...prev,
+                              status: checked as boolean,
+                            }))
+                          }
+                        />
+                        <Label htmlFor="status">Status</Label>
+                      </div>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+
+                <Button variant="outline" size="sm" onClick={handleExportAllInvoices}>
+                  <FileDown size={16} />
+                  Export All Invoices
+                </Button>
+              </div>
             </div>
 
             <Table>
@@ -482,42 +678,73 @@ export default function Billing() {
                 <TableRow>
                   <TableHead>S.No</TableHead>
                   <TableHead>Invoice ID</TableHead>
-                  <TableHead>Billing Date</TableHead>
-                  <TableHead>Paid Date</TableHead>
-                  <TableHead>Payment Method</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Status</TableHead>
+                  {columnVisibility.billingDate && <TableHead>Billing Date</TableHead>}
+                  {columnVisibility.paidDate && <TableHead>Paid Date</TableHead>}
+                  {columnVisibility.paymentMethod && <TableHead>Payment Method</TableHead>}
+                  {columnVisibility.amount && <TableHead>Amount</TableHead>}
+                  {columnVisibility.status && <TableHead>Status</TableHead>}
                   <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {invoices.map((invoice) => (
-                  <TableRow key={invoice.id}>
-                    <TableCell>{invoice.id}</TableCell>
-                    <TableCell className="cls-invoice-id">
-                      {invoice.invoiceId}
-                    </TableCell>
-                    <TableCell>{invoice.billingDate}</TableCell>
-                    <TableCell>{invoice.paidDate}</TableCell>
-                    <TableCell>{invoice.paymentMethod}</TableCell>
-                    <TableCell className="cls-invoice-amount">
-                      ${invoice.amount.toLocaleString()}
-                    </TableCell>
-                    <TableCell>
-                      <Badge className="cls-badge-paid">{invoice.status}</Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Button variant="ghost" size="sm">
-                        <Download size={16} />
-                        Download PDF
-                      </Button>
+                {paginatedInvoices.length > 0 ? (
+                  paginatedInvoices.map((invoice, index) => (
+                    <TableRow key={invoice.id}>
+                      <TableCell>{startIndex + index + 1}</TableCell>
+                      <TableCell className="cls-invoice-id">
+                        {invoice.invoiceId}
+                      </TableCell>
+                      {columnVisibility.billingDate && <TableCell>{invoice.billingDate}</TableCell>}
+                      {columnVisibility.paidDate && <TableCell>{invoice.paidDate}</TableCell>}
+                      {columnVisibility.paymentMethod && <TableCell>{invoice.paymentMethod}</TableCell>}
+                      {columnVisibility.amount && (
+                        <TableCell className="cls-invoice-amount">
+                          ${invoice.amount.toLocaleString()}
+                        </TableCell>
+                      )}
+                      {columnVisibility.status && (
+                        <TableCell>
+                          <Badge className="cls-badge-paid">{invoice.status}</Badge>
+                        </TableCell>
+                      )}
+                      <TableCell>
+                        <Button
+                          variant="default"
+                          size="sm"
+                          className="cls-download-pdf-btn"
+                          onClick={() => handleDownloadPDF(invoice)}
+                        >
+                          <Download size={16} />
+                          Download PDF
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={8} className="cls-no-data">
+                      No invoices found
                     </TableCell>
                   </TableRow>
-                ))}
+                )}
               </TableBody>
             </Table>
           </CardContent>
         </Card>
+
+        {/* Pagination */}
+        {filteredInvoices.length > 0 && (
+          <TablePagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={filteredInvoices.length}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+            onItemsPerPageChange={setItemsPerPage}
+            startIndex={startIndex}
+            endIndex={endIndex}
+          />
+        )}
       </div>
     </AppLayout>
   );

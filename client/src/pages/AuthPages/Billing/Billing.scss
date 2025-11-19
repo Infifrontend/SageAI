@@ -76,7 +76,7 @@
 
 // Insights Section
 .cls-insights-section {
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .cls-stats-grid {
@@ -133,6 +133,7 @@
   gap: 1rem;
   align-items: center;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-top: 1rem;
 }
 
 .cls-performance-icon {
@@ -475,6 +476,7 @@
   position: relative;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
+  cursor: pointer;
 
   &:hover {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -484,6 +486,12 @@
   &.cls-plan-highlighted {
     border: 2px solid #6366f1;
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+  }
+
+  &.cls-plan-selected {
+    border: 2px solid #1d2f7e;
+    box-shadow: 0 4px 12px rgba(29, 47, 126, 0.3);
+    background: #f8f9ff;
   }
 }
 
@@ -578,14 +586,101 @@
 .cls-invoices-header {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  gap: 1.5rem;
+}
+
+.cls-invoices-header-left {
+  flex: 0 0 auto;
+}
+
+.cls-invoices-header-right {
+  display: flex;
+  gap: 0.75rem;
   align-items: center;
-  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .cls-invoices-title {
   font-size: 1.125rem;
   font-weight: 600;
   color: #111827;
+  margin-bottom: 0.25rem;
+}
+
+.cls-invoices-subtitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.cls-search-wrapper {
+  position: relative;
+  width: 280px;
+}
+
+.cls-search-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  width: 16px;
+  height: 16px;
+}
+
+.cls-search-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem 0.5rem 2.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  transition: border-color 0.2s;
+
+  &:focus {
+    outline: none;
+    border-color: #1d2f7e;
+  }
+}
+
+.cls-filter-select {
+  min-width: 150px;
+}
+
+.cls-customize-button {
+  gap: 0.5rem;
+}
+
+.cls-customize-popover {
+  width: 280px;
+}
+
+.cls-customize-header {
+  margin-bottom: 1rem;
+
+  h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 0.25rem;
+  }
+
+  p {
+    font-size: 0.75rem;
+    color: #6b7280;
+  }
+}
+
+.cls-customize-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cls-customize-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .cls-invoice-id {
@@ -602,6 +697,24 @@
   background: #d1fae5;
   color: #065f46;
   border: 1px solid #6ee7b7;
+}
+
+.cls-download-pdf-btn {
+  background: #1d2f7e;
+  color: white;
+  gap: 0.5rem;
+  font-weight: 500;
+
+  &:hover {
+    background: #152461;
+  }
+}
+
+.cls-no-data {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+  font-style: italic;
 }
 
 @media (max-width: 768px) {
@@ -622,5 +735,19 @@
   .cls-overage-grid,
   .cls-plans-grid {
     grid-template-columns: 1fr;
+  }
+
+  .cls-invoices-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cls-invoices-header-right {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cls-search-wrapper {
+    width: 100%;
   }
 }
