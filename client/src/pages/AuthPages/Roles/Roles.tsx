@@ -28,6 +28,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { TablePagination } from "@/components/ui/table-pagination";
@@ -38,6 +45,7 @@ import {
   Pencil,
   Trash2,
   Shield,
+  Settings2,
 } from "lucide-react";
 import RolesForm from "./RolesForm/RolesForm";
 import "./Roles.scss";
@@ -58,6 +66,20 @@ export default function Roles() {
   const [editingRole, setEditingRole] = useState<Role | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [roleToDelete, setRoleToDelete] = useState<number | null>(null);
+
+  // Column visibility state
+  const [columnVisibility, setColumnVisibility] = useState({
+    description: true,
+    permissions: true,
+    status: true,
+  });
+
+  const toggleColumn = (column: keyof typeof columnVisibility) => {
+    setColumnVisibility((prev) => ({
+      ...prev,
+      [column]: !prev[column],
+    }));
+  };
 
   const roles: Role[] = [
     {
@@ -215,6 +237,48 @@ export default function Roles() {
                   className="cls-search-input"
                 />
               </div>
+              
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="cls-customize-button">
+                    <Settings2 size={16} />
+                    Customize
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="cls-customize-popover" align="end">
+                  <div className="cls-customize-header">
+                    <h4>Customize Columns</h4>
+                    <p>Select columns to display</p>
+                  </div>
+                  <div className="cls-column-options">
+                    <div className="cls-column-option">
+                      <Checkbox
+                        id="col-description"
+                        checked={columnVisibility.description}
+                        onCheckedChange={() => toggleColumn("description")}
+                      />
+                      <Label htmlFor="col-description">Description</Label>
+                    </div>
+                    <div className="cls-column-option">
+                      <Checkbox
+                        id="col-permissions"
+                        checked={columnVisibility.permissions}
+                        onCheckedChange={() => toggleColumn("permissions")}
+                      />
+                      <Label htmlFor="col-permissions">Permissions</Label>
+                    </div>
+                    <div className="cls-column-option">
+                      <Checkbox
+                        id="col-status"
+                        checked={columnVisibility.status}
+                        onCheckedChange={() => toggleColumn("status")}
+                      />
+                      <Label htmlFor="col-status">Status</Label>
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
+
               <Button onClick={handleCreateRole} className="cls-create-btn">
                 <Plus size={18} />
                 New Role
@@ -228,11 +292,17 @@ export default function Roles() {
                 <TableRow>
                   <TableHead className="cls-th-sno">S.No.</TableHead>
                   <TableHead className="cls-th-name">Role Name</TableHead>
-                  <TableHead className="cls-th-desc">Description</TableHead>
-                  <TableHead className="cls-th-permissions">
-                    Permissions
-                  </TableHead>
-                  <TableHead className="cls-th-status">Status</TableHead>
+                  {columnVisibility.description && (
+                    <TableHead className="cls-th-desc">Description</TableHead>
+                  )}
+                  {columnVisibility.permissions && (
+                    <TableHead className="cls-th-permissions">
+                      Permissions
+                    </TableHead>
+                  )}
+                  {columnVisibility.status && (
+                    <TableHead className="cls-th-status">Status</TableHead>
+                  )}
                   <TableHead className="cls-th-actions">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -246,33 +316,39 @@ export default function Roles() {
                       <TableCell className="cls-td-name">
                         <span className="cls-role-name">{role.name}</span>
                       </TableCell>
-                      <TableCell className="cls-td-desc">
-                        {role.description}
-                      </TableCell>
-                      <TableCell className="cls-td-permissions">
-                        <Badge variant="secondary" className="cls-permissions-badge">
-                          {role.permissions} permission{role.permissions !== 1 ? "s" : ""}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="cls-td-status">
-                        <div className="cls-status-switch">
-                          <Switch
-                            checked={role.status === "Active"}
-                            onCheckedChange={() =>
-                              handleToggleStatus(role.id, role.status)
-                            }
-                          />
-                          <span
-                            className={`cls-status-label ${
-                              role.status === "Active"
-                                ? "cls-active"
-                                : "cls-inactive"
-                            }`}
-                          >
-                            {role.status}
-                          </span>
-                        </div>
-                      </TableCell>
+                      {columnVisibility.description && (
+                        <TableCell className="cls-td-desc">
+                          {role.description}
+                        </TableCell>
+                      )}
+                      {columnVisibility.permissions && (
+                        <TableCell className="cls-td-permissions">
+                          <Badge variant="secondary" className="cls-permissions-badge">
+                            {role.permissions} permission{role.permissions !== 1 ? "s" : ""}
+                          </Badge>
+                        </TableCell>
+                      )}
+                      {columnVisibility.status && (
+                        <TableCell className="cls-td-status">
+                          <div className="cls-status-switch">
+                            <Switch
+                              checked={role.status === "Active"}
+                              onCheckedChange={() =>
+                                handleToggleStatus(role.id, role.status)
+                              }
+                            />
+                            <span
+                              className={`cls-status-label ${
+                                role.status === "Active"
+                                  ? "cls-active"
+                                  : "cls-inactive"
+                              }`}
+                            >
+                              {role.status}
+                            </span>
+                          </div>
+                        </TableCell>
+                      )}
                       <TableCell className="cls-td-actions">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
@@ -306,7 +382,16 @@ export default function Roles() {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={6} className="cls-no-results">
+                    <TableCell 
+                      colSpan={
+                        2 + 
+                        (columnVisibility.description ? 1 : 0) + 
+                        (columnVisibility.permissions ? 1 : 0) + 
+                        (columnVisibility.status ? 1 : 0) + 
+                        1
+                      } 
+                      className="cls-no-results"
+                    >
                       No roles found matching your search.
                     </TableCell>
                   </TableRow>
