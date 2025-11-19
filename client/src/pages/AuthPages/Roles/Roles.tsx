@@ -83,6 +83,55 @@ export default function Roles() {
       permissions: 4,
       status: "Inactive",
     },
+    {
+      id: 6,
+      name: "Content Manager",
+      description: "Can create and manage content",
+      permissions: 5,
+      status: "Active",
+    },
+    {
+      id: 7,
+      name: "API Manager",
+      description: "Manage API keys and documentation",
+      permissions: 6,
+      status: "Active",
+    },
+    {
+      id: 8,
+      name: "Analytics Viewer",
+      description: "View analytics and reports",
+      permissions: 3,
+      status: "Active",
+    },
+    {
+      id: 9,
+      name: "User Manager",
+      description: "Manage users and permissions",
+      permissions: 8,
+      status: "Active",
+    },
+    {
+      id: 10,
+      name: "Subscription Manager",
+      description: "Handle subscription plans and billing",
+      permissions: 4,
+      status: "Inactive",
+    },
+    {
+      id: 11,
+      name: "Security Admin",
+      description: "Manage security settings and policies",
+      permissions: 10,
+      status: "Active",
+    },
+    {
+      id: 12,
+      name: "Guest",
+      description: "Limited read-only access",
+      permissions: 1,
+      status: "Active",
+    },
   ];
 
   const filteredRoles = roles.filter((role) =>
