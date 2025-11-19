@@ -173,6 +173,8 @@ export default function UsersPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(6);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editUser, setEditUser] = useState<User | null>(null);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   // Column visibility state
   const [columnVisibility, setColumnVisibility] = useState({
@@ -215,13 +217,35 @@ export default function UsersPage() {
   const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
 
   const handleEdit = (user: User) => {
-    // TODO: Open edit modal with user data
-    console.log("Edit user:", user);
+    setEditUser(user);
+    setIsEditMode(true);
+    setIsFormOpen(true);
   };
 
   const handleCreateUser = (userData: any) => {
-    console.log("User created:", userData);
-    // TODO: Add user to list
+    console.log(isEditMode ? "User updated:" : "User created:", userData);
+    if (isEditMode) {
+      // TODO: Update user in list
+      console.log("Updating user:", editUser?.id);
+    } else {
+      // TODO: Add user to list
+    }
+    setIsEditMode(false);
+    setEditUser(null);
+  };
+
+  const handleAddUser = () => {
+    setIsEditMode(false);
+    setEditUser(null);
+    setIsFormOpen(true);
+  };
+
+  const handleCloseForm = (open: boolean) => {
+    setIsFormOpen(open);
+    if (!open) {
+      setIsEditMode(false);
+      setEditUser(null);
+    }
   };
 
   const handleDelete = (id: string) => {
@@ -422,7 +446,7 @@ export default function UsersPage() {
                 </Button>
 
                 <Button
-                  onClick={() => setIsFormOpen(true)}
+                  onClick={handleAddUser}
                   className="cls-add-user-button"
                 >
                   <Plus size={16} />
@@ -552,8 +576,10 @@ export default function UsersPage() {
         {/* User Form Modal */}
         <UsersForm
           open={isFormOpen}
-          onOpenChange={setIsFormOpen}
+          onOpenChange={handleCloseForm}
           onSubmit={handleCreateUser}
+          editData={editUser}
+          isEdit={isEditMode}
         />
       </div>
     </AppLayout>

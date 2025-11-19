@@ -66,9 +66,11 @@ interface UsersFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit?: (data: any) => void;
+  editData?: any;
+  isEdit?: boolean;
 }
 
-export default function UsersForm({ open, onOpenChange, onSubmit }: UsersFormProps) {
+export default function UsersForm({ open, onOpenChange, onSubmit, editData, isEdit = false }: UsersFormProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 4;
 
@@ -82,6 +84,22 @@ export default function UsersForm({ open, onOpenChange, onSubmit }: UsersFormPro
     requirePasswordReset: true,
     notes: "",
     status: "Pending",
+  });
+
+  // Update form data when editData changes
+  useState(() => {
+    if (editData && isEdit) {
+      setFormData({
+        fullName: editData.name || "",
+        email: editData.email || "",
+        organization: editData.organization || "",
+        role: editData.role?.toLowerCase().replace(" ", "-") || "",
+        sendInvitation: true,
+        requirePasswordReset: true,
+        notes: "",
+        status: editData.status || "Pending",
+      });
+    }
   });
 
   const [errors, setErrors] = useState({
@@ -164,15 +182,15 @@ export default function UsersForm({ open, onOpenChange, onSubmit }: UsersFormPro
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="cls-users-form-dialog">
         <DialogHeader>
-          <DialogTitle className="cls-dialog-title">Add New User</DialogTitle>
+          <DialogTitle className="cls-dialog-title">{isEdit ? "Edit User" : "Add New User"}</DialogTitle>
           <p className="cls-dialog-subtitle">
-            {currentStep === 1 && "Enter the information for the new user."}
+            {currentStep === 1 && (isEdit ? "Update the user information." : "Enter the information for the new user.")}
             {currentStep === 2 &&
               "Select the appropriate role and permissions for this user."}
             {currentStep === 3 &&
-              "Configure account settings for the new user."}
+              (isEdit ? "Update account settings for this user." : "Configure account settings for the new user.")}
             {currentStep === 4 &&
-              "Review all user details before saving the account."}
+              (isEdit ? "Review all changes before updating the account." : "Review all user details before saving the account.")}
           </p>
         </DialogHeader>
 
@@ -462,7 +480,7 @@ export default function UsersForm({ open, onOpenChange, onSubmit }: UsersFormPro
           {currentStep < totalSteps ? (
             <Button onClick={handleNext}>Next</Button>
           ) : (
-            <Button onClick={handleSubmit}>Create User</Button>
+            <Button onClick={handleSubmit}>{isEdit ? "Update User" : "Create User"}</Button>
           )}
         </div>
       </DialogContent>
