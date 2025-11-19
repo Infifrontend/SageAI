@@ -108,15 +108,20 @@ export default function Roles() {
   };
 
   const handleDeleteRole = (roleId: number) => {
-    console.log("Delete role:", roleId);
+    if (window.confirm("Are you sure you want to delete this role?")) {
+      console.log("Delete role:", roleId);
+      // Add delete logic here
+    }
   };
 
-  const handleViewRole = (roleId: number) => {
-    console.log("View role:", roleId);
+  const handleViewRole = (role: Role) => {
+    setEditingRole(role);
+    setIsCreateDialogOpen(true);
   };
 
   const handleToggleStatus = (roleId: number, currentStatus: string) => {
     console.log("Toggle status for role:", roleId, currentStatus);
+    // Add status toggle logic here
   };
 
   const handleSubmit = (formData: any) => {
@@ -219,20 +224,22 @@ export default function Roles() {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem
-                              onClick={() => handleViewRole(role.id)}
+                              onClick={() => handleViewRole(role)}
+                              className="cls-menu-item"
                             >
                               <Eye size={16} />
                               View Details
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() => handleEditRole(role)}
+                              className="cls-menu-item"
                             >
                               <Pencil size={16} />
                               Edit Role
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() => handleDeleteRole(role.id)}
-                              className="cls-delete-item"
+                              className="cls-menu-item cls-delete-item"
                             >
                               <Trash2 size={16} />
                               Delete Role

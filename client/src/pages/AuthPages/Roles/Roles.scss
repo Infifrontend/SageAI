@@ -68,7 +68,7 @@
     }
 
     .cls-create-btn {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: $primary-color;
       color: white;
       display: flex;
       align-items: center;
@@ -76,7 +76,7 @@
       white-space: nowrap;
 
       &:hover {
-        opacity: 0.9;
+        background: $primary-hover;
       }
     }
   }
@@ -184,6 +184,17 @@
       padding: 3rem 1rem;
       color: $text-secondary;
     }
+  }
+}
+
+.cls-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+
+  svg {
+    flex-shrink: 0;
   }
 }
 
