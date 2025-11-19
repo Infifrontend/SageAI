@@ -22,7 +22,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { CreditCard, Wallet, Building2 } from "lucide-react";
+import { CreditCard, Wallet, Building2, CheckCircle2, XCircle, Loader2, Smartphone } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 import "./BillingPayment.scss";
 
 interface BillingPaymentProps {
@@ -30,61 +31,198 @@ interface BillingPaymentProps {
   onOpenChange: (open: boolean) => void;
 }
 
+type PaymentStage = "selection" | "processing" | "success" | "failure";
+
 export default function BillingPayment({ open, onOpenChange }: BillingPaymentProps) {
   const [selectedMethod, setSelectedMethod] = useState<string>("card");
+  const [paymentStage, setPaymentStage] = useState<PaymentStage>("selection");
   const [cardData, setCardData] = useState({
     nameOnCard: "",
     cardNumber: "",
     expiry: "",
     cvc: "",
+    saveCard: false,
   });
   const [upiId, setUpiId] = useState("");
+  const [selectedUpiApp, setSelectedUpiApp] = useState("");
   const [selectedWallet, setSelectedWallet] = useState("");
   const [selectedBank, setSelectedBank] = useState("");
 
   const handleClose = () => {
+    setPaymentStage("selection");
+    setSelectedMethod("card");
     onOpenChange(false);
   };
 
-  const handleSaveCard = () => {
-    console.log("Saving card payment method:", cardData);
-    // TODO: Implement actual save logic
-    handleClose();
+  const simulatePayment = (paymentType: string) => {
+    setPaymentStage("processing");
+    
+    // Simulate payment processing
+    setTimeout(() => {
+      // 90% success rate for demo
+      const isSuccess = Math.random() > 0.1;
+      setPaymentStage(isSuccess ? "success" : "failure");
+    }, 2500);
+  };
+
+  const handlePayWithCard = () => {
+    if (!cardData.cardNumber || !cardData.nameOnCard || !cardData.expiry || !cardData.cvc) {
+      alert("Please fill in all card details");
+      return;
+    }
+    simulatePayment("card");
   };
 
   const handlePayWithUPI = () => {
-    console.log("Paying with UPI:", upiId);
-    // TODO: Implement UPI payment logic
-    handleClose();
+    if (!upiId && !selectedUpiApp) {
+      alert("Please enter UPI ID or select a UPI app");
+      return;
+    }
+    simulatePayment("upi");
   };
 
-  const handleSelectWallet = (wallet: string) => {
-    setSelectedWallet(wallet);
-    console.log("Selected wallet:", wallet);
-    // TODO: Implement wallet payment logic
+  const handlePayWithWallet = () => {
+    if (!selectedWallet) {
+      alert("Please select a wallet");
+      return;
+    }
+    simulatePayment("wallet");
   };
 
-  const handleProceedToNetBanking = () => {
-    console.log("Proceeding to net banking with bank:", selectedBank);
-    // TODO: Implement net banking logic
-    handleClose();
+  const handlePayWithNetBanking = () => {
+    if (!selectedBank) {
+      alert("Please select a bank");
+      return;
+    }
+    simulatePayment("netbanking");
   };
+
+  const upiApps = [
+    { id: "gpay", name: "Google Pay", icon: "🔵" },
+    { id: "phonepe", name: "PhonePe", icon: "🟣" },
+    { id: "paytm", name: "Paytm", icon: "🔵" },
+    { id: "bhim", name: "BHIM UPI", icon: "🟢" },
+  ];
 
   const wallets = [
-    { id: "paytm", name: "PayTM", icon: Wallet },
-    { id: "phonepe", name: "PhonePe", icon: Wallet },
-    { id: "gpay", name: "GPay", icon: Wallet },
-    { id: "paypal", name: "PayPal", icon: Wallet },
+    { id: "paytm", name: "Paytm Wallet", icon: "💰" },
+    { id: "phonepe", name: "PhonePe Wallet", icon: "💳" },
+    { id: "amazonpay", name: "Amazon Pay", icon: "🛒" },
+    { id: "mobikwik", name: "MobiKwik", icon: "📱" },
   ];
 
   const banks = [
-    { id: "sbi", name: "SBI" },
-    { id: "hdfc", name: "HDFC" },
-    { id: "icici", name: "ICICI" },
-    { id: "axis", name: "Axis Bank" },
-    { id: "kotak", name: "Kotak Bank" },
+    { 
+      id: "sbi", 
+      name: "State Bank of India",
+      logo: "https://www.logo.wine/a/logo/State_Bank_of_India/State_Bank_of_India-Logo.wine.svg"
+    },
+    { 
+      id: "hdfc", 
+      name: "HDFC Bank",
+      logo: "https://www.logo.wine/a/logo/HDFC_Bank/HDFC_Bank-Logo.wine.svg"
+    },
+    { 
+      id: "icici", 
+      name: "ICICI Bank",
+      logo: "https://www.logo.wine/a/logo/ICICI_Bank/ICICI_Bank-Logo.wine.svg"
+    },
+    { 
+      id: "axis", 
+      name: "Axis Bank",
+      logo: "https://www.logo.wine/a/logo/Axis_Bank/Axis_Bank-Logo.wine.svg"
+    },
+    { 
+      id: "kotak", 
+      name: "Kotak Mahindra Bank",
+      logo: "https://upload.wikimedia.org/wikipedia/en/thumb/4/44/Kotak_Mahindra_Bank_logo.svg/1200px-Kotak_Mahindra_Bank_logo.svg.png"
+    },
+    { 
+      id: "pnb", 
+      name: "Punjab National Bank",
+      logo: "https://www.logo.wine/a/logo/Punjab_National_Bank/Punjab_National_Bank-Logo.wine.svg"
+    },
   ];
 
+  // Processing Screen
+  if (paymentStage === "processing") {
+    return (
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="cls-billing-payment-dialog">
+          <div className="cls-payment-status-screen">
+            <Loader2 className="cls-status-icon cls-processing-icon" size={64} />
+            <h2 className="cls-status-title">Processing Payment</h2>
+            <p className="cls-status-message">
+              Please wait while we process your payment securely...
+            </p>
+            <div className="cls-processing-details">
+              <p>Do not close this window or press back button</p>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  // Success Screen
+  if (paymentStage === "success") {
+    return (
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="cls-billing-payment-dialog">
+          <div className="cls-payment-status-screen">
+            <CheckCircle2 className="cls-status-icon cls-success-icon" size={64} />
+            <h2 className="cls-status-title">Payment Successful!</h2>
+            <p className="cls-status-message">
+              Your payment method has been updated successfully.
+            </p>
+            <div className="cls-payment-details">
+              <div className="cls-detail-row">
+                <span>Transaction ID:</span>
+                <span className="cls-detail-value">TXN{Math.random().toString(36).substr(2, 9).toUpperCase()}</span>
+              </div>
+              <div className="cls-detail-row">
+                <span>Payment Method:</span>
+                <span className="cls-detail-value">{selectedMethod.toUpperCase()}</span>
+              </div>
+            </div>
+            <Button onClick={handleClose} className="cls-status-button">
+              Done
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  // Failure Screen
+  if (paymentStage === "failure") {
+    return (
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="cls-billing-payment-dialog">
+          <div className="cls-payment-status-screen">
+            <XCircle className="cls-status-icon cls-failure-icon" size={64} />
+            <h2 className="cls-status-title">Payment Failed</h2>
+            <p className="cls-status-message">
+              We couldn't process your payment. Please try again.
+            </p>
+            <div className="cls-failure-details">
+              <p>Error: Transaction declined by payment gateway</p>
+            </div>
+            <div className="cls-status-actions">
+              <Button onClick={() => setPaymentStage("selection")} className="cls-status-button">
+                Try Again
+              </Button>
+              <Button variant="outline" onClick={handleClose}>
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  // Selection Screen (Default)
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="cls-billing-payment-dialog">
@@ -109,65 +247,91 @@ export default function BillingPayment({ open, onOpenChange }: BillingPaymentPro
             {/* Card Payment */}
             <AccordionItem value="card" className="cls-accordion-item">
               <AccordionTrigger className="cls-accordion-trigger">
-                Card
+                <div className="cls-trigger-content">
+                  <CreditCard size={18} />
+                  <span>Credit / Debit Card</span>
+                </div>
               </AccordionTrigger>
               <AccordionContent className="cls-accordion-content">
                 <div className="cls-card-form">
                   <div className="cls-form-field">
-                    <Label htmlFor="nameOnCard">Name on Card</Label>
+                    <Label htmlFor="cardNumber">Card Number</Label>
                     <Input
-                      id="nameOnCard"
-                      placeholder="John M. Doe"
-                      value={cardData.nameOnCard}
-                      onChange={(e) =>
-                        setCardData({ ...cardData, nameOnCard: e.target.value })
-                      }
+                      id="cardNumber"
+                      placeholder="1234 5678 9012 3456"
+                      maxLength={19}
+                      value={cardData.cardNumber}
+                      onChange={(e) => {
+                        let value = e.target.value.replace(/\s/g, '');
+                        value = value.match(/.{1,4}/g)?.join(' ') || value;
+                        setCardData({ ...cardData, cardNumber: value });
+                      }}
                     />
                   </div>
 
                   <div className="cls-form-field">
-                    <Label htmlFor="cardNumber">Card Number</Label>
+                    <Label htmlFor="nameOnCard">Name on Card</Label>
                     <Input
-                      id="cardNumber"
-                      placeholder="0000 0000 0000 0000"
-                      value={cardData.cardNumber}
+                      id="nameOnCard"
+                      placeholder="JOHN DOE"
+                      value={cardData.nameOnCard}
                       onChange={(e) =>
-                        setCardData({ ...cardData, cardNumber: e.target.value })
+                        setCardData({ ...cardData, nameOnCard: e.target.value.toUpperCase() })
                       }
                     />
                   </div>
 
                   <div className="cls-form-row">
                     <div className="cls-form-field">
-                      <Label htmlFor="expiry">Expiry (MM/YY)</Label>
+                      <Label htmlFor="expiry">Expiry Date</Label>
                       <Input
                         id="expiry"
                         placeholder="MM/YY"
+                        maxLength={5}
                         value={cardData.expiry}
-                        onChange={(e) =>
-                          setCardData({ ...cardData, expiry: e.target.value })
-                        }
+                        onChange={(e) => {
+                          let value = e.target.value.replace(/\D/g, '');
+                          if (value.length >= 2) {
+                            value = value.slice(0, 2) + '/' + value.slice(2, 4);
+                          }
+                          setCardData({ ...cardData, expiry: value });
+                        }}
                       />
                     </div>
                     <div className="cls-form-field">
-                      <Label htmlFor="cvc">CVC</Label>
+                      <Label htmlFor="cvc">CVV</Label>
                       <Input
                         id="cvc"
+                        type="password"
                         placeholder="123"
+                        maxLength={3}
                         value={cardData.cvc}
                         onChange={(e) =>
-                          setCardData({ ...cardData, cvc: e.target.value })
+                          setCardData({ ...cardData, cvc: e.target.value.replace(/\D/g, '') })
                         }
                       />
                     </div>
+                  </div>
+
+                  <div className="cls-save-card-option">
+                    <Checkbox
+                      id="saveCard"
+                      checked={cardData.saveCard}
+                      onCheckedChange={(checked) =>
+                        setCardData({ ...cardData, saveCard: checked as boolean })
+                      }
+                    />
+                    <Label htmlFor="saveCard" className="cls-checkbox-label">
+                      Save this card for future payments
+                    </Label>
                   </div>
 
                   <div className="cls-form-actions">
                     <Button variant="outline" onClick={handleClose}>
                       Cancel
                     </Button>
-                    <Button onClick={handleSaveCard}>
-                      Save Payment Method
+                    <Button onClick={handlePayWithCard}>
+                      Pay Securely
                     </Button>
                   </div>
                 </div>
@@ -177,25 +341,52 @@ export default function BillingPayment({ open, onOpenChange }: BillingPaymentPro
             {/* UPI Payment */}
             <AccordionItem value="upi" className="cls-accordion-item">
               <AccordionTrigger className="cls-accordion-trigger">
-                UPI
+                <div className="cls-trigger-content">
+                  <Smartphone size={18} />
+                  <span>UPI</span>
+                </div>
               </AccordionTrigger>
               <AccordionContent className="cls-accordion-content">
                 <div className="cls-upi-form">
                   <div className="cls-form-field">
-                    <Label htmlFor="upiId">UPI ID</Label>
+                    <Label htmlFor="upiId">Enter UPI ID</Label>
                     <Input
                       id="upiId"
-                      placeholder="yourname@bank"
+                      placeholder="yourname@upi"
                       value={upiId}
                       onChange={(e) => setUpiId(e.target.value)}
                     />
+                  </div>
+
+                  <div className="cls-divider">
+                    <span>OR</span>
+                  </div>
+
+                  <div className="cls-upi-apps-section">
+                    <Label>Choose UPI App</Label>
+                    <div className="cls-upi-apps-grid">
+                      {upiApps.map((app) => (
+                        <button
+                          key={app.id}
+                          className={`cls-upi-app-option ${
+                            selectedUpiApp === app.id ? "cls-selected" : ""
+                          }`}
+                          onClick={() => setSelectedUpiApp(app.id)}
+                        >
+                          <span className="cls-app-icon">{app.icon}</span>
+                          <span className="cls-app-name">{app.name}</span>
+                        </button>
+                      ))}
+                    </div>
                   </div>
 
                   <div className="cls-form-actions">
                     <Button variant="outline" onClick={handleClose}>
                       Cancel
                     </Button>
-                    <Button onClick={handlePayWithUPI}>Pay with UPI</Button>
+                    <Button onClick={handlePayWithUPI}>
+                      Proceed to Pay
+                    </Button>
                   </div>
                 </div>
               </AccordionContent>
@@ -204,11 +395,14 @@ export default function BillingPayment({ open, onOpenChange }: BillingPaymentPro
             {/* Wallets */}
             <AccordionItem value="wallets" className="cls-accordion-item">
               <AccordionTrigger className="cls-accordion-trigger">
-                Wallets
+                <div className="cls-trigger-content">
+                  <Wallet size={18} />
+                  <span>Wallets</span>
+                </div>
               </AccordionTrigger>
               <AccordionContent className="cls-accordion-content">
                 <div className="cls-wallets-section">
-                  <p className="cls-section-label">Select a Wallet</p>
+                  <Label>Select a Wallet</Label>
                   <div className="cls-wallets-grid">
                     {wallets.map((wallet) => (
                       <button
@@ -216,12 +410,21 @@ export default function BillingPayment({ open, onOpenChange }: BillingPaymentPro
                         className={`cls-wallet-option ${
                           selectedWallet === wallet.id ? "cls-selected" : ""
                         }`}
-                        onClick={() => handleSelectWallet(wallet.id)}
+                        onClick={() => setSelectedWallet(wallet.id)}
                       >
-                        <Wallet size={20} />
-                        {wallet.name}
+                        <span className="cls-wallet-icon">{wallet.icon}</span>
+                        <span className="cls-wallet-name">{wallet.name}</span>
                       </button>
                     ))}
+                  </div>
+
+                  <div className="cls-form-actions">
+                    <Button variant="outline" onClick={handleClose}>
+                      Cancel
+                    </Button>
+                    <Button onClick={handlePayWithWallet} disabled={!selectedWallet}>
+                      Continue to Wallet
+                    </Button>
                   </div>
                 </div>
               </AccordionContent>
@@ -230,35 +433,46 @@ export default function BillingPayment({ open, onOpenChange }: BillingPaymentPro
             {/* Net Banking */}
             <AccordionItem value="netbanking" className="cls-accordion-item">
               <AccordionTrigger className="cls-accordion-trigger">
-                Net Banking
+                <div className="cls-trigger-content">
+                  <Building2 size={18} />
+                  <span>Net Banking</span>
+                </div>
               </AccordionTrigger>
               <AccordionContent className="cls-accordion-content">
                 <div className="cls-netbanking-form">
-                  <div className="cls-form-field">
-                    <Label htmlFor="selectBank">Select Bank</Label>
-                    <Select value={selectedBank} onValueChange={setSelectedBank}>
-                      <SelectTrigger id="selectBank">
-                        <SelectValue placeholder="Select your bank" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {banks.map((bank) => (
-                          <SelectItem key={bank.id} value={bank.id}>
-                            <div className="cls-bank-option">
-                              <Building2 size={16} />
-                              {bank.name}
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                  <Label>Select Your Bank</Label>
+                  <div className="cls-banks-grid">
+                    {banks.map((bank) => (
+                      <button
+                        key={bank.id}
+                        className={`cls-bank-option ${
+                          selectedBank === bank.id ? "cls-selected" : ""
+                        }`}
+                        onClick={() => setSelectedBank(bank.id)}
+                      >
+                        <div className="cls-bank-logo-container">
+                          <img 
+                            src={bank.logo} 
+                            alt={bank.name}
+                            className="cls-bank-logo"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).style.display = 'none';
+                              (e.target as HTMLImageElement).nextElementSibling?.classList.remove('cls-hidden');
+                            }}
+                          />
+                          <Building2 className="cls-bank-fallback-icon cls-hidden" size={24} />
+                        </div>
+                        <span className="cls-bank-name">{bank.name}</span>
+                      </button>
+                    ))}
                   </div>
 
                   <div className="cls-form-actions">
                     <Button variant="outline" onClick={handleClose}>
                       Cancel
                     </Button>
-                    <Button onClick={handleProceedToNetBanking}>
-                      Proceed to Net Banking
+                    <Button onClick={handlePayWithNetBanking} disabled={!selectedBank}>
+                      Proceed to Bank
                     </Button>
                   </div>
                 </div>
