@@ -57,9 +57,7 @@ export default function BillingPayment({ open, onOpenChange }: BillingPaymentPro
   const simulatePayment = (paymentType: string) => {
     setPaymentStage("processing");
     
-    // Simulate payment processing
     setTimeout(() => {
-      // 90% success rate for demo
       const isSuccess = Math.random() > 0.1;
       setPaymentStage(isSuccess ? "success" : "failure");
     }, 2500);
@@ -98,49 +96,81 @@ export default function BillingPayment({ open, onOpenChange }: BillingPaymentPro
   };
 
   const upiApps = [
-    { id: "gpay", name: "Google Pay", icon: "🔵" },
-    { id: "phonepe", name: "PhonePe", icon: "🟣" },
-    { id: "paytm", name: "Paytm", icon: "🔵" },
-    { id: "bhim", name: "BHIM UPI", icon: "🟢" },
+    { 
+      id: "gpay", 
+      name: "Google Pay", 
+      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/512px-Google_Pay_Logo.svg.png"
+    },
+    { 
+      id: "phonepe", 
+      name: "PhonePe", 
+      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/PhonePe_Logo.png/512px-PhonePe_Logo.png"
+    },
+    { 
+      id: "paytm", 
+      name: "Paytm", 
+      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Paytm_Logo_%28standalone%29.svg/512px-Paytm_Logo_%28standalone%29.svg.png"
+    },
+    { 
+      id: "bhim", 
+      name: "BHIM UPI", 
+      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Bhim-logo.svg/512px-Bhim-logo.svg.png"
+    },
   ];
 
   const wallets = [
-    { id: "paytm", name: "Paytm Wallet", icon: "💰" },
-    { id: "phonepe", name: "PhonePe Wallet", icon: "💳" },
-    { id: "amazonpay", name: "Amazon Pay", icon: "🛒" },
-    { id: "mobikwik", name: "MobiKwik", icon: "📱" },
+    { 
+      id: "paytm", 
+      name: "Paytm Wallet", 
+      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Paytm_Logo_%28standalone%29.svg/512px-Paytm_Logo_%28standalone%29.svg.png"
+    },
+    { 
+      id: "phonepe", 
+      name: "PhonePe Wallet", 
+      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/PhonePe_Logo.png/512px-PhonePe_Logo.png"
+    },
+    { 
+      id: "amazonpay", 
+      name: "Amazon Pay", 
+      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Amazon_Pay_logo.svg/512px-Amazon_Pay_logo.svg.png"
+    },
+    { 
+      id: "mobikwik", 
+      name: "MobiKwik", 
+      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/MobiKwik_Logo.png/512px-MobiKwik_Logo.png"
+    },
   ];
 
   const banks = [
     { 
       id: "sbi", 
       name: "State Bank of India",
-      logo: "https://www.logo.wine/a/logo/State_Bank_of_India/State_Bank_of_India-Logo.wine.svg"
+      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/SBI-logo.svg/512px-SBI-logo.svg.png"
     },
     { 
       id: "hdfc", 
       name: "HDFC Bank",
-      logo: "https://www.logo.wine/a/logo/HDFC_Bank/HDFC_Bank-Logo.wine.svg"
+      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/HDFC_Bank_Logo.svg/512px-HDFC_Bank_Logo.svg.png"
     },
     { 
       id: "icici", 
       name: "ICICI Bank",
-      logo: "https://www.logo.wine/a/logo/ICICI_Bank/ICICI_Bank-Logo.wine.svg"
+      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/ICICI_Bank_Logo.svg/512px-ICICI_Bank_Logo.svg.png"
     },
     { 
       id: "axis", 
       name: "Axis Bank",
-      logo: "https://www.logo.wine/a/logo/Axis_Bank/Axis_Bank-Logo.wine.svg"
+      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Axis_Bank_logo.svg/512px-Axis_Bank_logo.svg.png"
     },
     { 
       id: "kotak", 
-      name: "Kotak Mahindra Bank",
-      logo: "https://upload.wikimedia.org/wikipedia/en/thumb/4/44/Kotak_Mahindra_Bank_logo.svg/1200px-Kotak_Mahindra_Bank_logo.svg.png"
+      name: "Kotak Mahindra",
+      logo: "https://upload.wikimedia.org/wikipedia/en/thumb/4/44/Kotak_Mahindra_Bank_logo.svg/512px-Kotak_Mahindra_Bank_logo.svg.png"
     },
     { 
       id: "pnb", 
-      name: "Punjab National Bank",
-      logo: "https://www.logo.wine/a/logo/Punjab_National_Bank/Punjab_National_Bank-Logo.wine.svg"
+      name: "Punjab National",
+      logo: "https://upload.wikimedia.org/wikipedia/en/thumb/6/65/Punjab_National_Bank_logo.svg/512px-Punjab_National_Bank_logo.svg.png"
     },
   ];
 
@@ -150,7 +180,7 @@ export default function BillingPayment({ open, onOpenChange }: BillingPaymentPro
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="cls-billing-payment-dialog">
           <div className="cls-payment-status-screen">
-            <Loader2 className="cls-status-icon cls-processing-icon" size={64} />
+            <Loader2 className="cls-status-icon cls-processing-icon" size={56} />
             <h2 className="cls-status-title">Processing Payment</h2>
             <p className="cls-status-message">
               Please wait while we process your payment securely...
@@ -170,7 +200,7 @@ export default function BillingPayment({ open, onOpenChange }: BillingPaymentPro
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="cls-billing-payment-dialog">
           <div className="cls-payment-status-screen">
-            <CheckCircle2 className="cls-status-icon cls-success-icon" size={64} />
+            <CheckCircle2 className="cls-status-icon cls-success-icon" size={56} />
             <h2 className="cls-status-title">Payment Successful!</h2>
             <p className="cls-status-message">
               Your payment method has been updated successfully.
@@ -200,7 +230,7 @@ export default function BillingPayment({ open, onOpenChange }: BillingPaymentPro
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="cls-billing-payment-dialog">
           <div className="cls-payment-status-screen">
-            <XCircle className="cls-status-icon cls-failure-icon" size={64} />
+            <XCircle className="cls-status-icon cls-failure-icon" size={56} />
             <h2 className="cls-status-title">Payment Failed</h2>
             <p className="cls-status-message">
               We couldn't process your payment. Please try again.
@@ -228,7 +258,7 @@ export default function BillingPayment({ open, onOpenChange }: BillingPaymentPro
       <DialogContent className="cls-billing-payment-dialog">
         <DialogHeader>
           <DialogTitle className="cls-dialog-title">
-            <CreditCard size={20} />
+            <CreditCard size={18} />
             Update Payment Method
           </DialogTitle>
           <p className="cls-dialog-subtitle">
@@ -248,7 +278,7 @@ export default function BillingPayment({ open, onOpenChange }: BillingPaymentPro
             <AccordionItem value="card" className="cls-accordion-item">
               <AccordionTrigger className="cls-accordion-trigger">
                 <div className="cls-trigger-content">
-                  <CreditCard size={18} />
+                  <CreditCard size={16} />
                   <span>Credit / Debit Card</span>
                 </div>
               </AccordionTrigger>
@@ -342,7 +372,7 @@ export default function BillingPayment({ open, onOpenChange }: BillingPaymentPro
             <AccordionItem value="upi" className="cls-accordion-item">
               <AccordionTrigger className="cls-accordion-trigger">
                 <div className="cls-trigger-content">
-                  <Smartphone size={18} />
+                  <Smartphone size={16} />
                   <span>UPI</span>
                 </div>
               </AccordionTrigger>
@@ -373,7 +403,13 @@ export default function BillingPayment({ open, onOpenChange }: BillingPaymentPro
                           }`}
                           onClick={() => setSelectedUpiApp(app.id)}
                         >
-                          <span className="cls-app-icon">{app.icon}</span>
+                          <div className="cls-app-logo-container">
+                            <img 
+                              src={app.logo} 
+                              alt={app.name}
+                              className="cls-app-logo"
+                            />
+                          </div>
                           <span className="cls-app-name">{app.name}</span>
                         </button>
                       ))}
@@ -396,7 +432,7 @@ export default function BillingPayment({ open, onOpenChange }: BillingPaymentPro
             <AccordionItem value="wallets" className="cls-accordion-item">
               <AccordionTrigger className="cls-accordion-trigger">
                 <div className="cls-trigger-content">
-                  <Wallet size={18} />
+                  <Wallet size={16} />
                   <span>Wallets</span>
                 </div>
               </AccordionTrigger>
@@ -412,7 +448,13 @@ export default function BillingPayment({ open, onOpenChange }: BillingPaymentPro
                         }`}
                         onClick={() => setSelectedWallet(wallet.id)}
                       >
-                        <span className="cls-wallet-icon">{wallet.icon}</span>
+                        <div className="cls-wallet-logo-container">
+                          <img 
+                            src={wallet.logo} 
+                            alt={wallet.name}
+                            className="cls-wallet-logo"
+                          />
+                        </div>
                         <span className="cls-wallet-name">{wallet.name}</span>
                       </button>
                     ))}
@@ -434,7 +476,7 @@ export default function BillingPayment({ open, onOpenChange }: BillingPaymentPro
             <AccordionItem value="netbanking" className="cls-accordion-item">
               <AccordionTrigger className="cls-accordion-trigger">
                 <div className="cls-trigger-content">
-                  <Building2 size={18} />
+                  <Building2 size={16} />
                   <span>Net Banking</span>
                 </div>
               </AccordionTrigger>
@@ -455,12 +497,7 @@ export default function BillingPayment({ open, onOpenChange }: BillingPaymentPro
                             src={bank.logo} 
                             alt={bank.name}
                             className="cls-bank-logo"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).style.display = 'none';
-                              (e.target as HTMLImageElement).nextElementSibling?.classList.remove('cls-hidden');
-                            }}
                           />
-                          <Building2 className="cls-bank-fallback-icon cls-hidden" size={24} />
                         </div>
                         <span className="cls-bank-name">{bank.name}</span>
                       </button>
