@@ -27,7 +27,6 @@ import {
   MoreVertical,
   Pencil,
   Trash2,
-  Eye,
   Shield,
 } from "lucide-react";
 import RolesForm from "./RolesForm/RolesForm";
@@ -112,11 +111,6 @@ export default function Roles() {
       console.log("Delete role:", roleId);
       // Add delete logic here
     }
-  };
-
-  const handleViewRole = (role: Role) => {
-    setEditingRole(role);
-    setIsCreateDialogOpen(true);
   };
 
   const handleToggleStatus = (roleId: number, currentStatus: string) => {
@@ -224,13 +218,6 @@ export default function Roles() {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem
-                              onClick={() => handleViewRole(role)}
-                              className="cls-menu-item"
-                            >
-                              <Eye size={16} />
-                              View Details
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
                               onClick={() => handleEditRole(role)}
                               className="cls-menu-item"
                             >
@@ -265,6 +252,8 @@ export default function Roles() {
             totalPages={totalPages}
             itemsPerPage={itemsPerPage}
             totalItems={filteredRoles.length}
+            startIndex={startIndex}
+            endIndex={startIndex + itemsPerPage}
             onPageChange={setCurrentPage}
             onItemsPerPageChange={(value) => {
               setItemsPerPage(value);
