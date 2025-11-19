@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import AppLayout from "@/components/layout/AppLayout";
 import { Card, CardContent } from "@/components/ui/card";
@@ -339,7 +338,7 @@ export default function UsersPage() {
         {/* User Management Section */}
         <Card className="cls-management-card">
           <CardContent className="cls-management-content">
-            <div className="cls-management-header">
+            <div className="cls-management-header pt-2 pb-4">
               <div className="cls-header-left">
                 <UsersIcon className="cls-header-icon" />
                 <h2 className="cls-header-title">All Users</h2>
