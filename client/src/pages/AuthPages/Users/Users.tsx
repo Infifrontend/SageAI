@@ -18,14 +18,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+
 import {
   Popover,
   PopoverContent,
@@ -178,15 +171,7 @@ export default function UsersPage() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(6);
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [editingUser, setEditingUser] = useState<User | null>(null);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    organization: "TechCorp Solutions",
-    role: "Viewer",
-    status: "Active" as "Active" | "Pending" | "Suspended",
-  });
+  const [, setLocation] = useLocation();
 
   // Column visibility state
   const [columnVisibility, setColumnVisibility] = useState({
@@ -229,36 +214,12 @@ export default function UsersPage() {
   const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
 
   const handleEdit = (user: User) => {
-    setEditingUser(user);
-    setFormData({
-      name: user.name,
-      email: user.email,
-      organization: user.organization,
-      role: user.role,
-      status: user.status,
-    });
-    setIsAddDialogOpen(true);
+    // TODO: Navigate to edit form with user data
+    setLocation("/users/edit/" + user.id);
   };
 
   const handleDelete = (id: string) => {
     console.log("Delete user:", id);
-  };
-
-  const handleSaveUser = () => {
-    if (editingUser) {
-      console.log("Update user:", editingUser.id, formData);
-    } else {
-      console.log("Create new user:", formData);
-    }
-    setIsAddDialogOpen(false);
-    setEditingUser(null);
-    setFormData({
-      name: "",
-      email: "",
-      organization: "TechCorp Solutions",
-      role: "Viewer",
-      status: "Active",
-    });
   };
 
   const handleExport = () => {
@@ -455,7 +416,7 @@ export default function UsersPage() {
                 </Button>
 
                 <Button
-                  onClick={() => setIsAddDialogOpen(true)}
+                  onClick={() => setLocation("/users/new")}
                   className="cls-add-user-button"
                 >
                   <Plus size={16} />
@@ -582,152 +543,7 @@ export default function UsersPage() {
           endIndex={endIndex}
         />
 
-        {/* Add/Edit User Dialog */}
-        <Dialog
-          open={isAddDialogOpen}
-          onOpenChange={(open) => {
-            setIsAddDialogOpen(open);
-            if (!open) {
-              setEditingUser(null);
-              setFormData({
-                name: "",
-                email: "",
-                organization: "TechCorp Solutions",
-                role: "Viewer",
-                status: "Active",
-              });
-            }
-          }}
-        >
-          <DialogContent className="cls-add-dialog">
-            <DialogHeader>
-              <DialogTitle>
-                {editingUser ? "Edit User" : "Add New User"}
-              </DialogTitle>
-              <DialogDescription>
-                {editingUser
-                  ? "Update user details"
-                  : "Add a new user to the system"}
-              </DialogDescription>
-            </DialogHeader>
-
-            <div className="cls-form-grid">
-              <div className="cls-form-field">
-                <Label htmlFor="user-name">Name</Label>
-                <Input
-                  id="user-name"
-                  placeholder="e.g., John Smith"
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                />
-              </div>
-
-              <div className="cls-form-field">
-                <Label htmlFor="user-email">Email</Label>
-                <Input
-                  id="user-email"
-                  type="email"
-                  placeholder="e.g., john.smith@company.com"
-                  value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
-                />
-              </div>
-
-              <div className="cls-form-field">
-                <Label htmlFor="user-organization">Organization</Label>
-                <Select
-                  value={formData.organization}
-                  onValueChange={(value) =>
-                    setFormData({ ...formData, organization: value })
-                  }
-                >
-                  <SelectTrigger id="user-organization">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="TechCorp Solutions">
-                      TechCorp Solutions
-                    </SelectItem>
-                    <SelectItem value="DataFlow Systems">
-                      DataFlow Systems
-                    </SelectItem>
-                    <SelectItem value="Cloudify Inc.">Cloudify Inc.</SelectItem>
-                    <SelectItem value="Infiniti Software Solutions">
-                      Infiniti Software Solutions
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="cls-form-field">
-                <Label htmlFor="user-role">Role</Label>
-                <Select
-                  value={formData.role}
-                  onValueChange={(value) =>
-                    setFormData({ ...formData, role: value })
-                  }
-                >
-                  <SelectTrigger id="user-role">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Admin">Admin</SelectItem>
-                    <SelectItem value="Developer">Developer</SelectItem>
-                    <SelectItem value="Billing Manager">
-                      Billing Manager
-                    </SelectItem>
-                    <SelectItem value="Viewer">Viewer</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="cls-form-field">
-                <Label htmlFor="user-status">Status</Label>
-                <Select
-                  value={formData.status}
-                  onValueChange={(value: any) =>
-                    setFormData({ ...formData, status: value })
-                  }
-                >
-                  <SelectTrigger id="user-status">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Active">Active</SelectItem>
-                    <SelectItem value="Pending">Pending</SelectItem>
-                    <SelectItem value="Suspended">Suspended</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            <DialogFooter>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setIsAddDialogOpen(false);
-                  setEditingUser(null);
-                  setFormData({
-                    name: "",
-                    email: "",
-                    organization: "TechCorp Solutions",
-                    role: "Viewer",
-                    status: "Active",
-                  });
-                }}
-              >
-                Cancel
-              </Button>
-              <Button onClick={handleSaveUser}>
-                {editingUser ? "Update User" : "Add User"}
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        
       </div>
     </AppLayout>
   );
