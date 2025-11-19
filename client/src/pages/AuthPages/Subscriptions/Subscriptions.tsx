@@ -50,6 +50,9 @@ import {
   Check,
   X,
   PlusCircle,
+  Award,
+  Building,
+  Server,
 } from "lucide-react";
 import { TablePagination } from "@/components/ui/table-pagination";
 import "./Subscriptions.scss";
@@ -535,9 +538,9 @@ export default function Subscriptions() {
                       <div className="cls-plan-title-row">
                         <div className="cls-plan-icon">
                           {plan.icon === "star" && <Star size={20} />}
-                          {plan.icon === "award" && <Package size={20} />}
-                          {plan.icon === "building" && <Package size={20} />}
-                          {plan.icon === "server" && <Package size={20} />}
+                          {plan.icon === "award" && <Award size={20} />}
+                          {plan.icon === "building" && <Building size={20} />}
+                          {plan.icon === "server" && <Server size={20} />}
                         </div>
                         <h3 className="cls-plan-name">{plan.name}</h3>
                       </div>
