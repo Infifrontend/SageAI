@@ -138,6 +138,7 @@
   border: 2px solid hsl(var(--border));
   border-radius: 0.75rem;
   padding: 1.25rem;
+  padding-top: 1rem;
   background: hsl(var(--background));
   cursor: pointer;
   transition: all $transition-fast;
@@ -154,20 +155,25 @@
     border-color: #667eea;
     background: #f3f4ff;
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+
+    &:hover {
+      border-color: #667eea;
+    }
   }
 
   .cls-plan-check {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
-    width: 1.75rem;
-    height: 1.75rem;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 1.5rem;
+    height: 1.5rem;
     border-radius: 50%;
     background: #667eea;
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
   }
 
   .cls-plan-header {
