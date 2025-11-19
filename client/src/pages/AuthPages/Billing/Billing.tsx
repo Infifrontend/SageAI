@@ -95,6 +95,69 @@ const invoices: Invoice[] = [
     amount: 19610.0,
     status: "Paid",
   },
+  {
+    id: 6,
+    invoiceId: "SAGE-INV-006",
+    billingDate: "2024-07-01",
+    paidDate: "2024-07-02",
+    paymentMethod: "Mastercard **** 8821",
+    amount: 21200.0,
+    status: "Paid",
+  },
+  {
+    id: 7,
+    invoiceId: "SAGE-INV-007",
+    billingDate: "2024-06-01",
+    paidDate: "",
+    paymentMethod: "Visa **** 4532",
+    amount: 18900.0,
+    status: "Pending",
+  },
+  {
+    id: 8,
+    invoiceId: "SAGE-INV-008",
+    billingDate: "2024-05-01",
+    paidDate: "2024-05-01",
+    paymentMethod: "Amex **** 1009",
+    amount: 20000.0,
+    status: "Paid",
+  },
+  {
+    id: 9,
+    invoiceId: "SAGE-INV-009",
+    billingDate: "2024-04-01",
+    paidDate: "",
+    paymentMethod: "Visa **** 4532",
+    amount: 19500.0,
+    status: "Overdue",
+  },
+  {
+    id: 10,
+    invoiceId: "SAGE-INV-010",
+    billingDate: "2024-03-01",
+    paidDate: "2024-03-03",
+    paymentMethod: "Visa **** 4532",
+    amount: 22100.0,
+    status: "Paid",
+  },
+  {
+    id: 11,
+    invoiceId: "SAGE-INV-011",
+    billingDate: "2024-02-01",
+    paidDate: "",
+    paymentMethod: "Mastercard **** 8821",
+    amount: 20800.0,
+    status: "Pending",
+  },
+  {
+    id: 12,
+    invoiceId: "SAGE-INV-012",
+    billingDate: "2024-01-01",
+    paidDate: "2024-01-01",
+    paymentMethod: "Visa **** 4532",
+    amount: 19200.0,
+    status: "Paid",
+  },
 ];
 
 export default function Billing() {
@@ -773,7 +836,15 @@ export default function Billing() {
                       )}
                       {columnVisibility.status && (
                         <TableCell>
-                          <Badge className="cls-badge-paid">
+                          <Badge 
+                            className={
+                              invoice.status === "Paid" 
+                                ? "cls-badge-paid" 
+                                : invoice.status === "Pending"
+                                ? "cls-badge-pending"
+                                : "cls-badge-overdue"
+                            }
+                          >
                             {invoice.status}
                           </Badge>
                         </TableCell>
