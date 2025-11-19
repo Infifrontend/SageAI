@@ -19,6 +19,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { TablePagination } from "@/components/ui/table-pagination";
 import {
   Building2,
@@ -58,6 +68,8 @@ export default function Organizations() {
   const [itemsPerPage, setItemsPerPage] = useState(6);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [editingOrganization, setEditingOrganization] = useState<Organization | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [orgToDelete, setOrgToDelete] = useState<number | null>(null);
 
   const organizations: Organization[] = [
     {
@@ -234,8 +246,15 @@ export default function Organizations() {
   };
 
   const handleDeleteOrganization = (orgId: number) => {
-    if (window.confirm("Are you sure you want to delete this organization?")) {
-      console.log("Delete organization:", orgId);
+    setOrgToDelete(orgId);
+    setDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (orgToDelete) {
+      console.log("Delete organization:", orgToDelete);
+      setDeleteDialogOpen(false);
+      setOrgToDelete(null);
     }
   };
 
@@ -487,6 +506,22 @@ export default function Organizations() {
           editData={editingOrganization}
           isEdit={!!editingOrganization}
         />
+
+        {/* Delete Confirmation Dialog */}
+        <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Warning!</AlertDialogTitle>
+              <AlertDialogDescription>
+                Do you want to delete this organization? This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={confirmDelete}>OK</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </AppLayout>
   );

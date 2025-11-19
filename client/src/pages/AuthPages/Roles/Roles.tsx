@@ -18,6 +18,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { TablePagination } from "@/components/ui/table-pagination";
@@ -46,6 +56,8 @@ export default function Roles() {
   const [itemsPerPage, setItemsPerPage] = useState(6);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [editingRole, setEditingRole] = useState<Role | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [roleToDelete, setRoleToDelete] = useState<number | null>(null);
 
   const roles: Role[] = [
     {
@@ -156,9 +168,16 @@ export default function Roles() {
   };
 
   const handleDeleteRole = (roleId: number) => {
-    if (window.confirm("Are you sure you want to delete this role?")) {
-      console.log("Delete role:", roleId);
+    setRoleToDelete(roleId);
+    setDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (roleToDelete) {
+      console.log("Delete role:", roleToDelete);
       // Add delete logic here
+      setDeleteDialogOpen(false);
+      setRoleToDelete(null);
     }
   };
 
@@ -319,6 +338,22 @@ export default function Roles() {
         editData={editingRole}
         isEdit={!!editingRole}
       />
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Warning!</AlertDialogTitle>
+            <AlertDialogDescription>
+              Do you want to delete this role? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete}>OK</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </AppLayout>
   );
 }

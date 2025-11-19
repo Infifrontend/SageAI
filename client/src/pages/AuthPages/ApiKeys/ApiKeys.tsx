@@ -27,6 +27,16 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -281,6 +291,8 @@ export default function ApiKeys() {
     environment: "Development" as "Production" | "Development" | "Staging",
     status: "active" as "active" | "inactive",
   });
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [keyToDelete, setKeyToDelete] = useState<string | null>(null);
 
   // Available endpoint permissions for each API collection
   const apiCollectionEndpoints: Record<string, any[]> = {
@@ -448,7 +460,16 @@ export default function ApiKeys() {
   };
 
   const handleDelete = (id: string) => {
-    console.log("Delete API key:", id);
+    setKeyToDelete(id);
+    setDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (keyToDelete) {
+      console.log("Delete API key:", keyToDelete);
+      setDeleteDialogOpen(false);
+      setKeyToDelete(null);
+    }
   };
 
   const handleEdit = (apiKey: ApiKey) => {
@@ -1070,6 +1091,22 @@ export default function ApiKeys() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+
+        {/* Delete Confirmation Dialog */}
+        <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Warning!</AlertDialogTitle>
+              <AlertDialogDescription>
+                Do you want to delete this API key? This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={confirmDelete}>OK</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </AppLayout>
   );

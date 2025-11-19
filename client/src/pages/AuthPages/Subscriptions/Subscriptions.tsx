@@ -56,6 +56,16 @@ import {
 } from "lucide-react";
 import { TablePagination } from "@/components/ui/table-pagination";
 import "./Subscriptions.scss";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface SubscriptionPlan {
   id: string;
@@ -316,6 +326,8 @@ export default function Subscriptions() {
     features: [] as string[],
   });
   const [newFeature, setNewFeature] = useState("");
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [planToDelete, setPlanToDelete] = useState<string | null>(null);
 
   const filteredPlans = subscriptionPlans.filter((plan) => {
     const matchesSearch = plan.name
@@ -371,9 +383,19 @@ export default function Subscriptions() {
     setIsAddDialogOpen(true);
   };
 
-  const handleDelete = (planId: string) => {
-    console.log("Delete plan:", planId);
-    // TODO: Implement delete functionality
+  const handleDelete = (id: string) => {
+    setPlanToDelete(id);
+    setDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (planToDelete) {
+      console.log("Delete subscription plan:", planToDelete);
+      // In a real application, you would call an API to delete the plan here.
+      // For now, we'll just log and close the dialog.
+      setDeleteDialogOpen(false);
+      setPlanToDelete(null);
+    }
   };
 
   const handleSave = () => {
@@ -1013,6 +1035,22 @@ export default function Subscriptions() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+
+        {/* Delete Confirmation Dialog */}
+        <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Warning!</AlertDialogTitle>
+              <AlertDialogDescription>
+                Do you want to delete this subscription plan? This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={confirmDelete}>OK</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </AppLayout>
   );
