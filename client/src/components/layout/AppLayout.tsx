@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "wouter";
 import {
   LayoutDashboard,
@@ -120,16 +120,27 @@ export default function AppLayout({
   subtitle,
 }: AppLayoutProps) {
   const [location] = useLocation();
-  const [openMenus, setOpenMenus] = useState<string[]>([
+  const [openMenus, setOpenMenus] = useState<string[]>([]);
 
-  ]);
+  // Initialize open menu based on current location
+  React.useEffect(() => {
+    const currentMenu = menuItems.find((item) => 
+      item.items?.some((subItem) => subItem.href === location)
+    );
+    if (currentMenu && !openMenus.includes(currentMenu.title)) {
+      setOpenMenus([currentMenu.title]);
+    }
+  }, [location]);
 
   const toggleMenu = (title: string) => {
-    setOpenMenus((prev) =>
-      prev.includes(title)
-        ? prev.filter((item) => item !== title)
-        : [...prev, title],
-    );
+    setOpenMenus((prev) => {
+      // If the menu is already open, close it
+      if (prev.includes(title)) {
+        return prev.filter((item) => item !== title);
+      }
+      // Otherwise, close all other menus and open this one
+      return [title];
+    });
   };
 
   const handleLogout = () => {
