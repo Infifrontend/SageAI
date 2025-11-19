@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { useLocation } from "wouter";
+import UsersForm from "./UsersForm/UsersForm";
 import {
   Table,
   TableBody,
@@ -172,7 +172,7 @@ export default function UsersPage() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(6);
-  const [, setLocation] = useLocation();
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   // Column visibility state
   const [columnVisibility, setColumnVisibility] = useState({
@@ -215,8 +215,13 @@ export default function UsersPage() {
   const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
 
   const handleEdit = (user: User) => {
-    // TODO: Navigate to edit form with user data
-    setLocation("/users/edit/" + user.id);
+    // TODO: Open edit modal with user data
+    console.log("Edit user:", user);
+  };
+
+  const handleCreateUser = (userData: any) => {
+    console.log("User created:", userData);
+    // TODO: Add user to list
   };
 
   const handleDelete = (id: string) => {
@@ -417,7 +422,7 @@ export default function UsersPage() {
                 </Button>
 
                 <Button
-                  onClick={() => setLocation("/users/new")}
+                  onClick={() => setIsFormOpen(true)}
                   className="cls-add-user-button"
                 >
                   <Plus size={16} />
@@ -542,6 +547,13 @@ export default function UsersPage() {
           onItemsPerPageChange={setItemsPerPage}
           startIndex={startIndex}
           endIndex={endIndex}
+        />
+
+        {/* User Form Modal */}
+        <UsersForm
+          open={isFormOpen}
+          onOpenChange={setIsFormOpen}
+          onSubmit={handleCreateUser}
         />
       </div>
     </AppLayout>

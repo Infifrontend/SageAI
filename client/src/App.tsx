@@ -12,7 +12,6 @@ import ApiKeys from "@/pages/AuthPages/ApiKeys/ApiKeys";
 import ApiDocs from "@/pages/AuthPages/ApiDocs/ApiDocs";
 import ApiDocDetail from "@/pages/AuthPages/ApiDocs/ApiDocDetail";
 import UsersPage from "@/pages/AuthPages/Users/Users";
-import UsersForm from "@/pages/AuthPages/Users/UsersForm/UsersForm";
 import RolesPage from "@/pages/AuthPages/Roles/Roles";
 import OrganizationsPage from "@/pages/AuthPages/Organizations/Organizations";
 import Billing from "@/pages/AuthPages/Billing/Billing";
@@ -30,8 +29,6 @@ function Router() {
       <Route path="/api-docs" component={ApiDocs} />
       <Route path="/api-docs/:id" component={ApiDocDetail} />
       <Route path="/users" component={UsersPage} />
-      <Route path="/users/new" component={UsersForm} />
-      <Route path="/users/edit/:id" component={UsersForm} />
       <Route path="/roles" component={RolesPage} />
       <Route path="/organizations" component={OrganizationsPage} />
       <Route path="/billing" component={Billing} />

@@ -1,73 +1,21 @@
-
 @import '../../../../styles/theme.scss';
 
-.cls-users-form-page {
-  display: flex;
-  justify-content: center;
-  padding: 2rem 1rem;
-  min-height: calc(100vh - 100px);
-}
+.cls-users-form-dialog {
+  max-width: 800px !important;
 
-.cls-form-card {
-  width: 100%;
-  max-width: 600px;
-  border: 1px solid hsl(var(--border));
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-.cls-form-content {
-  padding: 2rem;
-}
-
-// Header
-.cls-form-header {
-  margin-bottom: 1.5rem;
-
-  .cls-header-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.5rem;
-
-    h2 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: hsl(var(--foreground));
-      margin: 0;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-
-      svg {
-        width: 1.5rem;
-        height: 1.5rem;
-      }
-    }
-
-    .cls-close-button {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: hsl(var(--muted-foreground));
-      padding: 0.25rem;
-      border-radius: 0.25rem;
-      transition: all $transition-fast;
-
-      &:hover {
-        background: hsl(var(--muted));
-        color: hsl(var(--foreground));
-      }
-    }
+  .cls-dialog-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: $text-primary;
   }
 
-  .cls-header-subtitle {
-    font-size: 0.875rem;
-    color: hsl(var(--muted-foreground));
-    margin: 0;
+  .cls-dialog-subtitle {
+    font-size: 14px;
+    color: $text-secondary;
+    margin-top: 4px;
   }
 }
 
-// Progress
 .cls-progress-section {
   margin-bottom: 2rem;
 
@@ -179,6 +127,11 @@
     align-items: center;
     justify-content: center;
     color: hsl(var(--foreground));
+
+    svg {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
   }
 
   .cls-role-info {
@@ -281,6 +234,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
+
+      svg {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
     }
 
     .cls-role-name {
@@ -351,15 +309,9 @@
 
 // Responsive
 @media (max-width: 640px) {
-  .cls-users-form-page {
-    padding: 1rem 0.5rem;
-  }
-
-  .cls-form-content {
-    padding: 1.5rem 1rem;
-  }
-
-  .cls-review-grid {
-    grid-template-columns: 1fr;
+  .cls-users-form-dialog {
+    .cls-form-content {
+      padding: 24px 16px;
+    }
   }
 }
