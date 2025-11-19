@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import AppLayout from "@/components/layout/AppLayout";
 import { Card, CardContent } from "@/components/ui/card";
@@ -128,10 +127,15 @@ export default function Billing() {
   // Filter invoices
   const filteredInvoices = invoices.filter((invoice) => {
     const matchesSearch =
-      invoice.invoiceId.toLowerCase().includes(invoiceSearchQuery.toLowerCase()) ||
-      invoice.paymentMethod.toLowerCase().includes(invoiceSearchQuery.toLowerCase());
+      invoice.invoiceId
+        .toLowerCase()
+        .includes(invoiceSearchQuery.toLowerCase()) ||
+      invoice.paymentMethod
+        .toLowerCase()
+        .includes(invoiceSearchQuery.toLowerCase());
     const matchesStatus =
-      statusFilter === "all" || invoice.status.toLowerCase() === statusFilter.toLowerCase();
+      statusFilter === "all" ||
+      invoice.status.toLowerCase() === statusFilter.toLowerCase();
     return matchesSearch && matchesStatus;
   });
 
@@ -144,7 +148,14 @@ export default function Billing() {
   // Export all invoices
   const handleExportAllInvoices = () => {
     const csvContent = [
-      ["Invoice ID", "Billing Date", "Paid Date", "Payment Method", "Amount", "Status"],
+      [
+        "Invoice ID",
+        "Billing Date",
+        "Paid Date",
+        "Payment Method",
+        "Amount",
+        "Status",
+      ],
       ...invoices.map((inv) => [
         inv.invoiceId,
         inv.billingDate,
@@ -257,8 +268,8 @@ export default function Billing() {
             <div className="cls-alert-text">
               <strong>High SAGE API Usage Alert</strong>
               <p>
-                You've used 84% of your monthly SAGE API calls. Additional
-                calls will be charged at $0.05/call.
+                You've used 84% of your monthly SAGE API calls. Additional calls
+                will be charged at $0.05/call.
               </p>
             </div>
           </div>
@@ -300,9 +311,12 @@ export default function Billing() {
           </div>
 
           <div className="cls-performance-text-section">
-            <p className="cls-performance-label">Group Engagement Performance</p>
+            <p className="cls-performance-label">
+              Group Engagement Performance
+            </p>
             <p className="cls-performance-description">
-              Your SAGE API is enabling seamless group interactions with 84% efficiency
+              Your SAGE API is enabling seamless group interactions with 84%
+              efficiency
             </p>
           </div>
         </div>
@@ -389,7 +403,11 @@ export default function Billing() {
                   <span className="cls-billing-label">Payment Method</span>
                   <span className="cls-billing-value">
                     {currentPlan.paymentMethod}
-                    <Button variant="ghost" size="sm" className="cls-default-btn">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="cls-default-btn"
+                    >
                       Default
                     </Button>
                   </span>
@@ -401,7 +419,9 @@ export default function Billing() {
                   </span>
                 </div>
                 <div className="cls-billing-row">
-                  <span className="cls-billing-label">Current Overage Status</span>
+                  <span className="cls-billing-label">
+                    Current Overage Status
+                  </span>
                   <span className="cls-billing-value cls-overage-status">
                     {currentPlan.overageStatus}
                   </span>
@@ -544,11 +564,13 @@ export default function Billing() {
             <div className="cls-invoices-header">
               <div className="cls-invoices-header-left">
                 <h3 className="cls-invoices-title">Recent SAGE Invoices</h3>
-                <p className="cls-invoices-subtitle">View and manage your billing history</p>
+                <p className="cls-invoices-subtitle">
+                  View and manage your billing history
+                </p>
               </div>
               <div className="cls-invoices-header-right">
                 <div className="cls-search-wrapper">
-                  <Search className="cls-search-icon" />
+                  {/* <Search className="cls-search-icon" /> */}
                   <input
                     type="text"
                     placeholder="Search invoices..."
@@ -661,7 +683,11 @@ export default function Billing() {
                   </PopoverContent>
                 </Popover>
 
-                <Button variant="outline" size="sm" onClick={handleExportAllInvoices}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportAllInvoices}
+                >
                   <FileDown size={16} />
                   Export All Invoices
                 </Button>
@@ -673,9 +699,15 @@ export default function Billing() {
                 <TableRow>
                   <TableHead>S.No</TableHead>
                   <TableHead>Invoice ID</TableHead>
-                  {columnVisibility.billingDate && <TableHead>Billing Date</TableHead>}
-                  {columnVisibility.paidDate && <TableHead>Paid Date</TableHead>}
-                  {columnVisibility.paymentMethod && <TableHead>Payment Method</TableHead>}
+                  {columnVisibility.billingDate && (
+                    <TableHead>Billing Date</TableHead>
+                  )}
+                  {columnVisibility.paidDate && (
+                    <TableHead>Paid Date</TableHead>
+                  )}
+                  {columnVisibility.paymentMethod && (
+                    <TableHead>Payment Method</TableHead>
+                  )}
                   {columnVisibility.amount && <TableHead>Amount</TableHead>}
                   {columnVisibility.status && <TableHead>Status</TableHead>}
                   <TableHead>Actions</TableHead>
@@ -689,9 +721,15 @@ export default function Billing() {
                       <TableCell className="cls-invoice-id">
                         {invoice.invoiceId}
                       </TableCell>
-                      {columnVisibility.billingDate && <TableCell>{invoice.billingDate}</TableCell>}
-                      {columnVisibility.paidDate && <TableCell>{invoice.paidDate}</TableCell>}
-                      {columnVisibility.paymentMethod && <TableCell>{invoice.paymentMethod}</TableCell>}
+                      {columnVisibility.billingDate && (
+                        <TableCell>{invoice.billingDate}</TableCell>
+                      )}
+                      {columnVisibility.paidDate && (
+                        <TableCell>{invoice.paidDate}</TableCell>
+                      )}
+                      {columnVisibility.paymentMethod && (
+                        <TableCell>{invoice.paymentMethod}</TableCell>
+                      )}
                       {columnVisibility.amount && (
                         <TableCell className="cls-invoice-amount">
                           ${invoice.amount.toLocaleString()}
@@ -699,7 +737,9 @@ export default function Billing() {
                       )}
                       {columnVisibility.status && (
                         <TableCell>
-                          <Badge className="cls-badge-paid">{invoice.status}</Badge>
+                          <Badge className="cls-badge-paid">
+                            {invoice.status}
+                          </Badge>
                         </TableCell>
                       )}
                       <TableCell>
