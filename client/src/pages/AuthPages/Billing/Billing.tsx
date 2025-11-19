@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import AppLayout from "@/components/layout/AppLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -98,6 +98,8 @@ const invoices: Invoice[] = [
 ];
 
 export default function Billing() {
+  const invoicesSectionRef = useRef<HTMLDivElement>(null);
+  const currentPlanName = "Enterprise"; // The actual current plan
   const [selectedPlan, setSelectedPlan] = useState("Enterprise");
   const [invoiceSearchQuery, setInvoiceSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -110,6 +112,14 @@ export default function Billing() {
     amount: true,
     status: true,
   });
+
+  // Scroll to invoices section
+  const scrollToInvoices = () => {
+    invoicesSectionRef.current?.scrollIntoView({ 
+      behavior: 'smooth',
+      block: 'start'
+    });
+  };
 
   const currentPlan = {
     name: "SAGE Enterprise",
@@ -433,7 +443,11 @@ export default function Billing() {
                   <CreditCard size={16} />
                   Update Payment Method
                 </Button>
-                <Button variant="outline" className="cls-billing-action-btn">
+                <Button 
+                  variant="outline" 
+                  className="cls-billing-action-btn"
+                  onClick={scrollToInvoices}
+                >
                   <Download size={16} />
                   View SAGE Billing History
                 </Button>
@@ -506,66 +520,82 @@ export default function Billing() {
           </p>
 
           <div className="cls-plans-grid">
-            {plans.map((plan) => (
-              <Card
-                key={plan.name}
-                className={`cls-plan-card ${
-                  plan.highlighted ? "cls-plan-highlighted" : ""
-                } ${selectedPlan === plan.name ? "cls-plan-selected" : ""}`}
-                onClick={() => setSelectedPlan(plan.name)}
-              >
-                <CardContent className="cls-plan-card-content">
-                  {plan.highlighted && (
-                    <div className="cls-current-plan-badge">
-                      <CheckCircle2 size={14} />
-                      Current Plan
-                    </div>
-                  )}
-
-                  <div className="cls-plan-card-body">
-                    <div className="cls-plan-card-header">
-                      <div className="cls-plan-card-name">{plan.name}</div>
-                      <div className="cls-plan-card-price">{plan.price}</div>
-                      {plan.priceValue > 0 && (
-                        <div className="cls-plan-card-period">per month</div>
-                      )}
-                    </div>
-
-                    <div className="cls-plan-card-calls">{plan.apiCalls}</div>
-                    {plan.overage && (
-                      <div className="cls-plan-card-overage">{plan.overage}</div>
+            {plans.map((plan) => {
+              const isCurrentPlan = plan.name === currentPlanName;
+              const isSelectedPlan = selectedPlan === plan.name;
+              
+              return (
+                <Card
+                  key={plan.name}
+                  className={`cls-plan-card ${
+                    isCurrentPlan ? "cls-plan-highlighted" : ""
+                  } ${isSelectedPlan ? "cls-plan-selected" : ""}`}
+                  onClick={() => setSelectedPlan(plan.name)}
+                >
+                  <CardContent className="cls-plan-card-content">
+                    {isCurrentPlan && (
+                      <div className="cls-current-plan-badge">
+                        <CheckCircle2 size={14} />
+                        Current Plan
+                      </div>
+                    )}
+                    {!isCurrentPlan && isSelectedPlan && (
+                      <div className="cls-selected-plan-badge">
+                        <CheckCircle2 size={14} />
+                        Selected Plan
+                      </div>
                     )}
 
-                    <div className="cls-plan-card-features">
-                      {plan.features.map((feature, index) => (
-                        <div key={index} className="cls-feature-item">
-                          <CheckCircle2 size={16} className="cls-feature-icon" />
-                          <span>{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                    <div className="cls-plan-card-body">
+                      <div className="cls-plan-card-header">
+                        <div className="cls-plan-card-name">{plan.name}</div>
+                        <div className="cls-plan-card-price">{plan.price}</div>
+                        {plan.priceValue > 0 && (
+                          <div className="cls-plan-card-period">per month</div>
+                        )}
+                      </div>
 
-                  <Button
-                    className="cls-plan-select-btn"
-                    variant={plan.highlighted ? "default" : "outline"}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedPlan(plan.name);
-                    }}
-                  >
-                    {plan.name === "Custom/On-Premise"
-                      ? "Contact SAGE Sales"
-                      : "Switch Plan"}
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
+                      <div className="cls-plan-card-calls">{plan.apiCalls}</div>
+                      {plan.overage && (
+                        <div className="cls-plan-card-overage">{plan.overage}</div>
+                      )}
+
+                      <div className="cls-plan-card-features">
+                        {plan.features.map((feature, index) => (
+                          <div key={index} className="cls-feature-item">
+                            <CheckCircle2 size={16} className="cls-feature-icon" />
+                            <span>{feature}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <Button
+                      className="cls-plan-select-btn"
+                      variant={isCurrentPlan ? "default" : "outline"}
+                      disabled={isCurrentPlan}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (!isCurrentPlan) {
+                          setSelectedPlan(plan.name);
+                        }
+                      }}
+                    >
+                      {plan.name === "Custom/On-Premise"
+                        ? "Contact SAGE Sales"
+                        : isCurrentPlan
+                        ? "Current Plan"
+                        : "Switch Plan"}
+                    </Button>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         </div>
 
         {/* Recent Invoices */}
-        <Card className="cls-invoices-card">
+        <Card className="cls-invoices-card" ref={invoicesSectionRef}>
           <CardContent className="cls-invoices-content">
             <div className="cls-invoices-header">
               <div className="cls-invoices-header-left">
