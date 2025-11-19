@@ -424,59 +424,61 @@ export default function UsersForm({ open, onOpenChange, onSubmit, editData, isEd
               </div>
             </div>
 
-            <div className="cls-review-section">
-              <h3 className="cls-section-title">Role & Permissions</h3>
-              <div className="cls-role-display">
-                {roleOptions.find((r) => r.id === formData.role) && (
-                  <div className="cls-role-summary">
-                    <div className="cls-role-icon-small">
-                      {(() => {
-                        const selectedRole = roleOptions.find((r) => r.id === formData.role);
-                        const IconComponent = selectedRole?.icon;
-                        return IconComponent ? <IconComponent size={20} /> : null;
-                      })()}
+            <div className="cls-review-sections-row">
+              <div className="cls-review-section">
+                <h3 className="cls-section-title">Role & Permissions</h3>
+                <div className="cls-role-display">
+                  {roleOptions.find((r) => r.id === formData.role) && (
+                    <div className="cls-role-summary">
+                      <div className="cls-role-icon-small">
+                        {(() => {
+                          const selectedRole = roleOptions.find((r) => r.id === formData.role);
+                          const IconComponent = selectedRole?.icon;
+                          return IconComponent ? <IconComponent size={20} /> : null;
+                        })()}
+                      </div>
+                      <div>
+                        <p className="cls-role-name">
+                          {
+                            roleOptions.find((r) => r.id === formData.role)
+                              ?.title
+                          }
+                        </p>
+                        <p className="cls-role-desc">
+                          {
+                            roleOptions.find((r) => r.id === formData.role)
+                              ?.description
+                          }
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="cls-role-name">
-                        {
-                          roleOptions.find((r) => r.id === formData.role)
-                            ?.title
-                        }
-                      </p>
-                      <p className="cls-role-desc">
-                        {
-                          roleOptions.find((r) => r.id === formData.role)
-                            ?.description
-                        }
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="cls-review-section">
-              <h3 className="cls-section-title">Account Configuration</h3>
-              <div className="cls-config-list">
-                <div className="cls-config-item">
-                  <p className="cls-config-label">Send Invitation:</p>
-                  <span
-                    className={`cls-config-badge ${
-                      formData.sendInvitation ? "cls-yes" : "cls-no"
-                    }`}
-                  >
-                    {formData.sendInvitation ? "Yes" : "No"}
-                  </span>
+                  )}
                 </div>
-                <div className="cls-config-item">
-                  <p className="cls-config-label">Require Password Reset:</p>
-                  <span
-                    className={`cls-config-badge ${
-                      formData.requirePasswordReset ? "cls-yes" : "cls-no"
-                    }`}
-                  >
-                    {formData.requirePasswordReset ? "Yes" : "No"}
-                  </span>
+              </div>
+
+              <div className="cls-review-section">
+                <h3 className="cls-section-title">Account Configuration</h3>
+                <div className="cls-config-list">
+                  <div className="cls-config-item">
+                    <p className="cls-config-label">Send Invitation:</p>
+                    <span
+                      className={`cls-config-badge ${
+                        formData.sendInvitation ? "cls-yes" : "cls-no"
+                      }`}
+                    >
+                      {formData.sendInvitation ? "Yes" : "No"}
+                    </span>
+                  </div>
+                  <div className="cls-config-item">
+                    <p className="cls-config-label">Require Password Reset:</p>
+                    <span
+                      className={`cls-config-badge ${
+                        formData.requirePasswordReset ? "cls-yes" : "cls-no"
+                      }`}
+                    >
+                      {formData.requirePasswordReset ? "Yes" : "No"}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>

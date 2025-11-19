@@ -222,6 +222,16 @@
   border: 1px solid hsl(var(--border));
 }
 
+.cls-review-sections-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
 .cls-review-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

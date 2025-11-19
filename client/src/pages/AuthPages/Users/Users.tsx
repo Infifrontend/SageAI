@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import UsersForm from "./UsersForm/UsersForm";
+import * as XLSX from "xlsx";
 import {
   Table,
   TableBody,
@@ -253,7 +254,24 @@ export default function UsersPage() {
   };
 
   const handleExport = () => {
-    console.log("Export users");
+    // Prepare data for export
+    const exportData = filteredUsers.map((user, index) => ({
+      "S.No.": index + 1,
+      "Name": user.name,
+      "Email": user.email,
+      "Organization": user.organization,
+      "Role": user.role,
+      "Status": user.status,
+      "Last Active": user.lastActive,
+    }));
+
+    // Create a new workbook
+    const ws = XLSX.utils.json_to_sheet(exportData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Users");
+
+    // Generate Excel file and download
+    XLSX.writeFile(wb, `users-export-${new Date().toISOString().split('T')[0]}.xlsx`);
   };
 
   return (
