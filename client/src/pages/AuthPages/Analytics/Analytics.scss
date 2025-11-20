@@ -34,20 +34,9 @@
 
   .cls-metric-header {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     margin-bottom: 1rem;
-  }
-
-  .cls-metric-title-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .cls-metric-title-icon {
-    color: #6b7280;
-    flex-shrink: 0;
   }
 
   .cls-metric-label {
@@ -56,6 +45,7 @@
     font-weight: 500;
     line-height: 1.4;
     margin: 0;
+    padding-top: 0.25rem;
   }
 
   .cls-metric-icon {
