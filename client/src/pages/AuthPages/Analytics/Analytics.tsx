@@ -242,7 +242,10 @@ export default function Analytics() {
           <Card className="cls-metric-card">
             <CardContent className="cls-metric-content">
               <div className="cls-metric-header">
-                <p className="cls-metric-label">System Uptime</p>
+                <div className="cls-metric-title-wrapper">
+                  <Activity size={18} className="cls-metric-title-icon" />
+                  <p className="cls-metric-label">System Uptime</p>
+                </div>
                 <div className="cls-metric-icon cls-info">
                   <Activity size={18} />
                 </div>
@@ -254,7 +257,10 @@ export default function Analytics() {
           <Card className="cls-metric-card">
             <CardContent className="cls-metric-content">
               <div className="cls-metric-header">
-                <p className="cls-metric-label">Avg Response Time</p>
+                <div className="cls-metric-title-wrapper">
+                  <Clock size={18} className="cls-metric-title-icon" />
+                  <p className="cls-metric-label">Avg Response Time</p>
+                </div>
                 <div className="cls-metric-icon cls-success">
                   <Clock size={18} />
                 </div>
@@ -266,7 +272,10 @@ export default function Analytics() {
           <Card className="cls-metric-card">
             <CardContent className="cls-metric-content">
               <div className="cls-metric-header">
-                <p className="cls-metric-label">Storage Used</p>
+                <div className="cls-metric-title-wrapper">
+                  <HardDrive size={18} className="cls-metric-title-icon" />
+                  <p className="cls-metric-label">Storage Used</p>
+                </div>
                 <div className="cls-metric-icon cls-warning">
                   <HardDrive size={18} />
                 </div>
@@ -278,7 +287,10 @@ export default function Analytics() {
           <Card className="cls-metric-card">
             <CardContent className="cls-metric-content">
               <div className="cls-metric-header">
-                <p className="cls-metric-label">Overall Health</p>
+                <div className="cls-metric-title-wrapper">
+                  <CheckCircle2 size={18} className="cls-metric-title-icon" />
+                  <p className="cls-metric-label">Overall Health</p>
+                </div>
                 <div className="cls-metric-icon cls-operational">
                   <CheckCircle2 size={18} />
                 </div>
