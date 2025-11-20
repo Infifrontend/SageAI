@@ -94,7 +94,7 @@
 }
 
 .cls-section-header {
-  padding: 1.5rem;
+  padding: 1.25rem 1.5rem;
   border-bottom: 1px solid #e5e7eb;
   display: flex;
   align-items: center;
@@ -252,6 +252,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
   margin-bottom: 2rem;
+  align-items: start;
 
   @media (max-width: 1024px) {
     grid-template-columns: 1fr;
@@ -262,6 +263,7 @@
 .cls-endpoint-card {
   border: 1px solid #e5e7eb;
   background-color: white;
+  height: fit-content;
 
   .cls-endpoint-content {
     padding: 0;
@@ -349,9 +351,10 @@
 .cls-rate-limit-card {
   border: 1px solid #e5e7eb;
   background-color: white;
+  height: fit-content;
 
   .cls-rate-limit-content {
-    padding: 1rem;
+    padding: 1.5rem;
   }
 
   .cls-rate-limit-item {
