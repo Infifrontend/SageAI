@@ -82,6 +82,11 @@ const menuItems: MenuItem[] = [
     href: "/subscriptions",
   },
   {
+    title: "Analytics",
+    icon: Activity,
+    href: "/analytics",
+  },
+  {
     title: "Settings",
     icon: Settings,
     href: "/settings",

@@ -16,6 +16,7 @@ import RolesPage from "@/pages/AuthPages/Roles/Roles";
 import OrganizationsPage from "@/pages/AuthPages/Organizations/Organizations";
 import Billing from "@/pages/AuthPages/Billing/Billing";
 import Subscriptions from "@/pages/AuthPages/Subscriptions/Subscriptions";
+import Analytics from "@/pages/AuthPages/Analytics/Analytics";
 import Settings from "@/pages/AuthPages/Settings/Settings";
 
 function Router() {
@@ -34,6 +35,7 @@ function Router() {
       <Route path="/organizations" component={OrganizationsPage} />
       <Route path="/billing" component={Billing} />
       <Route path="/subscriptions" component={Subscriptions} />
+      <Route path="/analytics" component={Analytics} />
       <Route path="/settings" component={Settings} />
       <Route component={NotFound} />
     </Switch>
