@@ -301,40 +301,51 @@ export default function Analytics() {
           <CardContent className="cls-section-content">
             {topAPIs.map((api, index) => (
               <div key={index} className="cls-api-row">
-                <div className="cls-api-info">
-                  <h4 className="cls-api-name">{api.name}</h4>
-                  <p className="cls-api-endpoint">{api.endpoint}</p>
+                <div className="cls-api-left">
+                  <div className="cls-api-icon">
+                    <Activity size={20} />
+                  </div>
+                  <div className="cls-api-info">
+                    <h4 className="cls-api-name">{api.name}</h4>
+                    <p className="cls-api-endpoint">{api.endpoint}</p>
+                  </div>
                 </div>
-                <div className="cls-api-metrics">
-                  <div className="cls-metric-item">
-                    <span className="cls-metric-label">Requests</span>
-                    <span className="cls-metric-value">{api.requests}</span>
+                <div className="cls-api-right">
+                  <div className="cls-api-metrics">
+                    <div className="cls-metric-item">
+                      <span className="cls-metric-label">Requests</span>
+                      <span className="cls-metric-value">{api.requests}</span>
+                    </div>
+                    <div className="cls-metric-item">
+                      <span className="cls-metric-label">Avg Response</span>
+                      <span className="cls-metric-value">{api.avgResponse}</span>
+                    </div>
+                    <div className="cls-metric-item">
+                      <span className="cls-metric-label">Success Rate</span>
+                      <span className="cls-metric-value">{api.successRate}</span>
+                    </div>
+                    <div className="cls-metric-item">
+                      <span className="cls-metric-label">Growth</span>
+                      <span className="cls-metric-value cls-growth">
+                        {api.growth}
+                      </span>
+                    </div>
+                    <Badge
+                      className={`cls-status-badge cls-${api.status}`}
+                    >
+                      {api.status}
+                    </Badge>
                   </div>
-                  <div className="cls-metric-item">
-                    <span className="cls-metric-label">Avg Response</span>
-                    <span className="cls-metric-value">{api.avgResponse}</span>
-                  </div>
-                  <div className="cls-metric-item">
-                    <span className="cls-metric-label">Success Rate</span>
-                    <span className="cls-metric-value">{api.successRate}</span>
-                  </div>
-                  <div className="cls-metric-item">
-                    <span className="cls-metric-label">Growth</span>
-                    <span className="cls-metric-value cls-growth">
-                      {api.growth}
-                    </span>
-                  </div>
-                  <Badge
-                    className={`cls-status-badge cls-${api.status}`}
-                  >
-                    {api.status}
-                  </Badge>
                 </div>
-                <div className="cls-progress-bar-container">
-                  <div
-                    className={`cls-progress-bar cls-${api.status}`}
-                    style={{ width: api.successRate }}
-                  ></div>
+                <div className="cls-performance-score-section">
+                  <span className="cls-performance-label">Performance Score</span>
+                  <span className="cls-performance-value">{api.successRate}</span>
+                  <div className="cls-progress-bar-container">
+                    <div
+                      className={`cls-progress-bar cls-${api.status}`}
+                      style={{ width: api.successRate }}
+                    ></div>
+                  </div>
                 </div>
               </div>
             ))}
