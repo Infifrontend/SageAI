@@ -6,6 +6,7 @@ import { users } from "../shared/schema";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { authenticateToken, AuthRequest } from "./middleware/auth";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-change-in-production";
 const JWT_EXPIRY = "24h";
@@ -24,30 +25,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // For now, use hardcoded admin credentials
-      // You can later extend this to check database
-      if (email === "admin@sage.com" && password === "Infi@123") {
-        const token = jwt.sign(
-          { email: "admin@sage.com", name: "Admin User" },
-          JWT_SECRET,
-          { expiresIn: JWT_EXPIRY }
-        );
+      // Find user in database
+      const user = await db.query.users.findFirst({
+        where: eq(users.username, email)
+      });
 
-        res.json({
-          success: true,
-          message: "Login successful",
-          token,
-          user: {
-            email: "admin@sage.com",
-            name: "Admin User"
-          }
-        });
-      } else {
-        res.status(401).json({
+      if (!user) {
+        return res.status(401).json({
           success: false,
           message: "Invalid credentials"
         });
       }
+
+      // Verify password
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+
+      if (!isPasswordValid) {
+        return res.status(401).json({
+          success: false,
+          message: "Invalid credentials"
+        });
+      }
+
+      // Generate JWT token
+      const token = jwt.sign(
+        { 
+          id: user.id,
+          email: user.username, 
+          name: "Admin User" 
+        },
+        JWT_SECRET,
+        { expiresIn: JWT_EXPIRY }
+      );
+
+      res.json({
+        success: true,
+        message: "Login successful",
+        token,
+        user: {
+          id: user.id,
+          email: user.username,
+          name: "Admin User"
+        }
+      });
     } catch (error) {
       console.error("Login error:", error);
       res.status(500).json({
@@ -137,8 +157,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Dashboard data endpoint
-  app.get("/api/dashboard", async (req, res) => {
+  // Dashboard data endpoint (protected)
+  app.get("/api/dashboard", authenticateToken, async (req: AuthRequest, res) => {
     try {
       // TODO: Fetch real dashboard data from database
       res.json({
