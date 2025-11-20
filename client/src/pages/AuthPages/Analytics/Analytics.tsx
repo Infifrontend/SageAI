@@ -244,7 +244,7 @@ export default function Analytics() {
               <div className="cls-metric-header">
                 <p className="cls-metric-label">System Uptime</p>
                 <div className="cls-metric-icon cls-info">
-                  <Activity size={16} />
+                  <Activity size={18} />
                 </div>
               </div>
               <h2 className="cls-metric-value">99.9%</h2>
@@ -256,7 +256,7 @@ export default function Analytics() {
               <div className="cls-metric-header">
                 <p className="cls-metric-label">Avg Response Time</p>
                 <div className="cls-metric-icon cls-success">
-                  <Clock size={16} />
+                  <Clock size={18} />
                 </div>
               </div>
               <h2 className="cls-metric-value">45ms</h2>
@@ -268,7 +268,7 @@ export default function Analytics() {
               <div className="cls-metric-header">
                 <p className="cls-metric-label">Storage Used</p>
                 <div className="cls-metric-icon cls-warning">
-                  <HardDrive size={16} />
+                  <HardDrive size={18} />
                 </div>
               </div>
               <h2 className="cls-metric-value">2.3GB</h2>
@@ -280,7 +280,7 @@ export default function Analytics() {
               <div className="cls-metric-header">
                 <p className="cls-metric-label">Overall Health</p>
                 <div className="cls-metric-icon cls-operational">
-                  <CheckCircle2 size={16} />
+                  <CheckCircle2 size={18} />
                 </div>
               </div>
               <h2 className="cls-metric-value cls-operational-text">
