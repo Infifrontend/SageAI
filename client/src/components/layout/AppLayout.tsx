@@ -18,6 +18,7 @@ import {
   ChevronLeft,
   PanelLeftClose,
   PanelLeftOpen,
+  Activity,
 } from "lucide-react";
 import {
   Sidebar,
