@@ -56,11 +56,30 @@ export default function ResetPassword() {
     }
   }, [isSubmitted, countdown]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid) {
-      console.log("Password reset successful");
-      setIsSubmitted(true);
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token') || 'temp-token';
+        
+        const response = await fetch('/api/reset-password', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ token, newPassword }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          console.log("Password reset successful");
+          setIsSubmitted(true);
+        }
+      } catch (error) {
+        console.error("Reset password error:", error);
+      }
     }
   };
 

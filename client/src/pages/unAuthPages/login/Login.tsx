@@ -37,7 +37,8 @@ export default function Login() {
           description: "Redirecting to dashboard...",
         });
         
-        // Store user data if remember me is checked
+        // Store token and user data
+        localStorage.setItem('authToken', data.token);
         if (rememberMe) {
           localStorage.setItem('user', JSON.stringify(data.user));
         }
