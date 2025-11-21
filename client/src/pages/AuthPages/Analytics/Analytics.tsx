@@ -508,7 +508,7 @@ export default function Analytics() {
             <div className="cls-chart-placeholder">
               <div className="cls-performance-chart">
                 {/* Chart placeholder - would use a charting library like recharts */}
-                <svg width="100%" height="100%" viewBox="0 0 800 300">
+                <svg viewBox="0 0 800 300" preserveAspectRatio="none">
                   <defs>
                     <linearGradient id="gradient1" x1="0%" y1="0%" x2="0%" y2="100%">
                       <stop offset="0%" stopColor="#10b981" stopOpacity="0.4" />
@@ -525,19 +525,19 @@ export default function Analytics() {
                   </defs>
                   {/* Example wavy chart paths */}
                   <path
-                    d="M0,150 Q100,120 200,140 T400,130 T600,145 T800,135"
+                    d="M0,150 Q100,120 200,140 T400,130 T600,145 T800,135 L800,300 L0,300 Z"
                     fill="url(#gradient1)"
                     stroke="#10b981"
                     strokeWidth="2"
                   />
                   <path
-                    d="M0,180 Q100,160 200,170 T400,165 T600,175 T800,170"
+                    d="M0,180 Q100,160 200,170 T400,165 T600,175 T800,170 L800,300 L0,300 Z"
                     fill="url(#gradient2)"
                     stroke="#3b82f6"
                     strokeWidth="2"
                   />
                   <path
-                    d="M0,210 Q100,190 200,200 T400,195 T600,205 T800,200"
+                    d="M0,210 Q100,190 200,200 T400,195 T600,205 T800,200 L800,300 L0,300 Z"
                     fill="url(#gradient3)"
                     stroke="#8b5cf6"
                     strokeWidth="2"
