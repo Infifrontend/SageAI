@@ -338,82 +338,82 @@ export default function Analytics() {
           </CardContent>
         </Card>
 
-        {/* Two Column Layout: API Endpoint Details & Rate Limiting */}
-        <div className="cls-two-column-layout">
-          {/* API Endpoint Details */}
-          <Card className="cls-endpoint-card">
-            <div className="cls-section-header">
-              <div className="cls-section-title-row">
-                <Activity className="cls-section-icon" size={20} />
-                <div>
-                  <h2 className="cls-section-title">API Endpoint Details</h2>
+        {/* API Endpoint Details */}
+        <Card className="cls-endpoint-card">
+          <div className="cls-section-header">
+            <div className="cls-section-title-row">
+              <Activity className="cls-section-icon" size={20} />
+              <div>
+                <h2 className="cls-section-title">API Endpoint Details</h2>
+              </div>
+            </div>
+            <Select defaultValue="all">
+              <SelectTrigger className="cls-filter-select">
+                <SelectValue placeholder="All Endpoints" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Endpoints</SelectItem>
+                <SelectItem value="healthy">Healthy</SelectItem>
+                <SelectItem value="warning">Warning</SelectItem>
+                <SelectItem value="critical">Critical</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="cls-endpoint-content">
+            {endpointDetails.map((endpoint, index) => (
+              <div key={index} className="cls-endpoint-item">
+                <div className="cls-endpoint-header">
+                  <div className="cls-endpoint-title">
+                    <span className={`cls-method cls-${endpoint.method.toLowerCase()}`}>
+                      {endpoint.method}
+                    </span>
+                    <span className="cls-endpoint-path">{endpoint.endpoint}</span>
+                  </div>
+                  <Badge className={`cls-status-badge cls-${endpoint.status}`}>
+                    {endpoint.status}
+                  </Badge>
+                </div>
+                <p className="cls-last-checked">
+                  <Clock size={12} className="cls-clock-icon" />
+                  Last checked: {endpoint.lastChecked}
+                </p>
+                <div className="cls-endpoint-stats">
+                  <div className="cls-stat">
+                    <Activity size={16} className="cls-stat-icon" />
+                    <div className="cls-stat-content">
+                      <span className="cls-stat-label">Requests</span>
+                      <span className="cls-stat-value">{endpoint.requests}</span>
+                    </div>
+                  </div>
+                  <div className="cls-stat">
+                    <Clock size={16} className="cls-stat-icon" />
+                    <div className="cls-stat-content">
+                      <span className="cls-stat-label">Avg Response</span>
+                      <span className="cls-stat-value">{endpoint.avgResponse}</span>
+                    </div>
+                  </div>
+                  <div className="cls-stat">
+                    <CheckCircle2 size={16} className="cls-stat-icon cls-success-icon" />
+                    <div className="cls-stat-content">
+                      <span className="cls-stat-label">Success Rate</span>
+                      <span className="cls-stat-value">{endpoint.successRate}</span>
+                    </div>
+                  </div>
+                  <div className="cls-stat">
+                    <Activity size={16} className="cls-stat-icon cls-error-icon" />
+                    <div className="cls-stat-content">
+                      <span className="cls-stat-label">Error Rate</span>
+                      <span className="cls-stat-value">{endpoint.errorRate}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <Select defaultValue="all">
-                <SelectTrigger className="cls-filter-select">
-                  <SelectValue placeholder="All Endpoints" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Endpoints</SelectItem>
-                  <SelectItem value="healthy">Healthy</SelectItem>
-                  <SelectItem value="warning">Warning</SelectItem>
-                  <SelectItem value="critical">Critical</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="cls-endpoint-content">
-              {endpointDetails.map((endpoint, index) => (
-                <div key={index} className="cls-endpoint-item">
-                  <div className="cls-endpoint-header">
-                    <div className="cls-endpoint-title">
-                      <span className={`cls-method cls-${endpoint.method.toLowerCase()}`}>
-                        {endpoint.method}
-                      </span>
-                      <span className="cls-endpoint-path">{endpoint.endpoint}</span>
-                    </div>
-                    <Badge className={`cls-status-badge cls-${endpoint.status}`}>
-                      {endpoint.status}
-                    </Badge>
-                  </div>
-                  <p className="cls-last-checked">
-                    <Clock size={12} className="cls-clock-icon" />
-                    Last checked: {endpoint.lastChecked}
-                  </p>
-                  <div className="cls-endpoint-stats">
-                    <div className="cls-stat">
-                      <Activity size={16} className="cls-stat-icon" />
-                      <div className="cls-stat-content">
-                        <span className="cls-stat-label">Requests</span>
-                        <span className="cls-stat-value">{endpoint.requests}</span>
-                      </div>
-                    </div>
-                    <div className="cls-stat">
-                      <Clock size={16} className="cls-stat-icon" />
-                      <div className="cls-stat-content">
-                        <span className="cls-stat-label">Avg Response</span>
-                        <span className="cls-stat-value">{endpoint.avgResponse}</span>
-                      </div>
-                    </div>
-                    <div className="cls-stat">
-                      <CheckCircle2 size={16} className="cls-stat-icon cls-success-icon" />
-                      <div className="cls-stat-content">
-                        <span className="cls-stat-label">Success Rate</span>
-                        <span className="cls-stat-value">{endpoint.successRate}</span>
-                      </div>
-                    </div>
-                    <div className="cls-stat">
-                      <Activity size={16} className="cls-stat-icon cls-error-icon" />
-                      <div className="cls-stat-content">
-                        <span className="cls-stat-label">Error Rate</span>
-                        <span className="cls-stat-value">{endpoint.errorRate}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Card>
+            ))}
+          </div>
+        </Card>
 
+        {/* Two Column Layout: Rate Limiting & Geographic */}
+        <div className="cls-two-column-layout">
           {/* Rate Limiting Status */}
           <Card className="cls-rate-limit-card">
             <div className="cls-section-header">
@@ -441,41 +441,41 @@ export default function Analytics() {
               ))}
             </div>
           </Card>
-        </div>
 
-        {/* Geographic Usage Distribution */}
-        <Card className="cls-geographic-card">
-          <div className="cls-section-header">
-            <div className="cls-section-title-row">
-              <Activity className="cls-section-icon" size={20} />
-              <h2 className="cls-section-title">Geographic Usage Distribution</h2>
-            </div>
-          </div>
-          <div className="cls-geographic-content">
-            <p className="cls-total-requests">Total Global Requests: 345,000</p>
-            {geographicData.map((country, index) => (
-              <div key={index} className="cls-country-row">
-                <div className="cls-country-info">
-                  <span className="cls-country-flag">{country.flag}</span>
-                  <span className="cls-country-name">{country.country}</span>
-                </div>
-                <div className="cls-country-stats">
-                  <span className="cls-country-percentage">{country.percentage}</span>
-                  <span>•</span>
-                  <span>{country.requests} requests</span>
-                  <span>•</span>
-                  <span>{country.avgResponse} avg</span>
-                </div>
-                <div className="cls-country-bar-container">
-                  <div
-                    className="cls-country-bar"
-                    style={{ width: country.percentage }}
-                  />
-                </div>
+          {/* Geographic Usage Distribution (moved to two-column) */}
+          <Card className="cls-geographic-card">
+            <div className="cls-section-header">
+              <div className="cls-section-title-row">
+                <Activity className="cls-section-icon" size={20} />
+                <h2 className="cls-section-title">Geographic Usage Distribution</h2>
               </div>
-            ))}
-          </div>
-        </Card>
+            </div>
+            <div className="cls-geographic-content">
+              <p className="cls-total-requests">Total Global Requests: 345,000</p>
+              {geographicData.map((country, index) => (
+                <div key={index} className="cls-country-row">
+                  <div className="cls-country-info">
+                    <span className="cls-country-flag">{country.flag}</span>
+                    <span className="cls-country-name">{country.country}</span>
+                  </div>
+                  <div className="cls-country-stats">
+                    <span className="cls-country-percentage">{country.percentage}</span>
+                    <span>•</span>
+                    <span>{country.requests} requests</span>
+                    <span>•</span>
+                    <span>{country.avgResponse} avg</span>
+                  </div>
+                  <div className="cls-country-bar-container">
+                    <div
+                      className="cls-country-bar"
+                      style={{ width: country.percentage }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+        </div>
 
         {/* System Monitoring */}
         <Card className="cls-monitoring-card">

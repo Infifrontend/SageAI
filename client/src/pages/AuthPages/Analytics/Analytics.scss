@@ -288,12 +288,10 @@
   background-color: white;
   border-radius: 0.75rem;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  height: fit-content;
+  margin-bottom: 2rem;
 
   .cls-endpoint-content {
     padding: 0;
-    max-height: 600px;
-    overflow-y: auto;
   }
 
   .cls-endpoint-item {
@@ -364,15 +362,16 @@
   }
 
   .cls-endpoint-stats {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.25rem;
+    display: flex;
+    gap: 2.5rem;
+    flex-wrap: wrap;
   }
 
   .cls-stat {
     display: flex;
     align-items: flex-start;
     gap: 0.5rem;
+    flex: 0 0 auto;
 
     .cls-stat-icon {
       color: #6b7280;
@@ -399,6 +398,7 @@
       color: #9ca3af;
       font-weight: 500;
       line-height: 1.2;
+      white-space: nowrap;
     }
 
     .cls-stat-value {
