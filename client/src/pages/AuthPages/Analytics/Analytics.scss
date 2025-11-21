@@ -361,40 +361,53 @@
     }
   }
 
-  .cls-endpoint-stats {
-    display: flex;
-    gap: 2.5rem;
-    flex-wrap: wrap;
+  .cls-endpoint-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 
-  .cls-stat {
+  .cls-stat-item {
     display: flex;
     align-items: flex-start;
-    gap: 0.5rem;
-    flex: 0 0 auto;
+    gap: 0.75rem;
 
-    .cls-stat-icon {
-      color: #6b7280;
+    .cls-stat-icon-purple {
+      color: #8b5cf6;
       flex-shrink: 0;
       margin-top: 0.125rem;
-
-      &.cls-success-icon {
-        color: #10b981;
-      }
-
-      &.cls-error-icon {
-        color: #ef4444;
-      }
     }
 
-    .cls-stat-content {
+    .cls-stat-icon-yellow {
+      color: #f59e0b;
+      flex-shrink: 0;
+      margin-top: 0.125rem;
+    }
+
+    .cls-stat-icon-green {
+      color: #10b981;
+      flex-shrink: 0;
+      margin-top: 0.125rem;
+    }
+
+    .cls-stat-icon-red {
+      color: #ef4444;
+      flex-shrink: 0;
+      margin-top: 0.125rem;
+    }
+
+    .cls-stat-info {
       display: flex;
       flex-direction: column;
       gap: 0.25rem;
     }
 
     .cls-stat-label {
-      font-size: 0.6875rem;
+      font-size: 0.75rem;
       color: #9ca3af;
       font-weight: 500;
       line-height: 1.2;
@@ -402,7 +415,7 @@
     }
 
     .cls-stat-value {
-      font-size: 0.875rem;
+      font-size: 0.9375rem;
       color: #111827;
       font-weight: 600;
       line-height: 1.2;
