@@ -389,23 +389,38 @@ export default function Analytics() {
                       {endpoint.status}
                     </Badge>
                   </div>
-                  <p className="cls-last-checked">Last run: {endpoint.lastChecked}</p>
+                  <p className="cls-last-checked">
+                    <Clock size={12} className="cls-clock-icon" />
+                    Last error: {endpoint.lastChecked}
+                  </p>
                   <div className="cls-endpoint-stats">
                     <div className="cls-stat">
-                      <span className="cls-stat-label">Requests</span>
-                      <span className="cls-stat-value">{endpoint.requests}</span>
+                      <Activity size={14} className="cls-stat-icon" />
+                      <div className="cls-stat-content">
+                        <span className="cls-stat-label">Requests</span>
+                        <span className="cls-stat-value">{endpoint.requests}</span>
+                      </div>
                     </div>
                     <div className="cls-stat">
-                      <span className="cls-stat-label">Avg Response</span>
-                      <span className="cls-stat-value">{endpoint.avgResponse}</span>
+                      <Clock size={14} className="cls-stat-icon" />
+                      <div className="cls-stat-content">
+                        <span className="cls-stat-label">Avg Response</span>
+                        <span className="cls-stat-value">{endpoint.avgResponse}</span>
+                      </div>
                     </div>
                     <div className="cls-stat">
-                      <span className="cls-stat-label">Success Rate</span>
-                      <span className="cls-stat-value">{endpoint.successRate}</span>
+                      <CheckCircle2 size={14} className="cls-stat-icon cls-success-icon" />
+                      <div className="cls-stat-content">
+                        <span className="cls-stat-label">Success Rate</span>
+                        <span className="cls-stat-value">{endpoint.successRate}</span>
+                      </div>
                     </div>
                     <div className="cls-stat">
-                      <span className="cls-stat-label">Error Rate</span>
-                      <span className="cls-stat-value">{endpoint.errorRate}</span>
+                      <Activity size={14} className="cls-stat-icon cls-error-icon" />
+                      <div className="cls-stat-content">
+                        <span className="cls-stat-label">Error Rate</span>
+                        <span className="cls-stat-value">{endpoint.errorRate}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
