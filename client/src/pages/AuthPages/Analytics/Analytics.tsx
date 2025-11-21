@@ -111,7 +111,7 @@ export default function Analytics() {
 
   const endpointDetails: EndpointDetail[] = [
     {
-      endpoint: "POST /api/v1/auth/login",
+      endpoint: "/api/v1/auth/login",
       method: "POST",
       requests: "41,000",
       avgResponse: "89ms",
@@ -121,7 +121,7 @@ export default function Analytics() {
       lastChecked: "2 mins ago",
     },
     {
-      endpoint: "GET /api/v1/users/profile",
+      endpoint: "/api/v1/users/profile",
       method: "GET",
       requests: "34,200",
       avgResponse: "134ms",
@@ -131,7 +131,7 @@ export default function Analytics() {
       lastChecked: "5 mins ago",
     },
     {
-      endpoint: "POST /api/v1/data/process-data",
+      endpoint: "/api/v1/data/process-data",
       method: "POST",
       requests: "28,900",
       avgResponse: "234ms",
@@ -141,7 +141,7 @@ export default function Analytics() {
       lastChecked: "1 min ago",
     },
     {
-      endpoint: "POST /api/v1/files/upload",
+      endpoint: "/api/v1/files/upload",
       method: "POST",
       requests: "18,400",
       avgResponse: "312ms",
@@ -151,7 +151,7 @@ export default function Analytics() {
       lastChecked: "3 mins ago",
     },
     {
-      endpoint: "POST /api/v1/payments/process",
+      endpoint: "/api/v1/payments/process",
       method: "POST",
       requests: "16,400",
       avgResponse: "402ms",
@@ -362,48 +362,48 @@ export default function Analytics() {
           <div className="cls-endpoint-content">
             {endpointDetails.map((endpoint, index) => (
               <div key={index} className="cls-endpoint-item">
-                <div className="cls-endpoint-header">
-                  <div className="cls-endpoint-title">
+                <div className="cls-endpoint-main-row">
+                  <div className="cls-endpoint-left-section">
                     <span className={`cls-method cls-${endpoint.method.toLowerCase()}`}>
                       {endpoint.method}
                     </span>
                     <span className="cls-endpoint-path">{endpoint.endpoint}</span>
+                    <Badge className={`cls-status-badge cls-${endpoint.status}`}>
+                      {endpoint.status}
+                    </Badge>
+                    <p className="cls-last-checked">
+                      <Clock size={12} className="cls-clock-icon" />
+                      Last error: {endpoint.lastChecked}
+                    </p>
                   </div>
-                  <Badge className={`cls-status-badge cls-${endpoint.status}`}>
-                    {endpoint.status}
-                  </Badge>
-                </div>
-                <p className="cls-last-checked">
-                  <Clock size={12} className="cls-clock-icon" />
-                  Last error: {endpoint.lastChecked}
-                </p>
-                <div className="cls-endpoint-stats-grid">
-                  <div className="cls-stat-item">
-                    <Zap size={16} className="cls-stat-icon-purple" />
-                    <div className="cls-stat-info">
-                      <span className="cls-stat-label">Requests</span>
-                      <span className="cls-stat-value">{endpoint.requests}</span>
+                  <div className="cls-endpoint-stats-row">
+                    <div className="cls-stat-column">
+                      <Zap size={16} className="cls-stat-icon-purple" />
+                      <div className="cls-stat-info">
+                        <span className="cls-stat-label">Requests</span>
+                        <span className="cls-stat-value">{endpoint.requests}</span>
+                      </div>
                     </div>
-                  </div>
-                  <div className="cls-stat-item">
-                    <Clock size={16} className="cls-stat-icon-yellow" />
-                    <div className="cls-stat-info">
-                      <span className="cls-stat-label">Avg Response</span>
-                      <span className="cls-stat-value">{endpoint.avgResponse}</span>
+                    <div className="cls-stat-column">
+                      <Clock size={16} className="cls-stat-icon-yellow" />
+                      <div className="cls-stat-info">
+                        <span className="cls-stat-label">Avg Response</span>
+                        <span className="cls-stat-value">{endpoint.avgResponse}</span>
+                      </div>
                     </div>
-                  </div>
-                  <div className="cls-stat-item">
-                    <CheckCircle2 size={16} className="cls-stat-icon-green" />
-                    <div className="cls-stat-info">
-                      <span className="cls-stat-label">Success Rate</span>
-                      <span className="cls-stat-value">{endpoint.successRate}</span>
+                    <div className="cls-stat-column">
+                      <CheckCircle2 size={16} className="cls-stat-icon-green" />
+                      <div className="cls-stat-info">
+                        <span className="cls-stat-label">Success Rate</span>
+                        <span className="cls-stat-value">{endpoint.successRate}</span>
+                      </div>
                     </div>
-                  </div>
-                  <div className="cls-stat-item">
-                    <Activity size={16} className="cls-stat-icon-red" />
-                    <div className="cls-stat-info">
-                      <span className="cls-stat-label">Error Rate</span>
-                      <span className="cls-stat-value">{endpoint.errorRate}</span>
+                    <div className="cls-stat-column">
+                      <Activity size={16} className="cls-stat-icon-red" />
+                      <div className="cls-stat-info">
+                        <span className="cls-stat-label">Error Rate</span>
+                        <span className="cls-stat-value">{endpoint.errorRate}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
