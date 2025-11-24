@@ -19,7 +19,6 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Activity,
-  TrendingUp,
 } from "lucide-react";
 import {
   Sidebar,
@@ -87,11 +86,6 @@ const menuItems: MenuItem[] = [
     title: "Analytics",
     icon: Activity,
     href: "/analytics",
-  },
-  {
-    title: "Side Menu",
-    icon: TrendingUp,
-    href: "/side-menu",
   },
   {
     title: "Settings",

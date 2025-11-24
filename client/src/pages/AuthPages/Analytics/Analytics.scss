@@ -295,7 +295,7 @@
   }
 
   .cls-endpoint-item {
-    padding: 1.25rem 1.5rem;
+    padding: 1.5rem;
     border-bottom: 1px solid #f3f4f6;
     background-color: white;
     transition: background-color 0.2s;
@@ -318,8 +318,9 @@
   .cls-endpoint-left-section {
     display: flex;
     align-items: center;
-    gap: 0.875rem;
+    gap: 0.75rem;
     flex-wrap: wrap;
+    width: 100%;
   }
 
   .cls-method {
@@ -365,22 +366,16 @@
   }
 
   .cls-endpoint-stats-row {
-    display: flex;
-    align-items: center;
-    gap: 3rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
     width: 100%;
-    margin-top: 0.5rem;
-
-    @media (max-width: 1200px) {
-      gap: 2rem;
-    }
 
     @media (max-width: 1024px) {
       gap: 1.5rem;
     }
 
     @media (max-width: 768px) {
-      display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 1rem;
     }
@@ -389,8 +384,7 @@
   .cls-stat-column {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    flex: 1;
+    gap: 0.625rem;
     min-width: 0;
 
     .cls-stat-icon-purple {
@@ -416,8 +410,9 @@
     .cls-stat-info {
       display: flex;
       flex-direction: column;
-      gap: 0.2rem;
+      gap: 0.125rem;
       min-width: 0;
+      overflow: hidden;
     }
 
     .cls-stat-label {
@@ -426,14 +421,18 @@
       font-weight: 500;
       line-height: 1.2;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .cls-stat-value {
-      font-size: 0.9375rem;
+      font-size: 0.875rem;
       color: #111827;
       font-weight: 700;
       line-height: 1.2;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 }
