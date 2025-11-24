@@ -105,6 +105,7 @@
 }
 
 .cls-section-header {
+  margin-bottom: 0 !important;
   padding: 1rem 1.5rem;
   border-bottom: 1px solid #e5e7eb;
   display: flex;
@@ -288,8 +289,7 @@
   border: 1px solid #e5e7eb;
   background-color: white !important;
   border-radius: 0.75rem;
-  border-radius: 0.75rem;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   margin-bottom: 2rem;
 
   .cls-endpoint-content {
@@ -297,7 +297,7 @@
   }
 
   .cls-endpoint-item {
-    padding: 1.5rem;
+    padding: 1rem;
     border-bottom: 1px solid #f3f4f6;
     background-color: white;
     transition: background-color 0.2s;
@@ -311,18 +311,26 @@
     }
   }
 
+  /* FIXED: Two-column aligned layout */
   .cls-endpoint-main-row {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    align-items: center;
+    gap: 2rem;
+
+    @media (max-width: 1024px) {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
   }
 
+  /* FIXED: Proper left section layout */
   .cls-endpoint-left-section {
     display: flex;
+    flex-wrap: nowrap;
     align-items: center;
     gap: 0.75rem;
-    flex-wrap: wrap;
-    width: 100%;
+    min-width: 0;
   }
 
   .cls-method {
@@ -332,7 +340,6 @@
     border-radius: 0.25rem;
     text-transform: uppercase;
     letter-spacing: 0.025em;
-    flex-shrink: 0;
 
     &.cls-post {
       background-color: #dbeafe;
@@ -347,35 +354,30 @@
 
   .cls-endpoint-path {
     font-size: 0.875rem;
-    font-family: 'Courier New', monospace;
+    font-family: "Courier New", monospace;
     color: #111827;
     font-weight: 500;
-    flex-shrink: 0;
   }
 
   .cls-last-checked {
     font-size: 0.75rem;
     color: #9ca3af;
-    margin: 0;
+    // margin-left: auto; /* FIX: Keeps right aligned */
     display: flex;
     align-items: center;
     gap: 0.375rem;
-    flex-shrink: 0;
 
     .cls-clock-icon {
       color: #9ca3af;
     }
   }
 
+  /* FIXED: Stats always aligned in 4 blocks */
   .cls-endpoint-stats-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 2rem;
+    gap: 1.5rem;
     width: 100%;
-
-    @media (max-width: 1024px) {
-      gap: 1.5rem;
-    }
 
     @media (max-width: 768px) {
       grid-template-columns: repeat(2, 1fr);
@@ -387,55 +389,29 @@
     display: flex;
     align-items: center;
     gap: 0.625rem;
-    min-width: 0;
+  }
 
-    .cls-stat-icon-purple {
-      color: #8b5cf6;
-      flex-shrink: 0;
-    }
+  .cls-stat-icon-purple { color: #8b5cf6; }
+  .cls-stat-icon-yellow { color: #f59e0b; }
+  .cls-stat-icon-green { color: #10b981; }
+  .cls-stat-icon-red { color: #ef4444; }
 
-    .cls-stat-icon-yellow {
-      color: #f59e0b;
-      flex-shrink: 0;
-    }
+  .cls-stat-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
 
-    .cls-stat-icon-green {
-      color: #10b981;
-      flex-shrink: 0;
-    }
+  .cls-stat-label {
+    font-size: 0.6875rem;
+    color: #9ca3af;
+    font-weight: 500;
+  }
 
-    .cls-stat-icon-red {
-      color: #ef4444;
-      flex-shrink: 0;
-    }
-
-    .cls-stat-info {
-      display: flex;
-      flex-direction: column;
-      gap: 0.125rem;
-      min-width: 0;
-      overflow: hidden;
-    }
-
-    .cls-stat-label {
-      font-size: 0.6875rem;
-      color: #9ca3af;
-      font-weight: 500;
-      line-height: 1.2;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .cls-stat-value {
-      font-size: 0.875rem;
-      color: #111827;
-      font-weight: 700;
-      line-height: 1.2;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+  .cls-stat-value {
+    font-size: 0.875rem;
+    color: #111827;
+    font-weight: 700;
   }
 }
 

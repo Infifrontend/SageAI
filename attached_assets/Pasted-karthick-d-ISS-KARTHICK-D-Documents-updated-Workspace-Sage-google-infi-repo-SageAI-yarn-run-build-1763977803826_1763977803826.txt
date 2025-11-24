@@ -1,0 +1,249 @@
+karthick.d@ISS-KARTHICK-D:~/Documents/updated_Workspace/Sage/google-infi-repo/SageAI$ yarn run build
+yarn run v1.22.22
+warning ../../../../../package.json: No license field
+$ vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+vite v5.4.21 building for production...
+Deprecation Warning [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+Deprecation Warning [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import '../../../styles/theme.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    client/src/pages/unAuthPages/forgot-password/forgot-password.scss 1:9  root stylesheet
+
+Deprecation Warning [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+Deprecation Warning [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import '../../../styles/theme.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    client/src/pages/unAuthPages/reset-password/reset-password.scss 1:9  root stylesheet
+
+Deprecation Warning [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+Deprecation Warning [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import '../../../styles/theme.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    client/src/pages/unAuthPages/login/login.scss 1:9  root stylesheet
+
+Deprecation Warning [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+Deprecation Warning [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import '../../../styles/theme.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    client/src/pages/AuthPages/ApiDocs/ApiDocs.scss 1:9  root stylesheet
+
+Deprecation Warning [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+Deprecation Warning [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+2 │ @import '../../../styles/theme.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    client/src/pages/AuthPages/Roles/Roles.scss 2:9  root stylesheet
+
+Deprecation Warning [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+Deprecation Warning [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import '../../../styles/theme.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    client/src/pages/AuthPages/Dashboard/Dashboard.scss 1:9  root stylesheet
+
+Deprecation Warning [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+Deprecation Warning [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+2 │ @import '../../../styles/theme.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    client/src/pages/AuthPages/ApiDocs/ApiDocDetail.scss 2:9  root stylesheet
+
+Deprecation Warning [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+Deprecation Warning [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+Deprecation Warning [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+2 │ @import '../../../styles/theme.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    client/src/pages/AuthPages/Users/Users.scss 2:9  root stylesheet
+
+Deprecation Warning [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+Deprecation Warning [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+Deprecation Warning [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+2 │ @import '../../../styles/theme.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    client/src/pages/AuthPages/Organizations/Organizations.scss 2:9  root stylesheet
+
+Deprecation Warning [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+Deprecation Warning [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import '../../../styles/theme.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    client/src/pages/AuthPages/Billing/Billing.scss 1:9  root stylesheet
+
+Deprecation Warning [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+Deprecation Warning [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import '../../../styles/theme.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    client/src/pages/AuthPages/Analytics/Analytics.scss 1:9  root stylesheet
+
+transforming (70) src/pages/AuthPages/Subscriptions/Subscriptions.scssDeprecation Warning [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+Deprecation Warning [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+2 │ @import '../../../styles/theme.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    client/src/pages/AuthPages/Settings/Settings.scss 2:9  root stylesheet
+
+transforming (1170) ../node_modules/lucide-react/dist/esm/icons/save.jsDeprecation Warning [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+Deprecation Warning [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+Deprecation Warning [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+Deprecation Warning [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import '../../../../styles/theme.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    client/src/pages/AuthPages/Users/UsersForm/UsersForm.scss 1:9  root stylesheet
+
+Deprecation Warning [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+Deprecation Warning [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+2 │ @import '../../../../styles/theme.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    client/src/pages/AuthPages/Roles/RolesForm/RolesForm.scss 2:9  root stylesheet
+
+Deprecation Warning [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+Deprecation Warning [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+2 │ @import '../../../../styles/theme.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    client/src/pages/AuthPages/Organizations/OrganizationForm/OrganizationForm.scss 2:9  root stylesheet
+
+Deprecation Warning [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+✓ 1802 modules transformed.
+../dist/public/index.html                   2.06 kB │ gzip:   0.79 kB
+../dist/public/assets/index-B1WprQU3.css  174.64 kB │ gzip:  26.12 kB
+../dist/public/assets/index-z9mkQbaU.js   948.61 kB │ gzip: 277.29 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 7.49s
+
+  dist/index.js  8.0kb
+
+Done in 8.60s.
