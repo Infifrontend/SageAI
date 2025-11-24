@@ -359,59 +359,57 @@ export default function Analytics() {
               </SelectContent>
             </Select>
           </div>
-          <CardContent className="cls-section-content">
+          <div className="cls-endpoint-content">
             {endpointDetails.map((endpoint, index) => (
-              <div key={index} className="cls-endpoint-row">
-                <div className="cls-endpoint-left">
-                  <div className="cls-endpoint-icon">
-                    <Zap size={20} />
-                  </div>
-                  <div className="cls-endpoint-info">
-                    <h3 className="cls-endpoint-name">
-                      {endpoint.endpoint.split('/').pop() || endpoint.endpoint}
-                    </h3>
-                    <p className="cls-endpoint-path">{endpoint.endpoint}</p>
-                  </div>
-                </div>
-                <div className="cls-endpoint-right">
-                  <div className="cls-endpoint-metrics">
-                    <div className="cls-metric-item">
-                      <span className="cls-metric-label">Requests</span>
-                      <span className="cls-metric-value">{endpoint.requests}</span>
-                    </div>
-                    <div className="cls-metric-item">
-                      <span className="cls-metric-label">Avg Response</span>
-                      <span className="cls-metric-value">{endpoint.avgResponse}</span>
-                    </div>
-                    <div className="cls-metric-item">
-                      <span className="cls-metric-label">Success Rate</span>
-                      <span className="cls-metric-value">{endpoint.successRate}</span>
-                    </div>
-                    <div className="cls-metric-item">
-                      <span className="cls-metric-label">Error Rate</span>
-                      <span className="cls-metric-value">{endpoint.errorRate}</span>
-                    </div>
-                  </div>
-                  <div className="cls-performance-score-section">
+              <div key={index} className="cls-endpoint-item">
+                <div className="cls-endpoint-main-row">
+                  <div className="cls-endpoint-left-section">
+                    <span className={`cls-method cls-${endpoint.method.toLowerCase()}`}>
+                      {endpoint.method}
+                    </span>
+                    <span className="cls-endpoint-path">{endpoint.endpoint}</span>
                     <Badge className={`cls-status-badge cls-${endpoint.status}`}>
                       {endpoint.status}
                     </Badge>
-                    <div className="cls-performance-bar-container">
-                      <div 
-                        className={`cls-performance-bar cls-${endpoint.status}`}
-                        style={{ 
-                          width: `${parseFloat(endpoint.successRate)}%` 
-                        }}
-                      />
+                    <p className="cls-last-checked">
+                      <Clock size={12} className="cls-clock-icon" />
+                      Last error: {endpoint.lastChecked}
+                    </p>
+                  </div>
+                  <div className="cls-endpoint-stats-row">
+                    <div className="cls-stat-column">
+                      <Zap size={16} className="cls-stat-icon-purple" />
+                      <div className="cls-stat-info">
+                        <span className="cls-stat-label">Requests</span>
+                        <span className="cls-stat-value">{endpoint.requests}</span>
+                      </div>
                     </div>
-                    <span className="cls-performance-percentage">
-                      {parseFloat(endpoint.successRate).toFixed(1)}%
-                    </span>
+                    <div className="cls-stat-column">
+                      <Clock size={16} className="cls-stat-icon-yellow" />
+                      <div className="cls-stat-info">
+                        <span className="cls-stat-label">Avg Response</span>
+                        <span className="cls-stat-value">{endpoint.avgResponse}</span>
+                      </div>
+                    </div>
+                    <div className="cls-stat-column">
+                      <CheckCircle2 size={16} className="cls-stat-icon-green" />
+                      <div className="cls-stat-info">
+                        <span className="cls-stat-label">Success Rate</span>
+                        <span className="cls-stat-value">{endpoint.successRate}</span>
+                      </div>
+                    </div>
+                    <div className="cls-stat-column">
+                      <Activity size={16} className="cls-stat-icon-red" />
+                      <div className="cls-stat-info">
+                        <span className="cls-stat-label">Error Rate</span>
+                        <span className="cls-stat-value">{endpoint.errorRate}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             ))}
-          </CardContent>
+          </div>
         </Card>
 
         {/* Two Column Layout: Rate Limiting & Geographic */}
