@@ -16,8 +16,9 @@ import RolesPage from "@/pages/AuthPages/Roles/Roles";
 import OrganizationsPage from "@/pages/AuthPages/Organizations/Organizations";
 import Billing from "@/pages/AuthPages/Billing/Billing";
 import Subscriptions from "@/pages/AuthPages/Subscriptions/Subscriptions";
-import Analytics from "@/pages/AuthPages/Analytics/Analytics";
-import Settings from "@/pages/AuthPages/Settings/Settings";
+import Analytics from "./pages/AuthPages/Analytics/Analytics";
+import SideMenu from "./pages/AuthPages/SideMenu/SideMenu";
+import Settings from "./pages/AuthPages/Settings/Settings";
 
 function Router() {
   return (
@@ -36,6 +37,7 @@ function Router() {
       <Route path="/billing" component={Billing} />
       <Route path="/subscriptions" component={Subscriptions} />
       <Route path="/analytics" component={Analytics} />
+      <Route path="/side-menu" component={SideMenu} />
       <Route path="/settings" component={Settings} />
       <Route component={NotFound} />
     </Switch>
