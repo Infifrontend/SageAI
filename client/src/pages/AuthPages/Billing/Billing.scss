@@ -1,4 +1,4 @@
-@import '../../../styles/theme.scss';
+@use '../../../styles/theme.scss' as *;
 
 .cls-billing-container {
   padding: 1.5rem;

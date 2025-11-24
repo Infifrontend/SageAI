@@ -1,5 +1,5 @@
 
-@import '../../../../styles/theme.scss';
+@use '../../../../styles/theme.scss' as *;
 
 .cls-organization-form-dialog {
   max-width: 700px !important;
