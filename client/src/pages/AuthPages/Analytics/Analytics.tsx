@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import AppLayout from "@/components/layout/AppLayout";
 import { Card, CardContent } from "@/components/ui/card";
@@ -237,54 +236,54 @@ export default function Analytics() {
       subtitle="Detailed insights on API performance, usage patterns, and endpoint analytics"
     >
       <div className="cls-analytics-container">
-        {/* Top Metrics Cards */}
-        <div className="cls-metrics-row">
+        {/* Metrics Cards */}
+        <div className="cls-metrics-grid">
           <Card className="cls-metric-card">
-            <CardContent className="cls-metric-content">
-              <div className="cls-metric-header">
+            <div className="cls-metric-content">
+              <div>
                 <p className="cls-metric-label">System Uptime</p>
-                <div className="cls-metric-icon cls-info">
-                  <Activity size={20} />
-                </div>
+                <h2 className="cls-metric-value">99.9%</h2>
               </div>
-              <h2 className="cls-metric-value">99.9%</h2>
-            </CardContent>
+              <div className="cls-metric-icon cls-icon-blue">
+                <Activity size={24} />
+              </div>
+            </div>
           </Card>
 
           <Card className="cls-metric-card">
-            <CardContent className="cls-metric-content">
-              <div className="cls-metric-header">
-                <p className="cls-metric-label">Avg Response Time</p>
-                <div className="cls-metric-icon cls-success">
-                  <Clock size={20} />
-                </div>
+            <div className="cls-metric-content">
+              <div>
+                <p className="cls-metric-label">Avg. Response Time</p>
+                <h2 className="cls-metric-value">45ms</h2>
               </div>
-              <h2 className="cls-metric-value">45ms</h2>
-            </CardContent>
+              <div className="cls-metric-icon cls-icon-green">
+                <Clock size={24} />
+              </div>
+            </div>
           </Card>
 
           <Card className="cls-metric-card">
-            <CardContent className="cls-metric-content">
-              <div className="cls-metric-header">
+            <div className="cls-metric-content">
+              <div>
                 <p className="cls-metric-label">Storage Used</p>
-                <div className="cls-metric-icon cls-warning">
-                  <HardDrive size={20} />
-                </div>
+                <h2 className="cls-metric-value">2.3GB</h2>
               </div>
-              <h2 className="cls-metric-value">2.3GB</h2>
-            </CardContent>
+              <div className="cls-metric-icon cls-icon-yellow">
+                <HardDrive size={24} />
+              </div>
+            </div>
           </Card>
 
           <Card className="cls-metric-card">
-            <CardContent className="cls-metric-content">
-              <div className="cls-metric-header">
+            <div className="cls-metric-content">
+              <div>
                 <p className="cls-metric-label">Overall Health</p>
-                <div className="cls-metric-icon cls-operational">
-                  <CheckCircle2 size={20} />
-                </div>
+                <h2 className="cls-metric-value">0.8%</h2>
               </div>
-              <h2 className="cls-metric-value cls-operational-text">Operational</h2>
-            </CardContent>
+              <div className="cls-metric-icon cls-icon-red">
+                <CheckCircle2 size={24} />
+              </div>
+            </div>
           </Card>
         </div>
 
@@ -316,15 +315,21 @@ export default function Analytics() {
                     </div>
                     <div className="cls-metric-item">
                       <span className="cls-metric-label">Avg Response</span>
-                      <span className="cls-metric-value">{api.avgResponse}</span>
+                      <span className="cls-metric-value">
+                        {api.avgResponse}
+                      </span>
                     </div>
                     <div className="cls-metric-item">
                       <span className="cls-metric-label">Success Rate</span>
-                      <span className="cls-metric-value">{api.successRate}</span>
+                      <span className="cls-metric-value">
+                        {api.successRate}
+                      </span>
                     </div>
                     <div className="cls-metric-item">
                       <span className="cls-metric-label">Growth</span>
-                      <span className="cls-metric-value cls-growth">{api.growth}</span>
+                      <span className="cls-metric-value cls-growth">
+                        {api.growth}
+                      </span>
                     </div>
                   </div>
                   <div className="cls-performance-score-section">
@@ -364,11 +369,17 @@ export default function Analytics() {
               <div key={index} className="cls-endpoint-item">
                 <div className="cls-endpoint-main-row">
                   <div className="cls-endpoint-left-section">
-                    <span className={`cls-method cls-${endpoint.method.toLowerCase()}`}>
+                    <span
+                      className={`cls-method cls-${endpoint.method.toLowerCase()}`}
+                    >
                       {endpoint.method}
                     </span>
-                    <span className="cls-endpoint-path">{endpoint.endpoint}</span>
-                    <Badge className={`cls-status-badge cls-${endpoint.status}`}>
+                    <span className="cls-endpoint-path">
+                      {endpoint.endpoint}
+                    </span>
+                    <Badge
+                      className={`cls-status-badge cls-${endpoint.status}`}
+                    >
                       {endpoint.status}
                     </Badge>
                     <p className="cls-last-checked">
@@ -381,28 +392,36 @@ export default function Analytics() {
                       <Zap size={16} className="cls-stat-icon-purple" />
                       <div className="cls-stat-info">
                         <span className="cls-stat-label">Requests</span>
-                        <span className="cls-stat-value">{endpoint.requests}</span>
+                        <span className="cls-stat-value">
+                          {endpoint.requests}
+                        </span>
                       </div>
                     </div>
                     <div className="cls-stat-column">
                       <Clock size={16} className="cls-stat-icon-yellow" />
                       <div className="cls-stat-info">
                         <span className="cls-stat-label">Avg Response</span>
-                        <span className="cls-stat-value">{endpoint.avgResponse}</span>
+                        <span className="cls-stat-value">
+                          {endpoint.avgResponse}
+                        </span>
                       </div>
                     </div>
                     <div className="cls-stat-column">
                       <CheckCircle2 size={16} className="cls-stat-icon-green" />
                       <div className="cls-stat-info">
                         <span className="cls-stat-label">Success Rate</span>
-                        <span className="cls-stat-value">{endpoint.successRate}</span>
+                        <span className="cls-stat-value">
+                          {endpoint.successRate}
+                        </span>
                       </div>
                     </div>
                     <div className="cls-stat-column">
                       <Activity size={16} className="cls-stat-icon-red" />
                       <div className="cls-stat-info">
                         <span className="cls-stat-label">Error Rate</span>
-                        <span className="cls-stat-value">{endpoint.errorRate}</span>
+                        <span className="cls-stat-value">
+                          {endpoint.errorRate}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -433,7 +452,8 @@ export default function Analytics() {
                   </div>
                   <div className="cls-rate-stats">
                     <span>
-                      <strong>{rate.currentRate}</strong> / {rate.limit} requests
+                      <strong>{rate.currentRate}</strong> / {rate.limit}{" "}
+                      requests
                     </span>
                   </div>
                   <p className="cls-reset-time">{rate.resetTime}</p>
@@ -447,11 +467,15 @@ export default function Analytics() {
             <div className="cls-section-header">
               <div className="cls-section-title-row">
                 <Activity className="cls-section-icon" size={20} />
-                <h2 className="cls-section-title">Geographic Usage Distribution</h2>
+                <h2 className="cls-section-title">
+                  Geographic Usage Distribution
+                </h2>
               </div>
             </div>
             <div className="cls-geographic-content">
-              <p className="cls-total-requests">Total Global Requests: 345,000</p>
+              <p className="cls-total-requests">
+                Total Global Requests: 345,000
+              </p>
               {geographicData.map((country, index) => (
                 <div key={index} className="cls-country-row">
                   <div className="cls-country-info">
@@ -459,7 +483,9 @@ export default function Analytics() {
                     <span className="cls-country-name">{country.country}</span>
                   </div>
                   <div className="cls-country-stats">
-                    <span className="cls-country-percentage">{country.percentage}</span>
+                    <span className="cls-country-percentage">
+                      {country.percentage}
+                    </span>
                     <span>•</span>
                     <span>{country.requests} requests</span>
                     <span>•</span>
@@ -510,17 +536,47 @@ export default function Analytics() {
                 {/* Chart placeholder - would use a charting library like recharts */}
                 <svg viewBox="0 0 800 300" preserveAspectRatio="none">
                   <defs>
-                    <linearGradient id="gradient1" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <linearGradient
+                      id="gradient1"
+                      x1="0%"
+                      y1="0%"
+                      x2="0%"
+                      y2="100%"
+                    >
                       <stop offset="0%" stopColor="#10b981" stopOpacity="0.4" />
-                      <stop offset="100%" stopColor="#10b981" stopOpacity="0.1" />
+                      <stop
+                        offset="100%"
+                        stopColor="#10b981"
+                        stopOpacity="0.1"
+                      />
                     </linearGradient>
-                    <linearGradient id="gradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <linearGradient
+                      id="gradient2"
+                      x1="0%"
+                      y1="0%"
+                      x2="0%"
+                      y2="100%"
+                    >
                       <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.4" />
-                      <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.1" />
+                      <stop
+                        offset="100%"
+                        stopColor="#3b82f6"
+                        stopOpacity="0.1"
+                      />
                     </linearGradient>
-                    <linearGradient id="gradient3" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <linearGradient
+                      id="gradient3"
+                      x1="0%"
+                      y1="0%"
+                      x2="0%"
+                      y2="100%"
+                    >
                       <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.4" />
-                      <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0.1" />
+                      <stop
+                        offset="100%"
+                        stopColor="#8b5cf6"
+                        stopOpacity="0.1"
+                      />
                     </linearGradient>
                   </defs>
                   {/* Example wavy chart paths */}
