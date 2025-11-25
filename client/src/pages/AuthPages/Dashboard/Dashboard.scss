@@ -192,6 +192,8 @@
   flex-direction: column;
   gap: 1rem;
   justify-content: space-between;
+  background-color: #fff !important;
+  margin-top: 1.25rem;
 }
 
 .cls-insight-header {
@@ -274,6 +276,7 @@
 
 .cls-chart-card {
   padding: 1.5rem;
+  background-color: #fff !important;
 }
 
 .cls-chart-header {
@@ -374,6 +377,7 @@
 .cls-resource-card,
 .cls-incidents-card {
   padding: 1.5rem;
+  background-color: #fff !important;
 }
 
 .cls-card-title {

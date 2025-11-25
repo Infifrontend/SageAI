@@ -1,4 +1,3 @@
-
 @use '../../../styles/theme' as *;
 
 .cls-users-page {
@@ -13,7 +12,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1.5rem;
-  margin: 1rem !important;
+  // margin: 1rem !important;
 }
 
 .cls-stat-card {
@@ -25,6 +24,8 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    background-color: #fff !important;
+    border-radius: 1rem !important;
   }
 
   .cls-stat-info {
@@ -103,6 +104,8 @@
 .cls-management-card {
   border: 1px solid hsl(var(--border));
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  margin: 1rem !important;
+  background-color: #fff !important;
 
   .cls-management-content {
     padding: 1.5rem;
