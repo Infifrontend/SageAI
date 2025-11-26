@@ -157,21 +157,202 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Dashboard data endpoint (protected)
-  app.get("/api/dashboard", authenticateToken, async (req: AuthRequest, res) => {
+  // Dashboard common data endpoint (protected)
+  app.get("/api/dashboard/common", authenticateToken, async (req: AuthRequest, res) => {
     try {
-      // TODO: Fetch real dashboard data from database
+      // TODO: Replace with real database queries
       res.json({
-        success: true,
+        summaryCards: {
+          totalApiCalls: 1200000,
+          avgResponseTimeMs: 120,
+          currentUsagePercent: 84,
+          errorRatePercent: 0.8
+        },
+        performanceSummary: [
+          {
+            service: "Authentication",
+            responseTimeMs: 89,
+            status: "Improved",
+            change: "+5.3%",
+            previousResponseTimeMs: 94
+          },
+          {
+            service: "User Data",
+            responseTimeMs: 156,
+            status: "Improved",
+            change: "+3.7%",
+            previousResponseTimeMs: 162
+          },
+          {
+            service: "Analytics",
+            responseTimeMs: 234,
+            status: "Improved",
+            change: "+2.5%",
+            previousResponseTimeMs: 240
+          },
+          {
+            service: "Payments",
+            responseTimeMs: 312,
+            status: "Slower",
+            change: "-5.4%",
+            previousResponseTimeMs: 296
+          }
+        ],
+        systemServicesStatus: [
+          {
+            name: "API Gateway",
+            responseTimeMs: 50,
+            uptime: "99.9%",
+            status: "Healthy",
+            lastCheck: "1m ago"
+          },
+          {
+            name: "Database Cluster",
+            responseTimeMs: 80,
+            uptime: "99.9%",
+            status: "Healthy",
+            lastCheck: "30s ago"
+          },
+          {
+            name: "Load Balancer",
+            responseTimeMs: 42,
+            uptime: "99.9%",
+            status: "Healthy",
+            lastCheck: "30s ago"
+          },
+          {
+            name: "Cache Layer",
+            responseTimeMs: 300,
+            uptime: "99.5%",
+            status: "Warning",
+            lastCheck: "1m ago"
+          },
+          {
+            name: "Auth Service",
+            responseTimeMs: 600,
+            uptime: "99.2%",
+            status: "Critical",
+            lastCheck: "5m ago"
+          }
+        ],
+        resourceUsage: {
+          cpuPercent: 45,
+          memoryPercent: 62,
+          diskPercent: 78,
+          networkPercent: 34,
+          overallHealth: "Operational"
+        },
+        recentIncidents: [
+          {
+            title: "Cache Layer Latency Spike",
+            subtitle: "Increased response times in cache layer",
+            status: "warning",
+            daysAgo: 3
+          },
+          {
+            title: "Database Connection Pool Full",
+            subtitle: "Temporary connection pool exhaustion",
+            status: "resolved",
+            daysAgo: 7
+          },
+          {
+            title: "API Rate Limit Exceeded",
+            subtitle: "Burst rate limit threshold breached",
+            status: "info",
+            daysAgo: 7
+          },
+          {
+            title: "No Active Incidents",
+            subtitle: "All systems are operating normally",
+            status: "resolved",
+            daysAgo: 0
+          }
+        ]
+      });
+    } catch (error) {
+      console.error("Dashboard common data error:", error);
+      res.status(500).json({
+        success: false,
+        message: "Server error"
+      });
+    }
+  });
+
+  // Dashboard API calls over time endpoint (protected)
+  app.get("/api/dashboard/api-calls", authenticateToken, async (req: AuthRequest, res) => {
+    try {
+      // TODO: Replace with real database queries based on query params
+      res.json({
+        status: "success",
         data: {
-          totalApiCalls: "1.2M",
-          activeUsers: "45.2K",
-          revenue: "$128.5K",
-          avgResponseTime: "124ms"
+          chartTitle: "API Calls Over Time",
+          selectedEndpoint: "All Endpoints",
+          selectedRange: "Last 30 days",
+          points: [
+            { date: "2025-10-01", count: 1200 },
+            { date: "2025-10-10", count: 1800 },
+            { date: "2025-10-20", count: 1500 },
+            { date: "2025-11-01", count: 2100 },
+            { date: "2025-11-10", count: 1950 },
+            { date: "2025-11-20", count: 1700 },
+            { date: "2025-11-30", count: 1850 }
+          ]
         }
       });
     } catch (error) {
-      console.error("Dashboard error:", error);
+      console.error("Dashboard API calls error:", error);
+      res.status(500).json({
+        success: false,
+        message: "Server error"
+      });
+    }
+  });
+
+  // Dashboard response time analytics endpoint (protected)
+  app.get("/api/dashboard/response-time", authenticateToken, async (req: AuthRequest, res) => {
+    try {
+      // TODO: Replace with real database queries
+      res.json({
+        title: "Response Time Analytics",
+        filter: "All APIs",
+        metrics: [
+          {
+            api: "Payments",
+            color: "red",
+            unit: "ms",
+            values: [310, 315, 320, 318, 322, 325, 330]
+          },
+          {
+            api: "Analytics",
+            color: "orange",
+            unit: "ms",
+            values: [220, 225, 230, 228, 229, 232, 235]
+          },
+          {
+            api: "User Data",
+            color: "green",
+            unit: "ms",
+            values: [150, 152, 155, 154, 156, 158, 160]
+          },
+          {
+            api: "Authentication",
+            color: "blue",
+            unit: "ms",
+            values: [90, 92, 95, 94, 96, 97, 99]
+          }
+        ],
+        dates: [
+          "Oct 01",
+          "Oct 10",
+          "Oct 20",
+          "Nov 01",
+          "Nov 10",
+          "Nov 20",
+          "Nov 30"
+        ]
+      });
+    } catch (error) {
+      console.error("Dashboard response time error:", error);
       res.status(500).json({
         success: false,
         message: "Server error"

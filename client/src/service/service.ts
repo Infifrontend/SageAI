@@ -5,6 +5,10 @@ const CommonService = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "/",
     credentials: "include",
+    prepareHeaders: (headers) => {
+      // Token is automatically sent via cookies with credentials: "include"
+      return headers;
+    },
   }),
   endpoints: () => ({}),
 });
