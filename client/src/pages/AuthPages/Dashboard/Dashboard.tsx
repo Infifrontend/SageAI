@@ -461,69 +461,40 @@ export default function Dashboard() {
           <Card className="cls-performance-card">
             <h3 className="cls-card-title">Performance Summary</h3>
             <div className="cls-performance-list">
-              {commonData?.performanceSummary?.map((item: any, index: number) => (
-                <div className="cls-performance-item" key={index}>
-                  <div className="cls-performance-info">
-                    <p className="cls-performance-name">{item.service}</p>
-                    <p className="cls-performance-value">{item.responseTimeMs}ms</p>
-                    <p className="cls-performance-prev">Prev: {item.previousResponseTimeMs}ms</p>
-                  </div>
-                  <div className="cls-performance-status">
-                    <Badge className={item.status === 'Improved' ? 'cls-badge-improved' : 'cls-badge-slower'}>
-                      {item.change}
-                    </Badge>
-                    <span className={`cls-status-text ${item.status === 'Improved' ? 'cls-improved' : 'cls-slower'}`}>
-                      {item.status}
-                    </span>
-                  </div>
-                </div>
-              )) || (
+              {dashboardCommonDataResponse?.isLoading ? (
                 <>
-                  <div className="cls-performance-item">
-                    <div className="cls-performance-info">
-                      <p className="cls-performance-name">Authentication</p>
-                      <p className="cls-performance-value">89ms</p>
-                      <p className="cls-performance-prev">Prev: 94ms</p>
+                  {[1, 2, 3, 4].map((index) => (
+                    <div className="cls-performance-item" key={index}>
+                      <div className="cls-performance-info">
+                        <div className="animate-pulse bg-gray-200 h-4 w-24 rounded mb-2"></div>
+                        <div className="animate-pulse bg-gray-200 h-6 w-16 rounded mb-1"></div>
+                        <div className="animate-pulse bg-gray-200 h-3 w-20 rounded"></div>
+                      </div>
+                      <div className="cls-performance-status">
+                        <div className="animate-pulse bg-gray-200 h-5 w-12 rounded mb-1"></div>
+                        <div className="animate-pulse bg-gray-200 h-4 w-16 rounded"></div>
+                      </div>
                     </div>
-                    <div className="cls-performance-status">
-                      <Badge className="cls-badge-improved">+5.3%</Badge>
-                      <span className="cls-status-text cls-improved">Improved</span>
-                    </div>
-                  </div>
-                  <div className="cls-performance-item">
-                    <div className="cls-performance-info">
-                      <p className="cls-performance-name">User Data</p>
-                      <p className="cls-performance-value">156ms</p>
-                      <p className="cls-performance-prev">Prev: 162ms</p>
-                    </div>
-                    <div className="cls-performance-status">
-                      <Badge className="cls-badge-improved">+3.7%</Badge>
-                      <span className="cls-status-text cls-improved">Improved</span>
-                    </div>
-                  </div>
-                  <div className="cls-performance-item">
-                    <div className="cls-performance-info">
-                      <p className="cls-performance-name">Analytics</p>
-                      <p className="cls-performance-value">234ms</p>
-                      <p className="cls-performance-prev">Prev: 240ms</p>
-                    </div>
-                    <div className="cls-performance-status">
-                      <Badge className="cls-badge-improved">+2.5%</Badge>
-                      <span className="cls-status-text cls-improved">Improved</span>
-                    </div>
-                  </div>
-                  <div className="cls-performance-item">
-                    <div className="cls-performance-info">
-                      <p className="cls-performance-name">Payments</p>
-                      <p className="cls-performance-value">312ms</p>
-                      <p className="cls-performance-prev">Prev: 296ms</p>
-                    </div>
-                    <div className="cls-performance-status">
-                      <Badge className="cls-badge-slower">-5.4%</Badge>
-                      <span className="cls-status-text cls-slower">Slower</span>
-                    </div>
-                  </div>
+                  ))}
                 </>
+              ) : (
+                commonData?.performanceSummary?.map((item: any, index: number) => (
+                  <div className="cls-performance-item" key={index}>
+                    <div className="cls-performance-info">
+                      <p className="cls-performance-name">{item.service}</p>
+                      <p className="cls-performance-value">{item.responseTimeMs}ms</p>
+                      <p className="cls-performance-prev">Prev: {item.previousResponseTimeMs}ms</p>
+                    </div>
+                    <div className="cls-performance-status">
+                      <Badge className={item.status === 'Improved' ? 'cls-badge-improved' : 'cls-badge-slower'}>
+                        {item.change}
+                      </Badge>
+                      <span className={`cls-status-text ${item.status === 'Improved' ? 'cls-improved' : 'cls-slower'}`}>
+                        {item.status}
+                      </span>
+                    </div>
+                  </div>
+                ))
               )}
             </div>
           </Card>
