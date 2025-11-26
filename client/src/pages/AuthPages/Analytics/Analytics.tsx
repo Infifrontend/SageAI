@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AppLayout from "@/components/layout/AppLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -19,6 +19,11 @@ import {
   Zap,
 } from "lucide-react";
 import "./Analytics.scss";
+import {
+  useLazyGetCommonAnalyticsDataQuery,
+  useLazyGetMenuApiAnalyticsDataQuery,
+  useLazyGetMenuPerformanceAnalyticsDataQuery,
+} from "@/service/analytics/analytics";
 
 interface APIMetric {
   name: string;
@@ -59,6 +64,40 @@ interface RateLimitStatus {
 
 export default function Analytics() {
   const [selectedTimeframe, setSelectedTimeframe] = useState("24h");
+
+  const [analyticsCommonData, analyticsCommonDataResponse] =
+    useLazyGetCommonAnalyticsDataQuery();
+
+  const [GetMenuApiAnalyticsData, GetMenuApiAnalyticsDataResponse] =
+    useLazyGetMenuApiAnalyticsDataQuery();
+
+  const [GetMenuPerformanceData, GetMenuPerformanceDataResponse] =
+    useLazyGetMenuPerformanceAnalyticsDataQuery();
+
+  // The following useEffect is triggered to get the sample data from static json file
+  useEffect(() => {
+    analyticsCommonData();
+    GetMenuApiAnalyticsData();
+    GetMenuPerformanceData();
+  }, []);
+
+  // The following useEffect is triggered when common data response is getting from API.
+  useEffect(() => {
+    if (analyticsCommonDataResponse?.isSuccess)
+      console.log(analyticsCommonDataResponse?.data);
+  }, [analyticsCommonDataResponse]);
+
+  // The following useEffect is triggered when common data response is getting from API.
+  useEffect(() => {
+    if (GetMenuApiAnalyticsDataResponse?.isSuccess)
+      console.log(GetMenuApiAnalyticsDataResponse?.data);
+  }, [GetMenuApiAnalyticsDataResponse]);
+
+  // The following useEffect is triggered when common data response is getting from API.
+  useEffect(() => {
+    if (GetMenuPerformanceDataResponse?.isSuccess)
+      console.log(GetMenuPerformanceDataResponse?.data);
+  }, [GetMenuPerformanceDataResponse]);
 
   const topAPIs: APIMetric[] = [
     {

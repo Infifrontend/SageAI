@@ -1,10 +1,12 @@
-
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore } from "@reduxjs/toolkit";
+import { CommonService } from "@/service/service";
 
 export const store = configureStore({
   reducer: {
-    // Add your reducers here
+    [CommonService.reducerPath]: CommonService.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(CommonService.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

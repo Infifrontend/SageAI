@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   TrendingUp,
   TrendingDown,
@@ -27,10 +27,45 @@ import {
 } from "@/components/ui/select";
 import AppLayout from "@/components/layout/AppLayout";
 import "./Dashboard.scss";
+import {
+  useLazyGetApiCallDataQuery,
+  useLazyGetCommonDashboardDataQuery,
+  useLazyGetResponseTimeDataQuery,
+} from "@/service/dashboard/dashboard";
 
 export default function Dashboard() {
   const [selectedEndpoint, setSelectedEndpoint] = useState("all");
   const [selectedTimePeriod, setSelectedTimePeriod] = useState("30");
+
+  const [dashboardCommonData, dashboardCommonDataResponse] =
+    useLazyGetCommonDashboardDataQuery();
+  const [getApiCall, getApiCallResponse] = useLazyGetApiCallDataQuery();
+  const [getResponseTimeData, getResponseTimeDataResponse] =
+    useLazyGetResponseTimeDataQuery();
+
+  // The following useEffect is used to trigger the API at initial rendering
+  useEffect(() => {
+    dashboardCommonData();
+    getApiCall();
+    getResponseTimeData();
+  }, []);
+
+  // The following useEffect is triggered when dashboardCommonDataResponse api is completed
+  useEffect(() => {
+    if (dashboardCommonDataResponse?.isSuccess)
+      console.log(dashboardCommonDataResponse?.data);
+  }, [dashboardCommonDataResponse]);
+
+  // The following useEffect is triggered when getApiCallResponse api is completed
+  useEffect(() => {
+    if (getApiCallResponse?.isSuccess) console.log(getApiCallResponse?.data);
+  }, [getApiCallResponse]);
+
+  // The following useEffect is triggered when getResponseTimeDataResponse api is completed
+  useEffect(() => {
+    if (getResponseTimeDataResponse?.isSuccess)
+      console.log(getResponseTimeDataResponse?.data);
+  }, [getResponseTimeDataResponse]);
 
   return (
     <AppLayout
