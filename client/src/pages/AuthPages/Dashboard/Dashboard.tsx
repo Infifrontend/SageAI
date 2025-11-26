@@ -43,6 +43,11 @@ export default function Dashboard() {
   const [getResponseTimeData, getResponseTimeDataResponse] =
     useLazyGetResponseTimeDataQuery();
 
+  // State to store API data
+  const [commonData, setCommonData] = useState<any>(null);
+  const [apiCallData, setApiCallData] = useState<any>(null);
+  const [responseTimeData, setResponseTimeData] = useState<any>(null);
+
   // The following useEffect is used to trigger the API at initial rendering
   useEffect(() => {
     dashboardCommonData();
@@ -52,19 +57,23 @@ export default function Dashboard() {
 
   // The following useEffect is triggered when dashboardCommonDataResponse api is completed
   useEffect(() => {
-    if (dashboardCommonDataResponse?.isSuccess)
-      console.log(dashboardCommonDataResponse?.data);
+    if (dashboardCommonDataResponse?.isSuccess && dashboardCommonDataResponse?.data) {
+      setCommonData(dashboardCommonDataResponse.data);
+    }
   }, [dashboardCommonDataResponse]);
 
   // The following useEffect is triggered when getApiCallResponse api is completed
   useEffect(() => {
-    if (getApiCallResponse?.isSuccess) console.log(getApiCallResponse?.data);
+    if (getApiCallResponse?.isSuccess && getApiCallResponse?.data) {
+      setApiCallData(getApiCallResponse.data);
+    }
   }, [getApiCallResponse]);
 
   // The following useEffect is triggered when getResponseTimeDataResponse api is completed
   useEffect(() => {
-    if (getResponseTimeDataResponse?.isSuccess)
-      console.log(getResponseTimeDataResponse?.data);
+    if (getResponseTimeDataResponse?.isSuccess && getResponseTimeDataResponse?.data) {
+      setResponseTimeData(getResponseTimeDataResponse.data);
+    }
   }, [getResponseTimeDataResponse]);
 
   return (
@@ -97,7 +106,11 @@ export default function Dashboard() {
             <div className="cls-metric-content">
               <div>
                 <p className="cls-metric-label">Total API Calls</p>
-                <h2 className="cls-metric-value">1.2M</h2>
+                <h2 className="cls-metric-value">
+                  {commonData?.summaryCards?.totalApiCalls 
+                    ? (commonData.summaryCards.totalApiCalls / 1000000).toFixed(1) + 'M'
+                    : '1.2M'}
+                </h2>
                 <p className="cls-metric-change cls-positive">
                   <TrendingUp size={14} /> 5.2%
                 </p>
@@ -112,7 +125,11 @@ export default function Dashboard() {
             <div className="cls-metric-content">
               <div>
                 <p className="cls-metric-label">Avg. Response Time</p>
-                <h2 className="cls-metric-value">120ms</h2>
+                <h2 className="cls-metric-value">
+                  {commonData?.summaryCards?.avgResponseTimeMs 
+                    ? commonData.summaryCards.avgResponseTimeMs + 'ms'
+                    : '120ms'}
+                </h2>
                 <p className="cls-metric-change cls-positive">
                   <TrendingUp size={14} /> 3.1%
                 </p>
@@ -127,7 +144,11 @@ export default function Dashboard() {
             <div className="cls-metric-content">
               <div>
                 <p className="cls-metric-label">Current Usage</p>
-                <h2 className="cls-metric-value">84%</h2>
+                <h2 className="cls-metric-value">
+                  {commonData?.summaryCards?.currentUsagePercent 
+                    ? commonData.summaryCards.currentUsagePercent + '%'
+                    : '84%'}
+                </h2>
                 <p className="cls-metric-change cls-negative">
                   <TrendingDown size={14} /> 2.3%
                 </p>
@@ -142,7 +163,11 @@ export default function Dashboard() {
             <div className="cls-metric-content">
               <div>
                 <p className="cls-metric-label">Error Rate</p>
-                <h2 className="cls-metric-value">0.8%</h2>
+                <h2 className="cls-metric-value">
+                  {commonData?.summaryCards?.errorRatePercent 
+                    ? commonData.summaryCards.errorRatePercent + '%'
+                    : '0.8%'}
+                </h2>
                 <p className="cls-metric-change cls-positive">
                   <TrendingUp size={14} /> 0.3%
                 </p>
@@ -159,7 +184,7 @@ export default function Dashboard() {
           <AlertCircle className="cls-alert-icon" />
           <div className="cls-alert-content">
             <p className="cls-alert-text">
-              You're approaching your usage cap - 84% of your quota is used.
+              You're approaching your usage cap - {commonData?.summaryCards?.currentUsagePercent || 84}% of your quota is used.
             </p>
             <p className="cls-alert-subtext">
               Upgrade your plan to prevent service disruption.
@@ -268,7 +293,9 @@ export default function Dashboard() {
           {/* API Calls Over Time */}
           <Card className="cls-chart-card">
             <div className="cls-chart-header">
-              <h3 className="cls-chart-title">API Calls Over Time</h3>
+              <h3 className="cls-chart-title">
+                {apiCallData?.data?.chartTitle || 'API Calls Over Time'}
+              </h3>
               <div className="cls-chart-filters">
                 <Select
                   value={selectedEndpoint}
@@ -300,19 +327,46 @@ export default function Dashboard() {
             </div>
             <div className="cls-chart-placeholder">
               <svg viewBox="0 0 400 200" className="cls-line-chart">
-                <polyline
-                  points="10,150 40,120 70,140 100,80 130,100 160,60 190,90 220,70 250,100 280,80 310,110 340,90 370,100"
-                  fill="none"
-                  stroke="#7C3AED"
-                  strokeWidth="2"
-                />
+                {apiCallData?.data?.points && apiCallData.data.points.length > 0 ? (
+                  <polyline
+                    points={apiCallData.data.points.map((point: any, index: number) => {
+                      const x = 10 + (360 / (apiCallData.data.points.length - 1)) * index;
+                      const maxCount = Math.max(...apiCallData.data.points.map((p: any) => p.count));
+                      const y = 180 - (point.count / maxCount) * 120;
+                      return `${x},${y}`;
+                    }).join(' ')}
+                    fill="none"
+                    stroke="#7C3AED"
+                    strokeWidth="2"
+                  />
+                ) : (
+                  <polyline
+                    points="10,150 40,120 70,140 100,80 130,100 160,60 190,90 220,70 250,100 280,80 310,110 340,90 370,100"
+                    fill="none"
+                    stroke="#7C3AED"
+                    strokeWidth="2"
+                  />
+                )}
               </svg>
               <div className="cls-chart-labels">
-                <span>Oct 01</span>
-                <span>Oct 20</span>
-                <span>Nov 8</span>
-                <span>Nov 16</span>
-                <span>Nov 30</span>
+                {apiCallData?.data?.points && apiCallData.data.points.length > 0 
+                  ? apiCallData.data.points.map((point: any, index: number) => {
+                      if (index % Math.ceil(apiCallData.data.points.length / 5) === 0 || index === apiCallData.data.points.length - 1) {
+                        const date = new Date(point.date);
+                        return <span key={index}>{date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>;
+                      }
+                      return null;
+                    })
+                  : (
+                    <>
+                      <span>Oct 01</span>
+                      <span>Oct 20</span>
+                      <span>Nov 8</span>
+                      <span>Nov 16</span>
+                      <span>Nov 30</span>
+                    </>
+                  )
+                }
               </div>
             </div>
           </Card>
@@ -320,7 +374,9 @@ export default function Dashboard() {
           {/* Response Time Analytics */}
           <Card className="cls-chart-card">
             <div className="cls-chart-header">
-              <h3 className="cls-chart-title">Response Time Analytics</h3>
+              <h3 className="cls-chart-title">
+                {responseTimeData?.title || 'Response Time Analytics'}
+              </h3>
               <Select defaultValue="all-apis">
                 <SelectTrigger className="cls-select-trigger">
                   <SelectValue />
@@ -369,22 +425,31 @@ export default function Dashboard() {
                 />
               </svg>
               <div className="cls-chart-legend">
-                <div className="cls-legend-item">
-                  <span className="cls-legend-dot cls-red"></span>
-                  Payments
-                </div>
-                <div className="cls-legend-item">
-                  <span className="cls-legend-dot cls-orange"></span>
-                  Analytics
-                </div>
-                <div className="cls-legend-item">
-                  <span className="cls-legend-dot cls-green"></span>
-                  User Data
-                </div>
-                <div className="cls-legend-item">
-                  <span className="cls-legend-dot cls-blue"></span>
-                  Authentication
-                </div>
+                {responseTimeData?.metrics?.map((metric: any, index: number) => (
+                  <div className="cls-legend-item" key={index}>
+                    <span className={`cls-legend-dot cls-${metric.color}`}></span>
+                    {metric.api}
+                  </div>
+                )) || (
+                  <>
+                    <div className="cls-legend-item">
+                      <span className="cls-legend-dot cls-red"></span>
+                      Payments
+                    </div>
+                    <div className="cls-legend-item">
+                      <span className="cls-legend-dot cls-orange"></span>
+                      Analytics
+                    </div>
+                    <div className="cls-legend-item">
+                      <span className="cls-legend-dot cls-green"></span>
+                      User Data
+                    </div>
+                    <div className="cls-legend-item">
+                      <span className="cls-legend-dot cls-blue"></span>
+                      Authentication
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </Card>
@@ -396,53 +461,70 @@ export default function Dashboard() {
           <Card className="cls-performance-card">
             <h3 className="cls-card-title">Performance Summary</h3>
             <div className="cls-performance-list">
-              <div className="cls-performance-item">
-                <div className="cls-performance-info">
-                  <p className="cls-performance-name">Authentication</p>
-                  <p className="cls-performance-value">89ms</p>
-                  <p className="cls-performance-prev">Prev: 94ms</p>
+              {commonData?.performanceSummary?.map((item: any, index: number) => (
+                <div className="cls-performance-item" key={index}>
+                  <div className="cls-performance-info">
+                    <p className="cls-performance-name">{item.service}</p>
+                    <p className="cls-performance-value">{item.responseTimeMs}ms</p>
+                    <p className="cls-performance-prev">Prev: {item.previousResponseTimeMs}ms</p>
+                  </div>
+                  <div className="cls-performance-status">
+                    <Badge className={item.status === 'Improved' ? 'cls-badge-improved' : 'cls-badge-slower'}>
+                      {item.change}
+                    </Badge>
+                    <span className={`cls-status-text ${item.status === 'Improved' ? 'cls-improved' : 'cls-slower'}`}>
+                      {item.status}
+                    </span>
+                  </div>
                 </div>
-                <div className="cls-performance-status">
-                  <Badge className="cls-badge-improved">+5.3%</Badge>
-                  <span className="cls-status-text cls-improved">Improved</span>
-                </div>
-              </div>
-
-              <div className="cls-performance-item">
-                <div className="cls-performance-info">
-                  <p className="cls-performance-name">User Data</p>
-                  <p className="cls-performance-value">156ms</p>
-                  <p className="cls-performance-prev">Prev: 162ms</p>
-                </div>
-                <div className="cls-performance-status">
-                  <Badge className="cls-badge-improved">+3.7%</Badge>
-                  <span className="cls-status-text cls-improved">Improved</span>
-                </div>
-              </div>
-
-              <div className="cls-performance-item">
-                <div className="cls-performance-info">
-                  <p className="cls-performance-name">Analytics</p>
-                  <p className="cls-performance-value">234ms</p>
-                  <p className="cls-performance-prev">Prev: 240ms</p>
-                </div>
-                <div className="cls-performance-status">
-                  <Badge className="cls-badge-improved">+2.5%</Badge>
-                  <span className="cls-status-text cls-improved">Improved</span>
-                </div>
-              </div>
-
-              <div className="cls-performance-item">
-                <div className="cls-performance-info">
-                  <p className="cls-performance-name">Payments</p>
-                  <p className="cls-performance-value">312ms</p>
-                  <p className="cls-performance-prev">Prev: 296ms</p>
-                </div>
-                <div className="cls-performance-status">
-                  <Badge className="cls-badge-slower">-5.4%</Badge>
-                  <span className="cls-status-text cls-slower">Slower</span>
-                </div>
-              </div>
+              )) || (
+                <>
+                  <div className="cls-performance-item">
+                    <div className="cls-performance-info">
+                      <p className="cls-performance-name">Authentication</p>
+                      <p className="cls-performance-value">89ms</p>
+                      <p className="cls-performance-prev">Prev: 94ms</p>
+                    </div>
+                    <div className="cls-performance-status">
+                      <Badge className="cls-badge-improved">+5.3%</Badge>
+                      <span className="cls-status-text cls-improved">Improved</span>
+                    </div>
+                  </div>
+                  <div className="cls-performance-item">
+                    <div className="cls-performance-info">
+                      <p className="cls-performance-name">User Data</p>
+                      <p className="cls-performance-value">156ms</p>
+                      <p className="cls-performance-prev">Prev: 162ms</p>
+                    </div>
+                    <div className="cls-performance-status">
+                      <Badge className="cls-badge-improved">+3.7%</Badge>
+                      <span className="cls-status-text cls-improved">Improved</span>
+                    </div>
+                  </div>
+                  <div className="cls-performance-item">
+                    <div className="cls-performance-info">
+                      <p className="cls-performance-name">Analytics</p>
+                      <p className="cls-performance-value">234ms</p>
+                      <p className="cls-performance-prev">Prev: 240ms</p>
+                    </div>
+                    <div className="cls-performance-status">
+                      <Badge className="cls-badge-improved">+2.5%</Badge>
+                      <span className="cls-status-text cls-improved">Improved</span>
+                    </div>
+                  </div>
+                  <div className="cls-performance-item">
+                    <div className="cls-performance-info">
+                      <p className="cls-performance-name">Payments</p>
+                      <p className="cls-performance-value">312ms</p>
+                      <p className="cls-performance-prev">Prev: 296ms</p>
+                    </div>
+                    <div className="cls-performance-status">
+                      <Badge className="cls-badge-slower">-5.4%</Badge>
+                      <span className="cls-status-text cls-slower">Slower</span>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </Card>
 
@@ -453,125 +535,49 @@ export default function Dashboard() {
               Real-time status of all critical system services.
             </p>
             <div className="cls-services-list">
-              <div className="cls-service-item">
-                <div className="cls-service-header">
-                  <Globe className="cls-service-icon" />
-                  <div className="cls-service-info">
-                    <p className="cls-service-name">API Gateway</p>
-                    <Badge className="cls-badge-healthy">Healthy</Badge>
-                  </div>
-                </div>
-                <div className="cls-service-details">
-                  <div className="cls-service-metric">
-                    <span className="cls-metric-name">Response Time:</span>
-                    <span className="cls-metric-val">50ms</span>
-                  </div>
-                  <div className="cls-service-metric">
-                    <span className="cls-metric-name">Uptime:</span>
-                    <span className="cls-metric-val">99.9%</span>
-                  </div>
-                  <div className="cls-service-metric">
-                    <span className="cls-metric-name">Last Check:</span>
-                    <span className="cls-metric-val">1m ago</span>
-                  </div>
-                </div>
-              </div>
+              {commonData?.systemServicesStatus?.map((service: any, index: number) => {
+                const getServiceIcon = (name: string) => {
+                  if (name.includes('Gateway')) return <Globe className="cls-service-icon" />;
+                  if (name.includes('Database')) return <Database className="cls-service-icon" />;
+                  if (name.includes('Load')) return <Shield className="cls-service-icon" />;
+                  if (name.includes('Cache')) return <HardDrive className="cls-service-icon" />;
+                  if (name.includes('Auth')) return <Zap className="cls-service-icon" />;
+                  return <Activity className="cls-service-icon" />;
+                };
 
-              <div className="cls-service-item">
-                <div className="cls-service-header">
-                  <Database className="cls-service-icon" />
-                  <div className="cls-service-info">
-                    <p className="cls-service-name">Database Cluster</p>
-                    <Badge className="cls-badge-healthy">Healthy</Badge>
-                  </div>
-                </div>
-                <div className="cls-service-details">
-                  <div className="cls-service-metric">
-                    <span className="cls-metric-name">Response Time:</span>
-                    <span className="cls-metric-val">80ms</span>
-                  </div>
-                  <div className="cls-service-metric">
-                    <span className="cls-metric-name">Uptime:</span>
-                    <span className="cls-metric-val">99.9%</span>
-                  </div>
-                  <div className="cls-service-metric">
-                    <span className="cls-metric-name">Last Check:</span>
-                    <span className="cls-metric-val">30s ago</span>
-                  </div>
-                </div>
-              </div>
+                const getBadgeClass = (status: string) => {
+                  if (status === 'Healthy') return 'cls-badge-healthy';
+                  if (status === 'Warning') return 'cls-badge-warning';
+                  if (status === 'Critical') return 'cls-badge-critical';
+                  return 'cls-badge-healthy';
+                };
 
-              <div className="cls-service-item">
-                <div className="cls-service-header">
-                  <Shield className="cls-service-icon" />
-                  <div className="cls-service-info">
-                    <p className="cls-service-name">Load Balancer</p>
-                    <Badge className="cls-badge-healthy">Healthy</Badge>
+                return (
+                  <div className="cls-service-item" key={index}>
+                    <div className="cls-service-header">
+                      {getServiceIcon(service.name)}
+                      <div className="cls-service-info">
+                        <p className="cls-service-name">{service.name}</p>
+                        <Badge className={getBadgeClass(service.status)}>{service.status}</Badge>
+                      </div>
+                    </div>
+                    <div className="cls-service-details">
+                      <div className="cls-service-metric">
+                        <span className="cls-metric-name">Response Time:</span>
+                        <span className="cls-metric-val">{service.responseTimeMs}ms</span>
+                      </div>
+                      <div className="cls-service-metric">
+                        <span className="cls-metric-name">Uptime:</span>
+                        <span className="cls-metric-val">{service.uptime}</span>
+                      </div>
+                      <div className="cls-service-metric">
+                        <span className="cls-metric-name">Last Check:</span>
+                        <span className="cls-metric-val">{service.lastCheck} ago</span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div className="cls-service-details">
-                  <div className="cls-service-metric">
-                    <span className="cls-metric-name">Response Time:</span>
-                    <span className="cls-metric-val">42ms</span>
-                  </div>
-                  <div className="cls-service-metric">
-                    <span className="cls-metric-name">Uptime:</span>
-                    <span className="cls-metric-val">99.9%</span>
-                  </div>
-                  <div className="cls-service-metric">
-                    <span className="cls-metric-name">Last Check:</span>
-                    <span className="cls-metric-val">30s ago</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="cls-service-item">
-                <div className="cls-service-header">
-                  <HardDrive className="cls-service-icon" />
-                  <div className="cls-service-info">
-                    <p className="cls-service-name">Cache Layer</p>
-                    <Badge className="cls-badge-warning">Warning</Badge>
-                  </div>
-                </div>
-                <div className="cls-service-details">
-                  <div className="cls-service-metric">
-                    <span className="cls-metric-name">Response Time:</span>
-                    <span className="cls-metric-val">300ms</span>
-                  </div>
-                  <div className="cls-service-metric">
-                    <span className="cls-metric-name">Uptime:</span>
-                    <span className="cls-metric-val">99.5%</span>
-                  </div>
-                  <div className="cls-service-metric">
-                    <span className="cls-metric-name">Last Check:</span>
-                    <span className="cls-metric-val">1m ago</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="cls-service-item">
-                <div className="cls-service-header">
-                  <Zap className="cls-service-icon" />
-                  <div className="cls-service-info">
-                    <p className="cls-service-name">Auth Service</p>
-                    <Badge className="cls-badge-critical">Critical</Badge>
-                  </div>
-                </div>
-                <div className="cls-service-details">
-                  <div className="cls-service-metric">
-                    <span className="cls-metric-name">Response Time:</span>
-                    <span className="cls-metric-val">600ms</span>
-                  </div>
-                  <div className="cls-service-metric">
-                    <span className="cls-metric-name">Uptime:</span>
-                    <span className="cls-metric-val">99.2%</span>
-                  </div>
-                  <div className="cls-service-metric">
-                    <span className="cls-metric-name">Last Check:</span>
-                    <span className="cls-metric-val">5m ago</span>
-                  </div>
-                </div>
-              </div>
+                );
+              }) || null}
             </div>
           </Card>
         </div>
@@ -594,10 +600,10 @@ export default function Dashboard() {
                   <div className="cls-progress-bar">
                     <div
                       className="cls-progress-fill"
-                      style={{ width: "45%" }}
+                      style={{ width: `${commonData?.resourceUsage?.cpuPercent || 45}%` }}
                     ></div>
                   </div>
-                  <span className="cls-resource-percent">45%</span>
+                  <span className="cls-resource-percent">{commonData?.resourceUsage?.cpuPercent || 45}%</span>
                 </div>
               </div>
 
@@ -610,10 +616,10 @@ export default function Dashboard() {
                   <div className="cls-progress-bar">
                     <div
                       className="cls-progress-fill"
-                      style={{ width: "62%" }}
+                      style={{ width: `${commonData?.resourceUsage?.memoryPercent || 62}%` }}
                     ></div>
                   </div>
-                  <span className="cls-resource-percent">62%</span>
+                  <span className="cls-resource-percent">{commonData?.resourceUsage?.memoryPercent || 62}%</span>
                 </div>
               </div>
 
@@ -626,10 +632,10 @@ export default function Dashboard() {
                   <div className="cls-progress-bar">
                     <div
                       className="cls-progress-fill cls-warning"
-                      style={{ width: "78%" }}
+                      style={{ width: `${commonData?.resourceUsage?.diskPercent || 78}%` }}
                     ></div>
                   </div>
-                  <span className="cls-resource-percent">78%</span>
+                  <span className="cls-resource-percent">{commonData?.resourceUsage?.diskPercent || 78}%</span>
                 </div>
               </div>
 
@@ -642,16 +648,16 @@ export default function Dashboard() {
                   <div className="cls-progress-bar">
                     <div
                       className="cls-progress-fill"
-                      style={{ width: "34%" }}
+                      style={{ width: `${commonData?.resourceUsage?.networkPercent || 34}%` }}
                     ></div>
                   </div>
-                  <span className="cls-resource-percent">34%</span>
+                  <span className="cls-resource-percent">{commonData?.resourceUsage?.networkPercent || 34}%</span>
                 </div>
               </div>
             </div>
             <div className="cls-system-health">
               <span className="cls-health-label">Overall System Health</span>
-              <Badge className="cls-badge-operational">Operational</Badge>
+              <Badge className="cls-badge-operational">{commonData?.resourceUsage?.overallHealth || 'Operational'}</Badge>
             </div>
           </Card>
 
@@ -665,52 +671,35 @@ export default function Dashboard() {
               </Button>
             </div>
             <div className="cls-incidents-list">
-              <div className="cls-incident-item">
-                <div className="cls-incident-info">
-                  <p className="cls-incident-title">
-                    Cache Layer Latency Spike
-                  </p>
-                  <p className="cls-incident-description">
-                    Increased response times in cache layer
-                  </p>
-                  <p className="cls-incident-time">3 days ago</p>
-                </div>
-                <Badge className="cls-badge-warning-small">warning</Badge>
-              </div>
+              {commonData?.recentIncidents?.map((incident: any, index: number) => {
+                const getBadgeClass = (status: string) => {
+                  if (status === 'warning') return 'cls-badge-warning-small';
+                  if (status === 'resolved') return 'cls-badge-resolved';
+                  if (status === 'info') return 'cls-badge-info';
+                  return 'cls-badge-success';
+                };
 
-              <div className="cls-incident-item">
-                <div className="cls-incident-info">
-                  <p className="cls-incident-title">
-                    Database Connection Pool Full
-                  </p>
-                  <p className="cls-incident-description">
-                    Temporary connection pool exhaustion
-                  </p>
-                  <p className="cls-incident-time">1 week ago</p>
-                </div>
-                <Badge className="cls-badge-resolved">resolved</Badge>
-              </div>
+                const getTimeAgo = (daysAgo: number) => {
+                  if (daysAgo === 0) return '';
+                  if (daysAgo < 7) return `${daysAgo} days ago`;
+                  return `${Math.floor(daysAgo / 7)} week ago`;
+                };
 
-              <div className="cls-incident-item">
-                <div className="cls-incident-info">
-                  <p className="cls-incident-title">API Rate Limit Exceeded</p>
-                  <p className="cls-incident-description">
-                    Burst rate limit threshold breached
-                  </p>
-                  <p className="cls-incident-time">1 week ago</p>
-                </div>
-                <Badge className="cls-badge-info">info</Badge>
-              </div>
-
-              <div className="cls-incident-item cls-no-incidents">
-                <div className="cls-incident-info">
-                  <p className="cls-incident-title">No Active Incidents</p>
-                  <p className="cls-incident-description">
-                    All systems are operating normally
-                  </p>
-                </div>
-                <Badge className="cls-badge-success">Resolved</Badge>
-              </div>
+                return (
+                  <div className={`cls-incident-item ${incident.daysAgo === 0 ? 'cls-no-incidents' : ''}`} key={index}>
+                    <div className="cls-incident-info">
+                      <p className="cls-incident-title">{incident.title}</p>
+                      <p className="cls-incident-description">{incident.subtitle}</p>
+                      {incident.daysAgo > 0 && (
+                        <p className="cls-incident-time">{getTimeAgo(incident.daysAgo)}</p>
+                      )}
+                    </div>
+                    <Badge className={getBadgeClass(incident.status)}>
+                      {incident.status === 'resolved' ? 'Resolved' : incident.status}
+                    </Badge>
+                  </div>
+                );
+              }) || null}
             </div>
           </Card>
         </div>
