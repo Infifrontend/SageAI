@@ -134,7 +134,7 @@ function SidebarProvider({
           style={
             {
               "--sidebar-width": SIDEBAR_WIDTH,
-              "--sidebar-width-icon": SIDEBAR_WIDTH_ICON,
+              "--sidebar-width-icon": "70px",
               ...style,
             } as React.CSSProperties
           }

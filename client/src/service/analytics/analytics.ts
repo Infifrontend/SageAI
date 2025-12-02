@@ -3,15 +3,17 @@ import { CommonService } from "../service";
 const analyticsService = CommonService.injectEndpoints({
   endpoints: (build) => ({
     getCommonAnalyticsData: build.query<any, void>({
-      query: () => "staticData/analytics/commonAnalytics.json",
+      query: () => "metricsData//systemOverview",
     }),
-    getMenuApiAnalyticsData: build.query<any, void>({
-      query: () =>
-        "staticData/analytics/Analytics_Menu_API_Endpoint_Details_section.json",
+    getMenuApiAnalyticsData: build.query<any, {endPointName?: any; range?: any}>({
+      query: ({endPointName,range }) =>
+        // `metricsData/endpoint=${endPointName}&range=${range}`,
+        `metricsData/endpointHealth`,
     }),
-    getMenuPerformanceAnalyticsData: build.query<any, void>({
-      query: () =>
-        "staticData/analytics/Analytics_Menu_System_Performance_Metrics.json",
+    getMenuPerformanceAnalyticsData: build.query<any, {range?: any}>({
+      query: ({range}) =>
+        // `metricsData/systemPerformance&range=${range}`,
+      `metricsData/systemPerformance`,
     }),
   }),
   overrideExisting: true,

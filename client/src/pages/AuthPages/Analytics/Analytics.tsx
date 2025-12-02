@@ -26,7 +26,7 @@ import {
 } from "@/service/analytics/analytics";
 
 export default function Analytics() {
-  const [selectedTimeframe, setSelectedTimeframe] = useState("24h");
+  const [selectedTimeframe, setSelectedTimeframe] = useState("24H");
   const [selectedEndpointFilter, setSelectedEndpointFilter] = useState("all");
 
   const [analyticsCommonData, analyticsCommonDataResponse] =
@@ -46,9 +46,22 @@ export default function Analytics() {
   // Fetch data on initial render
   useEffect(() => {
     analyticsCommonData();
-    GetMenuApiAnalyticsData();
-    GetMenuPerformanceData();
   }, []);
+
+  // To trigger the filter based selections
+  useEffect(()=>{
+    GetMenuApiAnalyticsData({
+      endPointName : selectedEndpointFilter,
+      range : "30"
+    });
+  },[selectedEndpointFilter]);
+
+  // To trigger the timeframe selection
+  useEffect(()=>{
+    GetMenuPerformanceData({
+      range : selectedTimeframe
+    });
+  },[selectedTimeframe]);
 
   // Handle common analytics data response
   useEffect(() => {
@@ -60,7 +73,7 @@ export default function Analytics() {
   // Handle API endpoint details response
   useEffect(() => {
     if (GetMenuApiAnalyticsDataResponse?.isSuccess && GetMenuApiAnalyticsDataResponse?.data) {
-      setApiEndpointData(GetMenuApiAnalyticsDataResponse.data);
+      setApiEndpointData(GetMenuApiAnalyticsDataResponse?.data);
     }
   }, [GetMenuApiAnalyticsDataResponse]);
 
@@ -378,17 +391,17 @@ export default function Analytics() {
                 commonData?.Rate_Limiting_Status?.map((rate: any, index: number) => (
                   <div key={index} className="cls-rate-limit-item">
                     <div className="cls-rate-limit-header">
-                      <span className="cls-rate-endpoint">{rate.API_Endpoint}</span>
-                      <Badge className={`cls-status-badge cls-${rate.Status}`}>
-                        {rate.Status}
+                      <span className="cls-rate-endpoint">{rate?.API_Endpoint}</span>
+                      <Badge className={`cls-status-badge cls-${rate?.Status}`}>
+                        {rate?.Status}
                       </Badge>
                     </div>
                     <div className="cls-rate-stats">
                       <span>
-                        <strong>{rate.Usage}</strong> requests
+                        <strong>{rate?.Usage}</strong> requests
                       </span>
                     </div>
-                    <p className="cls-reset-time">Resets in {rate.Reset_Time}</p>
+                    <p className="cls-reset-time">Resets in {rate?.Reset_Time}</p>
                   </div>
                 ))
               )}
@@ -447,21 +460,21 @@ export default function Analytics() {
                               ? "🇦🇺"
                               : "🌍"}
                           </span>
-                          <span className="cls-country-name">{country.Country}</span>
+                          <span className="cls-country-name">{country?.Country}</span>
                         </div>
                         <div className="cls-country-stats">
                           <span className="cls-country-percentage">
-                            {country.Usage_Percentage}
+                            {country?.Usage_Percentage}
                           </span>
                           <span>•</span>
-                          <span>{country.Requests?.toLocaleString()} requests</span>
+                          <span>{country?.Requests?.toLocaleString()} requests</span>
                           <span>•</span>
-                          <span>{country.Avg_Response_ms}ms avg</span>
+                          <span>{country?.Avg_Response_ms}ms avg</span>
                         </div>
                         <div className="cls-country-bar-container">
                           <div
                             className="cls-country-bar"
-                            style={{ width: country.Usage_Percentage }}
+                            style={{ width: country?.Usage_Percentage }}
                           />
                         </div>
                       </div>
@@ -487,13 +500,15 @@ export default function Analytics() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="1h">Last Hour</SelectItem>
-                    <SelectItem value="24h">24 Hours</SelectItem>
-                    <SelectItem value="7d">7 Days</SelectItem>
-                    <SelectItem value="30d">30 Days</SelectItem>
+                    <SelectItem value="1H">Last Hour</SelectItem>
+                    <SelectItem value="24H">24 Hours</SelectItem>
+                    <SelectItem value="7D">7 Days</SelectItem>
+                    <SelectItem value="30D">30 Days</SelectItem>
                   </SelectContent>
                 </Select>
-                <button className="cls-refresh-button" onClick={() => GetMenuPerformanceData()}>
+                <button className="cls-refresh-button" onClick={() => {
+                  GetMenuPerformanceData({range : selectedTimeframe})
+                  }}>
                   <RefreshCw size={16} />
                 </button>
               </div>

@@ -36,6 +36,8 @@ import {
 export default function Dashboard() {
   const [selectedEndpoint, setSelectedEndpoint] = useState("all");
   const [selectedTimePeriod, setSelectedTimePeriod] = useState("30");
+  const [selectedApi, setSelectedApi] = useState("all");
+  const [selectedAnalyticsTimePeriod, setSelectedAnalyticsTimePeriod] = useState("30");
 
   const [dashboardCommonData, dashboardCommonDataResponse] =
     useLazyGetCommonDashboardDataQuery();
@@ -50,10 +52,24 @@ export default function Dashboard() {
 
   // The following useEffect is used to trigger the API at initial rendering
   useEffect(() => {
-    dashboardCommonData();
-    getApiCall();
-    getResponseTimeData();
+    dashboardCommonData({});
   }, []);
+
+  // To trigger the API call based on user selection
+  useEffect(() => {
+    getApiCall({
+      endpointName: selectedEndpoint,
+      range: `last_${selectedTimePeriod}_days`,
+    });
+  }, [selectedEndpoint, selectedTimePeriod])
+
+  // To trigger the API call based on user selection
+  useEffect(() => {
+    getResponseTimeData({
+      endPointApi: selectedApi,
+      range:`last_${selectedAnalyticsTimePeriod}_dayas`
+    });
+  }, [selectedApi, selectedAnalyticsTimePeriod]);
 
   // The following useEffect is triggered when dashboardCommonDataResponse api is completed
   useEffect(() => {
@@ -107,9 +123,9 @@ export default function Dashboard() {
               <div>
                 <p className="cls-metric-label">Total API Calls</p>
                 <h2 className="cls-metric-value">
-                  {commonData?.summaryCards?.totalApiCalls 
+                  {commonData?.summaryCards?.totalApiCalls
                     ? (commonData.summaryCards.totalApiCalls / 1000000).toFixed(1) + 'M'
-                    : '1.2M'}
+                    : 'N/A'}
                 </h2>
                 <p className="cls-metric-change cls-positive">
                   <TrendingUp size={14} /> 5.2%
@@ -126,9 +142,9 @@ export default function Dashboard() {
               <div>
                 <p className="cls-metric-label">Avg. Response Time</p>
                 <h2 className="cls-metric-value">
-                  {commonData?.summaryCards?.avgResponseTimeMs 
+                  {commonData?.summaryCards?.avgResponseTimeMs
                     ? commonData.summaryCards.avgResponseTimeMs + 'ms'
-                    : '120ms'}
+                    : 'N/A'}
                 </h2>
                 <p className="cls-metric-change cls-positive">
                   <TrendingUp size={14} /> 3.1%
@@ -145,9 +161,9 @@ export default function Dashboard() {
               <div>
                 <p className="cls-metric-label">Current Usage</p>
                 <h2 className="cls-metric-value">
-                  {commonData?.summaryCards?.currentUsagePercent 
+                  {commonData?.summaryCards?.currentUsagePercent
                     ? commonData.summaryCards.currentUsagePercent + '%'
-                    : '84%'}
+                    : 'N/A'}
                 </h2>
                 <p className="cls-metric-change cls-negative">
                   <TrendingDown size={14} /> 2.3%
@@ -164,9 +180,9 @@ export default function Dashboard() {
               <div>
                 <p className="cls-metric-label">Error Rate</p>
                 <h2 className="cls-metric-value">
-                  {commonData?.summaryCards?.errorRatePercent 
+                  {commonData?.summaryCards?.errorRatePercent
                     ? commonData.summaryCards.errorRatePercent + '%'
-                    : '0.8%'}
+                    : 'N/A'}
                 </h2>
                 <p className="cls-metric-change cls-positive">
                   <TrendingUp size={14} /> 0.3%
@@ -349,14 +365,14 @@ export default function Dashboard() {
                 )}
               </svg>
               <div className="cls-chart-labels">
-                {apiCallData?.data?.points && apiCallData.data.points.length > 0 
+                {apiCallData?.data?.points && apiCallData.data.points.length > 0
                   ? apiCallData.data.points.map((point: any, index: number) => {
-                      if (index % Math.ceil(apiCallData.data.points.length / 5) === 0 || index === apiCallData.data.points.length - 1) {
-                        const date = new Date(point.date);
-                        return <span key={index}>{date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>;
-                      }
-                      return null;
-                    })
+                    if (index % Math.ceil(apiCallData.data.points.length / 5) === 0 || index === apiCallData.data.points.length - 1) {
+                      const date = new Date(point.date);
+                      return <span key={index}>{date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>;
+                    }
+                    return null;
+                  })
                   : (
                     <>
                       <span>Oct 01</span>
@@ -377,15 +393,33 @@ export default function Dashboard() {
               <h3 className="cls-chart-title">
                 {responseTimeData?.title || 'Response Time Analytics'}
               </h3>
-              <Select defaultValue="all-apis">
-                <SelectTrigger className="cls-select-trigger">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all-apis">All APIs</SelectItem>
-                  <SelectItem value="payments">Payments</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="cls-chart-filters">
+                <Select
+                  value={selectedApi}
+                  onValueChange={setSelectedApi}
+                >
+                  <SelectTrigger className="cls-select-trigger">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All APIs</SelectItem>
+                    <SelectItem value="payments">Payments</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Select
+                  value={selectedAnalyticsTimePeriod}
+                  onValueChange={setSelectedAnalyticsTimePeriod}
+                >
+                  <SelectTrigger className="cls-select-trigger">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="7">Last 7 days</SelectItem>
+                    <SelectItem value="30">Last 30 days</SelectItem>
+                    <SelectItem value="90">Last 90 days</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             <div className="cls-chart-placeholder">
               <svg viewBox="0 0 400 200" className="cls-area-chart">
@@ -431,25 +465,25 @@ export default function Dashboard() {
                     {metric.api}
                   </div>
                 )) || (
-                  <>
-                    <div className="cls-legend-item">
-                      <span className="cls-legend-dot cls-red"></span>
-                      Payments
-                    </div>
-                    <div className="cls-legend-item">
-                      <span className="cls-legend-dot cls-orange"></span>
-                      Analytics
-                    </div>
-                    <div className="cls-legend-item">
-                      <span className="cls-legend-dot cls-green"></span>
-                      User Data
-                    </div>
-                    <div className="cls-legend-item">
-                      <span className="cls-legend-dot cls-blue"></span>
-                      Authentication
-                    </div>
-                  </>
-                )}
+                    <>
+                      <div className="cls-legend-item">
+                        <span className="cls-legend-dot cls-red"></span>
+                        Payments
+                      </div>
+                      <div className="cls-legend-item">
+                        <span className="cls-legend-dot cls-orange"></span>
+                        Analytics
+                      </div>
+                      <div className="cls-legend-item">
+                        <span className="cls-legend-dot cls-green"></span>
+                        User Data
+                      </div>
+                      <div className="cls-legend-item">
+                        <span className="cls-legend-dot cls-blue"></span>
+                        Authentication
+                      </div>
+                    </>
+                  )}
               </div>
             </div>
           </Card>
@@ -571,10 +605,10 @@ export default function Dashboard() {
                   <div className="cls-progress-bar">
                     <div
                       className="cls-progress-fill"
-                      style={{ width: `${commonData?.resourceUsage?.cpuPercent || 45}%` }}
+                      style={{ width: `${commonData?.resourceUsage?.cpuPercent || 0}%` }}
                     ></div>
                   </div>
-                  <span className="cls-resource-percent">{commonData?.resourceUsage?.cpuPercent || 45}%</span>
+                  <span className="cls-resource-percent">{commonData?.resourceUsage?.cpuPercent || 0}%</span>
                 </div>
               </div>
 
@@ -587,10 +621,10 @@ export default function Dashboard() {
                   <div className="cls-progress-bar">
                     <div
                       className="cls-progress-fill"
-                      style={{ width: `${commonData?.resourceUsage?.memoryPercent || 62}%` }}
+                      style={{ width: `${commonData?.resourceUsage?.memoryPercent || 0}%` }}
                     ></div>
                   </div>
-                  <span className="cls-resource-percent">{commonData?.resourceUsage?.memoryPercent || 62}%</span>
+                  <span className="cls-resource-percent">{commonData?.resourceUsage?.memoryPercent || 0}%</span>
                 </div>
               </div>
 
@@ -603,10 +637,10 @@ export default function Dashboard() {
                   <div className="cls-progress-bar">
                     <div
                       className="cls-progress-fill cls-warning"
-                      style={{ width: `${commonData?.resourceUsage?.diskPercent || 78}%` }}
+                      style={{ width: `${commonData?.resourceUsage?.diskPercent || 0}%` }}
                     ></div>
                   </div>
-                  <span className="cls-resource-percent">{commonData?.resourceUsage?.diskPercent || 78}%</span>
+                  <span className="cls-resource-percent">{commonData?.resourceUsage?.diskPercent || 0}%</span>
                 </div>
               </div>
 
@@ -619,10 +653,10 @@ export default function Dashboard() {
                   <div className="cls-progress-bar">
                     <div
                       className="cls-progress-fill"
-                      style={{ width: `${commonData?.resourceUsage?.networkPercent || 34}%` }}
+                      style={{ width: `${commonData?.resourceUsage?.networkPercent || 0}%` }}
                     ></div>
                   </div>
-                  <span className="cls-resource-percent">{commonData?.resourceUsage?.networkPercent || 34}%</span>
+                  <span className="cls-resource-percent">{commonData?.resourceUsage?.networkPercent || 0}%</span>
                 </div>
               </div>
             </div>

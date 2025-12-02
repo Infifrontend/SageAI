@@ -105,7 +105,7 @@ function SidebarHeaderComponent() {
   
   return (
     <SidebarHeader className="cls-sidebar-header">
-      <div className="cls-logo">
+      <div className={`cls-logo ${state ==="collapsed" ? 'cls-collapsed-state' : ''}`}>
         <div className="cls-logo-icon">
           {state === "collapsed" ? <PanelLeftOpen /> : <PanelLeftClose />}
         </div>
@@ -132,7 +132,8 @@ function AppLayoutContent({
 }: AppLayoutProps) {
   const [location] = useLocation();
   const [openMenus, setOpenMenus] = useState<string[]>([]);
-  const { state: sidebarState } = useSidebar();
+  const { state: sidebarState, toggleSidebar } = useSidebar();
+
 
   // Initialize open menu based on current location
   React.useEffect(() => {
@@ -145,6 +146,8 @@ function AppLayoutContent({
   }, [location]);
 
   const toggleMenu = (title: string) => {
+    // debugger
+      if (sidebarState === "collapsed") return; 
     setOpenMenus((prev) => {
       // If the menu is already open, close it
       if (prev.includes(title)) {
@@ -170,21 +173,23 @@ function AppLayoutContent({
                 <SidebarMenuItem key={item.title}>
                   {item.items ? (
                     <Collapsible
-                      open={sidebarState !== "collapsed" && openMenus.includes(item.title)}
-                      onOpenChange={() => toggleMenu(item.title)}
+                      open={sidebarState !== "collapsed" && openMenus.includes(item?.title)}
+                      onOpenChange={() => toggleMenu(item?.title)}
                     >
+                      <>
                       <CollapsibleTrigger asChild>
                         <SidebarMenuButton 
                           className="cls-menu-button"
                           tooltip={item.title}
+                          style={{ justifyContent: sidebarState === "collapsed" ? "center" : '' }}
                         >
-                          <item.icon className="cls-menu-icon" />
-                          <span>{item.title}</span>
-                          {openMenus.includes(item.title) ? (
-                            <ChevronDown className="cls-chevron" />
-                          ) : (
-                            <ChevronRight className="cls-chevron" />
-                          )}
+                            <item.icon className="cls-menu-icon" />
+                            {sidebarState !== "collapsed" && <span>{item?.title}</span>}
+                            {sidebarState !== "collapsed" && (openMenus?.includes(item.title) ? (
+                              <ChevronDown className="cls-chevron" />
+                            ) : (
+                              <ChevronRight className="cls-chevron" />
+                            ))}
                         </SidebarMenuButton>
                       </CollapsibleTrigger>
                       {sidebarState !== "collapsed" && (
@@ -201,16 +206,19 @@ function AppLayoutContent({
                           ))}
                         </CollapsibleContent>
                       )}
+                      </>
                     </Collapsible>
                   ) : (
-                    <Link href={item.href!}>
+                    <Link href={item?.href!}>
                       <SidebarMenuButton
-                        isActive={location === item.href}
+                        isActive={location === item?.href}
                         className="cls-menu-button"
-                        tooltip={item.title}
+                        tooltip={item?.title}
+                        style={{ justifyContent:sidebarState === "collapsed" ? "center" : '' }}
+                        onClick={sidebarState === "collapsed" ? toggleSidebar : undefined}
                       >
                         <item.icon className="cls-menu-icon" />
-                        <span>{item.title}</span>
+                        {sidebarState !== "collapsed" && <span>{item?.title}</span>}
                       </SidebarMenuButton>
                     </Link>
                   )}
@@ -221,10 +229,10 @@ function AppLayoutContent({
 
           <SidebarFooter className="cls-sidebar-footer">
             <div className="cls-user-profile">
-              <Avatar className="cls-avatar">
+              <Avatar className="cls-avatar" style={{ justifyContent:sidebarState === "collapsed" ? "center" : '' }}>
                 <AvatarFallback>A</AvatarFallback>
               </Avatar>
-              <div className="cls-user-info">
+              <div className="cls-user-info" style={{ display:sidebarState === "collapsed" ? "none" : '' }}>
                 <p className="cls-user-name">admin</p>
                 <p className="cls-user-role">Admin</p>
               </div>
@@ -236,7 +244,7 @@ function AppLayoutContent({
               className="cls-logout-button"
             >
               <LogOut className="cls-logout-icon" />
-              <span>Logout</span>
+              {sidebarState !== "collapsed" &&< span>Logout</span>}
             </Button>
           </SidebarFooter>
         </Sidebar>
