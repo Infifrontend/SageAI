@@ -1,12 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { CommonService } from "@/service/service";
+import { CommonService, LocalService } from "@/service/service";
+import { MenuDataReducer } from "./menu.store";
 
 export const store = configureStore({
   reducer: {
+    MenuDataReducer,
     [CommonService.reducerPath]: CommonService.reducer,
+    [LocalService.reducerPath]: LocalService.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(CommonService.middleware),
+    getDefaultMiddleware()
+      .concat(CommonService.middleware)
+      .concat(LocalService.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
