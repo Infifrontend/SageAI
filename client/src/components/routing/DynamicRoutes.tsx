@@ -1,5 +1,5 @@
 
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Switch, Route, useLocation } from "wouter";
 
 // Lazy load all components
@@ -36,7 +36,7 @@ function RedirectToDefault({ defaultRoute }: { defaultRoute: string }) {
   const [, setLocation] = useLocation();
   
   // Redirect to default route
-  React.useEffect(() => {
+  useEffect(() => {
     setLocation(defaultRoute);
   }, [defaultRoute, setLocation]);
   
