@@ -20,27 +20,32 @@ export default function Login() {
     e.preventDefault();
     setIsLoading(true);
 
+    // Static credentials
+    const VALID_EMAIL = 'admin@sage.com';
+    const VALID_PASSWORD = 'Infi@123';
+
+    // Simulate a small delay for better UX
+    await new Promise(resolve => setTimeout(resolve, 500));
+
     try {
-      const response = await fetch('/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok && data.success) {
+      // Client-side validation
+      if (email === VALID_EMAIL && password === VALID_PASSWORD) {
         toast({
           title: "Login Successful",
           description: "Redirecting to dashboard...",
         });
         
-        // Store token and user data
-        localStorage.setItem('authToken', data.token);
+        // Store authentication token and user data
+        const mockToken = 'mock-auth-token-' + Date.now();
+        const mockUser = {
+          email: VALID_EMAIL,
+          name: 'Admin User',
+          role: 'admin'
+        };
+        
+        localStorage.setItem('authToken', mockToken);
         if (rememberMe) {
-          localStorage.setItem('user', JSON.stringify(data.user));
+          localStorage.setItem('user', JSON.stringify(mockUser));
         }
         
         // Redirect to dashboard
@@ -50,14 +55,14 @@ export default function Login() {
       } else {
         toast({
           title: "Login Failed",
-          description: data.message || "Invalid credentials",
+          description: "Invalid email or password. Please try again.",
           variant: "destructive",
         });
       }
     } catch (error) {
       toast({
         title: "Error",
-        description: "An error occurred during login",
+        description: "An unexpected error occurred during login",
         variant: "destructive",
       });
     } finally {

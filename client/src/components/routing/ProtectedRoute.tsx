@@ -1,7 +1,6 @@
 
 import { useEffect } from "react";
 import { useLocation } from "wouter";
-import { useAppSelector } from "@/store/hooks";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -9,7 +8,10 @@ interface ProtectedRouteProps {
 
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const [, setLocation] = useLocation();
-  const { isAuthenticated } = useAppSelector((state) => state.AuthReducer);
+  
+  // Check authentication from localStorage
+  const authToken = localStorage.getItem('authToken');
+  const isAuthenticated = !!authToken;
 
   useEffect(() => {
     if (!isAuthenticated) {
