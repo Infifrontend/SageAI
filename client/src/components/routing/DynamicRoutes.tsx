@@ -1,6 +1,6 @@
 
 import { lazy, Suspense } from "react";
-import { Routes, Route, Redirect } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
 
 // Lazy load all components
 const componentsMap: Record<string, any> = {
@@ -32,12 +32,23 @@ interface DynamicRoutesProps {
   isAuthenticated?: boolean;
 }
 
+function RedirectToDefault({ defaultRoute }: { defaultRoute: string }) {
+  const [, setLocation] = useLocation();
+  
+  // Redirect to default route
+  React.useEffect(() => {
+    setLocation(defaultRoute);
+  }, [defaultRoute, setLocation]);
+  
+  return null;
+}
+
 export default function DynamicRoutes({ routes, isAuthenticated = false }: DynamicRoutesProps) {
   const defaultRoute = routes?.find((route) => route.default)?.path || "/";
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <Routes>
+      <Switch>
         {routes?.map((route) => {
           const Component = componentsMap[route.component];
           
@@ -53,14 +64,14 @@ export default function DynamicRoutes({ routes, isAuthenticated = false }: Dynam
         
         {/* Redirect root to default route */}
         <Route path="/">
-          <Redirect to={defaultRoute} />
+          <RedirectToDefault defaultRoute={defaultRoute} />
         </Route>
         
         {/* Fallback for non-existent routes */}
-        <Route path="/:rest*">
-          <Redirect to={defaultRoute} />
+        <Route>
+          <RedirectToDefault defaultRoute={defaultRoute} />
         </Route>
-      </Routes>
+      </Switch>
     </Suspense>
   );
 }
