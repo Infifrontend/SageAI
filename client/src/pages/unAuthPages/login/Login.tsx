@@ -5,6 +5,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
+import { useDispatch } from 'react-redux';
+import { setAuthenticated } from '@/store/auth.store';
+import { useLocation } from 'wouter';
 import authIllustration from '@assets/generated_images/Auth_page_side_illustration_6a131ae3.png';
 import './login.scss';
 
@@ -15,6 +18,8 @@ export default function Login() {
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const dispatch = useDispatch();
+  const [, setLocation] = useLocation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,9 +53,12 @@ export default function Login() {
           localStorage.setItem('user', JSON.stringify(mockUser));
         }
         
-        // Redirect to dashboard
+        // Update Redux state
+        dispatch(setAuthenticated({ value: true, user: mockUser }));
+        
+        // Navigate to dashboard
         setTimeout(() => {
-          window.location.href = '/dashboard';
+          setLocation('/dashboard');
         }, 500);
       } else {
         toast({

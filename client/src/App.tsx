@@ -8,6 +8,7 @@ import { useAppSelector } from "@/store/hooks";
 import { useDispatch } from "react-redux";
 import { useLazyGetMenuDataQuery, useLazyGetLandingRouteQuery } from "@/service/menu/menu";
 import { setMenuReponse, setLandingRoutes } from "@/store/menu.store";
+import { setAuthenticated } from "@/store/auth.store";
 import DynamicRoutes from "@/components/routing/DynamicRoutes";
 
 function AppContent() {
@@ -17,6 +18,17 @@ function AppContent() {
 
   const [getMenuData, getMenuResponseStatus] = useLazyGetMenuDataQuery();
   const [getLandingRoute, getLandingRouteResponse] = useLazyGetLandingRouteQuery();
+
+  // Check localStorage and set authentication state on initial load
+  useEffect(() => {
+    const authToken = localStorage.getItem('authToken');
+    const userStr = localStorage.getItem('user');
+    
+    if (authToken && !isAuthenticated) {
+      const user = userStr ? JSON.parse(userStr) : undefined;
+      dispatch(setAuthenticated({ value: true, user }));
+    }
+  }, []);
 
   // Load routes based on authentication status
   useEffect(() => {

@@ -44,6 +44,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { setMenuReponse } from "@/store/menu.store";
 import { useAppSelector } from "@/store/hooks";
+import { logout } from "@/store/auth.store";
 
 interface MenuItem {
   title: string;
@@ -114,7 +115,7 @@ function SidebarHeaderComponent() {
         className={`cls-logo ${state === "collapsed" ? "cls-collapsed-state" : ""}`}
       >
         <div className="cls-logo-icon">
-          {state === "collapsed" ? <PanelLeftOpen /> : <PanelLeftClose />}
+          {state === "collapsed" ? <PanelOpen /> : <PanelLeftClose />}
         </div>
         <div className="cls-logo-text">
           <h1>SAGE</h1>
@@ -138,6 +139,9 @@ function AppLayoutContent({ children, title, subtitle }: AppLayoutProps) {
   const [location] = useLocation();
   const [openMenus, setOpenMenus] = useState<string[]>([]);
   const { state: sidebarState, toggleSidebar } = useSidebar();
+  const dispatch = useDispatch();
+  const [_, setLocation] = useLocation();
+
 
   // Initialize open menu based on current location
   React.useEffect(() => {
@@ -163,7 +167,15 @@ function AppLayoutContent({ children, title, subtitle }: AppLayoutProps) {
   };
 
   const handleLogout = () => {
-    window.location.href = "/login";
+    // Clear localStorage
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('user');
+
+    // Update Redux state
+    dispatch(logout());
+
+    // Navigate to login
+    setLocation('/login');
   };
 
   return (
