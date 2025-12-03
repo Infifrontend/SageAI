@@ -1,6 +1,6 @@
 
 import { lazy, Suspense } from "react";
-import { Routes, Route, Navigate } from "wouter";
+import { Routes, Route, Redirect } from "wouter";
 
 // Lazy load all components
 const componentsMap: Record<string, any> = {
@@ -53,12 +53,12 @@ export default function DynamicRoutes({ routes, isAuthenticated = false }: Dynam
         
         {/* Redirect root to default route */}
         <Route path="/">
-          {() => <Navigate to={defaultRoute} replace />}
+          <Redirect to={defaultRoute} />
         </Route>
         
         {/* Fallback for non-existent routes */}
         <Route path="/:rest*">
-          {() => <Navigate to={defaultRoute} replace />}
+          <Redirect to={defaultRoute} />
         </Route>
       </Routes>
     </Suspense>
