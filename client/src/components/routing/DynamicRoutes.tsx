@@ -1,0 +1,66 @@
+
+import { lazy, Suspense } from "react";
+import { Routes, Route, Navigate } from "wouter";
+
+// Lazy load all components
+const componentsMap: Record<string, any> = {
+  Login: lazy(() => import("@/pages/unAuthPages/login/Login")),
+  ForgotPassword: lazy(() => import("@/pages/unAuthPages/forgot-password/Forgot-password")),
+  ResetPassword: lazy(() => import("@/pages/unAuthPages/reset-password/Reset-password")),
+  Dashboard: lazy(() => import("@/pages/AuthPages/Dashboard/Dashboard")),
+  ApiKeys: lazy(() => import("@/pages/AuthPages/ApiKeys/ApiKeys")),
+  ApiDocs: lazy(() => import("@/pages/AuthPages/ApiDocs/ApiDocs")),
+  ApiDocDetail: lazy(() => import("@/pages/AuthPages/ApiDocs/ApiDocDetail")),
+  UsersPage: lazy(() => import("@/pages/AuthPages/Users/Users")),
+  RolesPage: lazy(() => import("@/pages/AuthPages/Roles/Roles")),
+  OrganizationsPage: lazy(() => import("@/pages/AuthPages/Organizations/Organizations")),
+  Billing: lazy(() => import("@/pages/AuthPages/Billing/Billing")),
+  Subscriptions: lazy(() => import("@/pages/AuthPages/Subscriptions/Subscriptions")),
+  Analytics: lazy(() => import("@/pages/AuthPages/Analytics/Analytics")),
+  Settings: lazy(() => import("@/pages/AuthPages/Settings/Settings")),
+};
+
+interface RouteConfig {
+  id: number;
+  path: string;
+  component: string;
+  default?: boolean;
+}
+
+interface DynamicRoutesProps {
+  routes: RouteConfig[];
+  isAuthenticated?: boolean;
+}
+
+export default function DynamicRoutes({ routes, isAuthenticated = false }: DynamicRoutesProps) {
+  const defaultRoute = routes?.find((route) => route.default)?.path || "/";
+
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Routes>
+        {routes?.map((route) => {
+          const Component = componentsMap[route.component];
+          
+          if (!Component) {
+            console.warn(`Component ${route.component} not found`);
+            return null;
+          }
+
+          return (
+            <Route key={route.id} path={route.path} component={Component} />
+          );
+        })}
+        
+        {/* Redirect root to default route */}
+        <Route path="/">
+          {() => <Navigate to={defaultRoute} replace />}
+        </Route>
+        
+        {/* Fallback for non-existent routes */}
+        <Route path="/:rest*">
+          {() => <Navigate to={defaultRoute} replace />}
+        </Route>
+      </Routes>
+    </Suspense>
+  );
+}

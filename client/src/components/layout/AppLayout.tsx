@@ -106,38 +106,7 @@ interface AppLayoutProps {
 function SidebarHeaderComponent() {
   const { state, toggleSidebar } = useSidebar();
 
-  const { menuResponse } = useAppSelector((state) => state.MenuDataReducer);
-
-  const dispath = useDispatch();
-
-  // The following API is used to get the auth menu and route response.
-  const [getMenuData, getMenuResponseStatus] = useLazyGetMenuDataQuery();
-
-  // The following API is used to get the landing route json value.
-  const [getLandingRoute, getLandingRouteResponse] =
-    useLazyGetLandingRouteQuery();
-
-  // The following useEffect is used to trigger the menu api or landing route
-  useEffect(() => {
-    getMenuData();
-    getLandingRoute();
-  }, []);
-
-  // The following useEffect is used to get menu api response
-  useEffect(() => {
-    if (getMenuResponseStatus?.isSuccess)
-      dispath(setMenuReponse({ value: getMenuResponseStatus?.data }));
-  }, [getMenuResponseStatus]);
-
-  // The following useEffect is used to get the landing route json values
-  useEffect(() => {
-    if (getLandingRouteResponse?.isSuccess)
-      console.log(getLandingRouteResponse?.data);
-  });
-
-  useEffect(() => {
-    console.log(menuResponse);
-  }, [menuResponse]);
+  const { menuItems } = useAppSelector((state) => state.MenuDataReducer);
 
   return (
     <SidebarHeader className="cls-sidebar-header">
