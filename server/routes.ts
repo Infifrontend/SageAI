@@ -26,9 +26,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Find user in database
-      const user = await db.query.users.findFirst({
-        where: eq(users.username, email)
-      });
+      let user;
+      try {
+        user = await db.query.users.findFirst({
+          where: eq(users.username, email)
+        });
+      } catch (dbError) {
+        console.error("Database connection error:", dbError);
+        return res.status(500).json({
+          success: false,
+          message: "Database connection failed. Please check your DATABASE_URL environment variable."
+        });
+      }
 
       if (!user) {
         return res.status(401).json({
