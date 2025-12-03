@@ -12,4 +12,5 @@ const menuService = LocalService.injectEndpoints({
   overrideExisting: true,
 });
 
-export const { useLazyGetMenuDataQuery, useGetLandingRouteQuery } = menuService;
+export const { useLazyGetMenuDataQuery, useLazyGetLandingRouteQuery } =
+  menuService;
