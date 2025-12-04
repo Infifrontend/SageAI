@@ -5,26 +5,32 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useAppSelector } from "@/store/hooks";
 import { useDispatch } from "react-redux";
-import { useLazyGetMenuDataQuery, useLazyGetLandingRouteQuery } from "@/service/menu/menu";
+import {
+  useLazyGetMenuDataQuery,
+  useLazyGetLandingRouteQuery,
+} from "@/service/menu/menu";
 import { setMenuReponse, setLandingRoutes } from "@/store/menu.store";
 import { setAuthenticated } from "@/store/auth.store";
 import DynamicRoutes from "@/components/routing/DynamicRoutes";
 import { Router, Route, Switch } from "wouter";
 
-const BASE_PATH = import.meta.env.PROD ? '/sage' : '';
+const BASE_PATH = "/sage";
 
 function AppContent() {
   const dispatch = useDispatch();
   const { isAuthenticated } = useAppSelector((state) => state.AuthReducer);
-  const { landingRoutes, authRoutes } = useAppSelector((state) => state.MenuDataReducer);
+  const { landingRoutes, authRoutes } = useAppSelector(
+    (state) => state.MenuDataReducer,
+  );
 
   const [getMenuData, getMenuResponseStatus] = useLazyGetMenuDataQuery();
-  const [getLandingRoute, getLandingRouteResponse] = useLazyGetLandingRouteQuery();
+  const [getLandingRoute, getLandingRouteResponse] =
+    useLazyGetLandingRouteQuery();
 
   // Check localStorage and set authentication state on initial load
   useEffect(() => {
-    const authToken = localStorage.getItem('authToken');
-    const userStr = localStorage.getItem('user');
+    const authToken = localStorage.getItem("authToken");
+    const userStr = localStorage.getItem("user");
 
     if (authToken && !isAuthenticated) {
       const user = userStr ? JSON.parse(userStr) : undefined;

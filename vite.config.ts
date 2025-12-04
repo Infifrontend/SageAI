@@ -4,7 +4,7 @@ import path from "path";
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 
 export default defineConfig({
-  base: process.env.NODE_ENV === 'production' ? '/sage/' : '/',
+  base: "/sage/",
   plugins: [
     react(),
     runtimeErrorOverlay(),
@@ -23,8 +23,8 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        api: 'modern-compiler',
-        silenceDeprecations: ['legacy-js-api'],
+        api: "modern-compiler",
+        silenceDeprecations: ["legacy-js-api"],
       },
     },
   },
@@ -44,10 +44,14 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          'vendor-react': ['react', 'react-dom', 'react-redux'],
-          'vendor-ui': ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-select'],
-          'vendor-icons': ['lucide-react'],
-          'vendor-utils': ['clsx', 'tailwind-merge', 'date-fns'],
+          "vendor-react": ["react", "react-dom", "react-redux"],
+          "vendor-ui": [
+            "@radix-ui/react-dialog",
+            "@radix-ui/react-dropdown-menu",
+            "@radix-ui/react-select",
+          ],
+          "vendor-icons": ["lucide-react"],
+          "vendor-utils": ["clsx", "tailwind-merge", "date-fns"],
         },
       },
     },
