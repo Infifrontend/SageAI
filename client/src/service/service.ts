@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+const BASE_PATH = import.meta.env.PROD ? '/sage' : '';
+
 const CommonService = createApi({
   reducerPath: "CommonApi",
   baseQuery: fetchBaseQuery({
@@ -12,7 +14,7 @@ const CommonService = createApi({
 const LocalService = createApi({
   reducerPath: "LocalApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "/",
+    baseUrl: BASE_PATH + "/",
     credentials: "include",
   }),
   endpoints: () => ({}),

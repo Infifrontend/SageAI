@@ -1,4 +1,3 @@
-
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { db } from "./db";
@@ -10,11 +9,12 @@ import { authenticateToken, AuthRequest } from "./middleware/auth";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-change-in-production";
 const JWT_EXPIRY = "24h";
+const BASE_PATH = process.env.NODE_ENV === 'production' ? '/sage' : '';
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  
+
   // Login endpoint
-  app.post("/api/login", async (req, res) => {
+  app.post(`${BASE_PATH}/api/login`, async (req, res) => {
     try {
       const { email, password } = req.body;
 
@@ -58,10 +58,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Generate JWT token
       const token = jwt.sign(
-        { 
+        {
           id: user.id,
-          email: user.username, 
-          name: "Admin User" 
+          email: user.username,
+          name: "Admin User"
         },
         JWT_SECRET,
         { expiresIn: JWT_EXPIRY }
@@ -87,7 +87,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Forgot password endpoint
-  app.post("/api/forgot-password", async (req, res) => {
+  app.post(`${BASE_PATH}/api/forgot-password`, async (req, res) => {
     try {
       const { email } = req.body;
 
@@ -114,7 +114,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Reset password endpoint
-  app.post("/api/reset-password", async (req, res) => {
+  app.post(`${BASE_PATH}/api/reset-password`, async (req, res) => {
     try {
       const { token, newPassword } = req.body;
 
@@ -140,10 +140,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Check session endpoint
-  app.get("/api/check-session", async (req, res) => {
+  app.get(`${BASE_PATH}/api/check-session`, async (req, res) => {
     try {
       const authHeader = req.headers.authorization;
-      
+
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({
           success: false,
@@ -167,7 +167,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Dashboard data endpoint (protected)
-  app.get("/api/dashboard", authenticateToken, async (req: AuthRequest, res) => {
+  app.get(`${BASE_PATH}/api/dashboard`, authenticateToken, async (req: AuthRequest, res) => {
     try {
       // TODO: Fetch real dashboard data from database
       res.json({

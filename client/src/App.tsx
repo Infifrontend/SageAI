@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -10,6 +9,9 @@ import { useLazyGetMenuDataQuery, useLazyGetLandingRouteQuery } from "@/service/
 import { setMenuReponse, setLandingRoutes } from "@/store/menu.store";
 import { setAuthenticated } from "@/store/auth.store";
 import DynamicRoutes from "@/components/routing/DynamicRoutes";
+import { Router, Route, Switch } from "wouter";
+
+const BASE_PATH = import.meta.env.PROD ? '/sage' : '';
 
 function AppContent() {
   const dispatch = useDispatch();
@@ -23,7 +25,7 @@ function AppContent() {
   useEffect(() => {
     const authToken = localStorage.getItem('authToken');
     const userStr = localStorage.getItem('user');
-    
+
     if (authToken && !isAuthenticated) {
       const user = userStr ? JSON.parse(userStr) : undefined;
       dispatch(setAuthenticated({ value: true, user }));
@@ -68,12 +70,14 @@ function AppContent() {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <AppContent />
-      </TooltipProvider>
-    </QueryClientProvider>
+    <Router base={BASE_PATH}>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <AppContent />
+        </TooltipProvider>
+      </QueryClientProvider>
+    </Router>
   );
 }
 
