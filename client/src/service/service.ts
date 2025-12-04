@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const BASE_PATH = import.meta.env.PROD ? '/sage' : '';
+const BASE_PATH = "/sageAdmin";
 
 const CommonService = createApi({
   reducerPath: "CommonApi",

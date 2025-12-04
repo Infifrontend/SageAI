@@ -14,7 +14,7 @@ import { setAuthenticated } from "@/store/auth.store";
 import DynamicRoutes from "@/components/routing/DynamicRoutes";
 import { Router, Route, Switch } from "wouter";
 
-const BASE_PATH = "/sage";
+const BASE_PATH = "/sageAdmin";
 
 function AppContent() {
   const dispatch = useDispatch();
