@@ -15,6 +15,7 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Activity,
+  PanelLeft,
 } from "lucide-react";
 import {
   Sidebar,
@@ -115,7 +116,7 @@ function SidebarHeaderComponent() {
         className={`cls-logo ${state === "collapsed" ? "cls-collapsed-state" : ""}`}
       >
         <div className="cls-logo-icon">
-          {state === "collapsed" ? <PanelOpen /> : <PanelLeftClose />}
+          {state === "collapsed" ? <PanelLeft className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
         </div>
         <div className="cls-logo-text">
           <h1>SAGE</h1>
