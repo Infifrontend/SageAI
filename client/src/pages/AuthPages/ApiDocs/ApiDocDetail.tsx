@@ -60,6 +60,12 @@ export default function ApiDocDetail() {
           }
           const yamlText = await response.text();
           
+          // Check if we received HTML instead of YAML (common issue with static file serving)
+          if (yamlText.trim().startsWith('<!DOCTYPE') || yamlText.trim().startsWith('<html')) {
+            console.error("Received HTML instead of YAML. File path may be incorrect:", metadata.yamlPath);
+            throw new Error(`Failed to load YAML file. The file at ${metadata.yamlPath} could not be found or is not accessible.`);
+          }
+          
           let parsedYaml: any;
           try {
             parsedYaml = yaml.load(yamlText, { 
