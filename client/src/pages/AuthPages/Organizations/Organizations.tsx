@@ -340,18 +340,26 @@ export default function Organizations() {
     // },
   ];
 
-  const totalOrganizations = organizations.length;
-  const activeOrganizations = organizations.filter(
-    (org) => org.status === "Active",
-  ).length;
-  const enterprisePlans = organizations.filter(
-    (org) => org.subscriptionPlan === "Enterprise",
-  ).length;
-  const highApiUsage = organizations.filter(
-    (org) => org.apiUsage.percentage > 70,
-  ).length;
+  const totalOrganizations = sampleResponse.count;
+  const activeOrganizations = sampleResponse.results.length; // All active by default
+  const enterprisePlans = sampleResponse.results.length; // All enterprise by default
+  const highApiUsage = 0; // Default since API doesn't provide usage data
 
-  const filteredOrganizations = organizations.filter((org) =>
+  // Map sampleResponse to match the Organization interface
+  const mappedOrganizations: Organization[] = sampleResponse.results.map((org) => ({
+    id: org.id,
+    name: org.name,
+    email: org.api_keys[0]?.key || "N/A",
+    subscriptionPlan: "Enterprise", // Default value since not in API
+    userCount: 1, // Default value since not in API
+    apiUsage: { percentage: 0, used: 0, total: 1000000 }, // Default values
+    status: "Active" as const,
+    lastActive: new Date(org.created_at).toLocaleDateString(),
+    billingStatus: "Pending" as const,
+    lastBillDate: new Date(org.created_at).toLocaleDateString(),
+  }));
+
+  const filteredOrganizations = mappedOrganizations.filter((org) =>
     org.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
