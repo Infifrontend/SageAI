@@ -1,0 +1,42 @@
+chunk-RPCDYKBN.js?v=d399e836:521 Warning: validateDOMNesting(...): <div> cannot appear as a descendant of <p>.
+    at div
+    at Badge (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit.dev/sageAdmin/src/components/ui/badge.tsx:36:18)
+    at p
+    at div
+    at div
+    at div
+    at _c9 (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit.dev/sageAdmin/src/components/ui/card.tsx:114:12)
+    at div
+    at _c (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit.dev/sageAdmin/src/components/ui/card.tsx:20:11)
+    at div
+    at div
+    at _c9 (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit.dev/sageAdmin/src/components/ui/card.tsx:114:12)
+    at div
+    at _c (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit.dev/sageAdmin/src/components/ui/card.tsx:20:11)
+    at div
+    at main
+    at main
+    at SidebarInset (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit.dev/sageAdmin/src/components/ui/sidebar.tsx:417:25)
+    at div
+    at AppLayoutContent (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit.dev/sageAdmin/src/components/layout/AppLayout.tsx:192:29)
+    at div
+    at Provider (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit…unner/workspace/node_modules/.vite/deps/chunk-OXZDJRWN.js?v=d399e836:38:15)
+    at TooltipProvider (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit…rkspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=d399e836:62:5)
+    at SidebarProvider (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit.dev/sageAdmin/src/components/ui/sidebar.tsx:59:3)
+    at AppLayout
+    at ApiDocs (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit.dev/sageAdmin/src/pages/AuthPages/ApiDocs/ApiDocs.tsx:120:27)
+    at Route (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit…/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=d399e836:265:16)
+    at Switch (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit…/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=d399e836:321:17)
+    at Suspense
+    at DynamicRoutes (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit.dev/sageAdmin/src/components/routing/DynamicRoutes.tsx:48:41)
+    at AppContent (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit.dev/sageAdmin/src/App.tsx?v=xLgdfT7kznkefg6up3dTp:36:20)
+    at Provider (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit…unner/workspace/node_modules/.vite/deps/chunk-OXZDJRWN.js?v=d399e836:38:15)
+    at TooltipProvider (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit…rkspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=d399e836:62:5)
+    at QueryClientProvider (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit…rkspace/node_modules/.vite/deps/@tanstack_react-query.js?v=d399e836:2805:3)
+    at Router (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit…/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=d399e836:233:17)
+    at App
+    at Provider (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit…nner/workspace/node_modules/.vite/deps/chunk-DP3TOLV7.js?v=d399e836:923:11)
+
+ApiDocDetail.tsx:132 Error loading YAML: 
+YAMLException$1
+loadApiDoc	@	ApiDocDetail.tsx:132
