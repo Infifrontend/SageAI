@@ -62,13 +62,25 @@ export default function ApiDocDetail() {
           
           let parsedYaml: any;
           try {
-            parsedYaml = yaml.load(yamlText);
-          } catch (yamlError) {
+            parsedYaml = yaml.load(yamlText, { 
+              json: true,
+              onWarning: (warning) => {
+                console.warn("YAML warning:", warning);
+              }
+            });
+          } catch (yamlError: any) {
             console.error("YAML parsing error:", yamlError);
-            throw new Error("Invalid YAML format");
+            console.error("YAML content preview:", yamlText.substring(0, 500));
+            throw new Error(`Invalid YAML format: ${yamlError.message || 'Unknown error'}`);
           }
 
-          if (!parsedYaml || !parsedYaml.paths) {
+          if (!parsedYaml || typeof parsedYaml !== 'object') {
+            console.error("Parsed YAML is not an object:", parsedYaml);
+            throw new Error("Invalid YAML structure - not a valid object");
+          }
+
+          if (!parsedYaml.paths) {
+            console.error("YAML structure:", Object.keys(parsedYaml));
             throw new Error("Invalid YAML structure - missing paths");
           }
 
@@ -175,17 +187,22 @@ export default function ApiDocDetail() {
     );
   }
 
-  if (!apiDoc) {
+  if (!apiDoc && !isLoading) {
     return (
       <AppLayout title="API Documentation" subtitle="API document not found">
         <div className="cls-apidoc-detail-container">
           <Card>
             <CardContent className="p-6">
-              <p>API documentation not found.</p>
-              <Button onClick={() => setLocation("/api-docs")} className="mt-4">
-                <ArrowLeft size={16} />
-                Back to API Collections
-              </Button>
+              <div className="space-y-4">
+                <p className="text-red-600 font-semibold">API documentation could not be loaded.</p>
+                <p className="text-sm text-gray-600">
+                  The YAML specification file may be invalid or missing. Please check the console for detailed error messages.
+                </p>
+                <Button onClick={() => setLocation("/api-docs")} className="mt-4">
+                  <ArrowLeft size={16} className="mr-2" />
+                  Back to API Collections
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </div>
