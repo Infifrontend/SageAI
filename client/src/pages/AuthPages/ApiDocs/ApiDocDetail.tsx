@@ -34,10 +34,10 @@ import "./ApiDocDetail.scss";
 // API collections metadata with YAML file paths
 const apiCollectionsMetadata: Record<string, { yamlPath?: string }> = {
   "1": {
-    yamlPath: "/api-specs/grm-api.yaml"
+    yamlPath: `${import.meta.env.BASE_URL}api-specs/grm-api.yaml`
   },
   "2": {
-    yamlPath: "/api-specs/sample-api.yaml"
+    yamlPath: `${import.meta.env.BASE_URL}api-specs/sample-api.yaml`
   }
 };
 
