@@ -1,0 +1,36 @@
+AppLayout.tsx:118 Uncaught ReferenceError: PanelOpen is not defined
+    at SidebarHeaderComponent (AppLayout.tsx:118:37)
+
+AppLayout.tsx:118 Uncaught ReferenceError: PanelOpen is not defined
+    at SidebarHeaderComponent (AppLayout.tsx:118:37)
+chunk-RPCDYKBN.js?v=d399e836:14032 The above error occurred in the <SidebarHeaderComponent> component:
+
+    at SidebarHeaderComponent (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit.dev/sageAdmin/src/components/layout/AppLayout.tsx:105:36)
+    at div
+    at div
+    at div
+    at Sidebar (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit.dev/sageAdmin/src/components/ui/sidebar.tsx:151:3)
+    at div
+    at AppLayoutContent (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit.dev/sageAdmin/src/components/layout/AppLayout.tsx:192:29)
+    at div
+    at Provider (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit…unner/workspace/node_modules/.vite/deps/chunk-OXZDJRWN.js?v=d399e836:38:15)
+    at TooltipProvider (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit…rkspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=d399e836:62:5)
+    at SidebarProvider (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit.dev/sageAdmin/src/components/ui/sidebar.tsx:59:3)
+    at AppLayout
+    at ApiDocDetail (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit.dev/sageAdmin/src/pages/AuthPages/ApiDocs/ApiDocDetail.tsx:59:18)
+    at Route (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit…/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=d399e836:265:16)
+    at Switch (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit…/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=d399e836:321:17)
+    at Suspense
+    at DynamicRoutes (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit.dev/sageAdmin/src/components/routing/DynamicRoutes.tsx:48:41)
+    at AppContent (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit.dev/sageAdmin/src/App.tsx?v=Jnkpzgl7jjMy93v5AvVi0:36:20)
+    at Provider (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit…unner/workspace/node_modules/.vite/deps/chunk-OXZDJRWN.js?v=d399e836:38:15)
+    at TooltipProvider (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit…rkspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=d399e836:62:5)
+    at QueryClientProvider (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit…rkspace/node_modules/.vite/deps/@tanstack_react-query.js?v=d399e836:2805:3)
+    at Router (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit…/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=d399e836:233:17)
+    at App
+    at Provider (https://270d0836-3099-4073-bb29-fb8f7df1bb4f-00-10wbdpek8f1uk.picard.replit…nner/workspace/node_modules/.vite/deps/chunk-DP3TOLV7.js?v=d399e836:923:11)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+chunk-RPCDYKBN.js?v=d399e836:9129 Uncaught ReferenceError: PanelOpen is not defined
+    at SidebarHeaderComponent (AppLayout.tsx:118:37)
