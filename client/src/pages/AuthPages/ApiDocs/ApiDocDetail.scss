@@ -149,11 +149,17 @@
   &:hover {
     background: $hover-background;
     border-color: $border-color;
+    .cls-endpoint-name{
+      color : $text-primary
+    }
   }
 
   &.cls-active {
     background: $primary-background;
     border-color: $primary;
+     .cls-endpoint-name{
+      color : $text-primary
+    }
   }
 }
 
@@ -224,7 +230,8 @@
 .cls-endpoint-name {
   font-size: 14px;
   font-weight: 500;
-  color: $text-primary;
+  // color: $text-primary;
+  color: white;
 }
 
 .cls-endpoint-path {

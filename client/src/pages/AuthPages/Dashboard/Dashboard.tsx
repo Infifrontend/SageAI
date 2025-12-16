@@ -32,6 +32,10 @@ import {
   useLazyGetCommonDashboardDataQuery,
   useLazyGetResponseTimeDataQuery,
 } from "@/service/dashboard/dashboard";
+// If api call fails or is loading, use static data as fallback
+import commonDashboardData from '../../../../public/staticData/dashboard/commonDashboard.json';
+import apiData from '../../../../public/staticData/dashboard/api_calls_over_time.json';
+import performancedData from '../../../../public/staticData/dashboard/response_time_analytics.json';
 
 export default function Dashboard() {
   const [selectedEndpoint, setSelectedEndpoint] = useState("all");
@@ -67,7 +71,7 @@ export default function Dashboard() {
   useEffect(() => {
     getResponseTimeData({
       endPointApi: selectedApi,
-      range:`last_${selectedAnalyticsTimePeriod}_dayas`
+      range:`last_${selectedAnalyticsTimePeriod}_days`
     });
   }, [selectedApi, selectedAnalyticsTimePeriod]);
 
@@ -76,6 +80,10 @@ export default function Dashboard() {
     if (dashboardCommonDataResponse?.isSuccess && dashboardCommonDataResponse?.data) {
       setCommonData(dashboardCommonDataResponse.data);
     }
+    // If api call fails or is loading, use static data as fallback
+    else{
+      setCommonData(commonDashboardData);
+    }
   }, [dashboardCommonDataResponse]);
 
   // The following useEffect is triggered when getApiCallResponse api is completed
@@ -83,12 +91,20 @@ export default function Dashboard() {
     if (getApiCallResponse?.isSuccess && getApiCallResponse?.data) {
       setApiCallData(getApiCallResponse.data);
     }
+    // If api call fails or is loading, use static data as fallback
+    else{
+      setApiCallData(apiData);
+    }
   }, [getApiCallResponse]);
 
   // The following useEffect is triggered when getResponseTimeDataResponse api is completed
   useEffect(() => {
     if (getResponseTimeDataResponse?.isSuccess && getResponseTimeDataResponse?.data) {
       setResponseTimeData(getResponseTimeDataResponse.data);
+    }
+    // If api call fails or is loading, use static data as fallback
+    else{
+      setResponseTimeData(performancedData);
     }
   }, [getResponseTimeDataResponse]);
 

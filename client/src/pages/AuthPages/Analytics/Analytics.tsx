@@ -24,6 +24,10 @@ import {
   useLazyGetMenuApiAnalyticsDataQuery,
   useLazyGetMenuPerformanceAnalyticsDataQuery,
 } from "@/service/analytics/analytics";
+// If api call fails or is loading, use static data as fallback
+import commonAnalytics from '../../../../public/staticData/analytics/commonAnalytics.json';
+import apiEndPointData from '../../../../public/staticData/analytics/Analytics_Menu_API_Endpoint_Details_section.json';
+import performancedData from '../../../../public/staticData/analytics/Analytics_Menu_System_Performance_Metrics.json';
 
 export default function Analytics() {
   const [selectedTimeframe, setSelectedTimeframe] = useState("24H");
@@ -68,6 +72,10 @@ export default function Analytics() {
     if (analyticsCommonDataResponse?.isSuccess && analyticsCommonDataResponse?.data) {
       setCommonData(analyticsCommonDataResponse.data);
     }
+    // If api call fails or is loading, use static data as fallback
+    else{
+       setCommonData(commonAnalytics);
+    }
   }, [analyticsCommonDataResponse]);
 
   // Handle API endpoint details response
@@ -75,12 +83,20 @@ export default function Analytics() {
     if (GetMenuApiAnalyticsDataResponse?.isSuccess && GetMenuApiAnalyticsDataResponse?.data) {
       setApiEndpointData(GetMenuApiAnalyticsDataResponse?.data);
     }
+    // If api call fails or is loading, use static data as fallback
+    else{
+      setApiEndpointData(apiEndPointData);
+    }
   }, [GetMenuApiAnalyticsDataResponse]);
 
   // Handle performance metrics response
   useEffect(() => {
     if (GetMenuPerformanceDataResponse?.isSuccess && GetMenuPerformanceDataResponse?.data) {
       setPerformanceData(GetMenuPerformanceDataResponse.data);
+    }
+    // If api call fails or is loading, use static data as fallback
+    else{
+      setPerformanceData(performancedData);
     }
   }, [GetMenuPerformanceDataResponse]);
 

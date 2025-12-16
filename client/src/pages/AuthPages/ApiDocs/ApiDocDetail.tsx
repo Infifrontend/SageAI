@@ -27,6 +27,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import "./ApiDocDetail.scss";
+import { apiCollectionsData } from "./ApiDocsSample";
 
 // Mock data for API collections with YAML file paths
 const apiCollectionsMetadata: Record<string, { yamlPath?: string }> = {
@@ -35,50 +36,6 @@ const apiCollectionsMetadata: Record<string, { yamlPath?: string }> = {
   },
   "2": {
     yamlPath: "/api-specs/simple-api.yaml" // Sample API uses YAML
-  }
-};
-
-// Mock data for API collections
-const apiCollectionsData = {
-  "1": {
-    id: "1",
-    name: "GRM API",
-    version: "1.0.0",
-    status: "active" as const,
-    description: "GRM API provides endpoints for authentication, user management, ancillary services, policy management, and more.",
-    baseUrl: "https://api.example.com/v1",
-    endpoints: [
-      {
-        id: "ping",
-        name: "Ping",
-        method: "GET",
-        path: "/ping",
-        description: "Simple ping endpoint to check API availability",
-        responses: {
-          "200": {
-            description: "Success",
-            example: '{\n  "message": "pong"\n}'
-          }
-        }
-      },
-      {
-        id: "auth",
-        name: "Authentication",
-        method: "POST",
-        path: "/auth/login",
-        description: "Authenticate user and receive access token",
-        responses: {
-          "200": {
-            description: "Success",
-            example: '{\n  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",\n  "user": {\n    "id": "123",\n    "email": "user@example.com"\n  }\n}'
-          },
-          "401": {
-            description: "Unauthorized",
-            example: '{\n  "error": "Invalid credentials"\n}'
-          }
-        }
-      }
-    ]
   }
 };
 
@@ -95,13 +52,13 @@ export default function ApiDocDetail() {
     const loadApiDoc = async () => {
       setIsLoading(true);
       const metadata = apiCollectionsMetadata[id as string];
-      
+
       if (metadata?.yamlPath) {
         try {
           const response = await fetch(metadata.yamlPath);
           const yamlText = await response.text();
           const parsedYaml: any = yaml.load(yamlText);
-          
+
           // Transform OpenAPI spec to our format
           const endpoints = Object.entries(parsedYaml.paths || {}).flatMap(([path, methods]: [string, any]) => {
             return Object.entries(methods).map(([method, details]: [string, any]) => {
@@ -116,7 +73,7 @@ export default function ApiDocDetail() {
                   )
                 };
               });
-              
+
               return {
                 id: details.operationId || `${method}-${path}`,
                 name: details.summary || `${method.toUpperCase()} ${path}`,
@@ -127,7 +84,7 @@ export default function ApiDocDetail() {
               };
             });
           });
-          
+
           setApiDoc({
             id: id,
             name: parsedYaml.info?.title || "API Documentation",
@@ -137,7 +94,7 @@ export default function ApiDocDetail() {
             baseUrl: parsedYaml.servers?.[0]?.url || "https://api.example.com",
             endpoints
           });
-          
+
           if (endpoints.length > 0) {
             setSelectedEndpoint(endpoints[0].id);
           }
@@ -153,10 +110,10 @@ export default function ApiDocDetail() {
           setSelectedEndpoint(mockData.endpoints[0].id);
         }
       }
-      
+
       setIsLoading(false);
     };
-    
+
     loadApiDoc();
   }, [id]);
 
@@ -192,8 +149,8 @@ export default function ApiDocDetail() {
     );
   }
 
-  const currentEndpoint = apiDoc.endpoints.find(e => e.id === selectedEndpoint) || apiDoc.endpoints[0];
-  const filteredEndpoints = apiDoc.endpoints.filter(endpoint =>
+  const currentEndpoint = apiDoc.endpoints.find((e : any) => e.id === selectedEndpoint) || apiDoc.endpoints[0];
+  const filteredEndpoints = apiDoc.endpoints.filter((endpoint : any) =>
     endpoint.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     endpoint.path.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -246,20 +203,20 @@ export default function ApiDocDetail() {
               {/* Sidebar - Endpoints List */}
               <div className="cls-sidebar">
                 <div className="cls-sidebar-header">
-                  <h3 className="cls-sidebar-title">Endpoints</h3>
+                  <h3 className="cls-sidebar-title text-[#fff]">Endpoints</h3>
                   <div className="cls-search-container">
-                    <Search className="cls-search-icon" size={16} />
+                    <Search className="cls-search-icon right-[12px] left-[unset]" size={16} />
                     <Input
                       type="text"
                       placeholder="Search endpoints..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="cls-search-input"
+                      className="cls-search-input text-[#000]"
                     />
                   </div>
                 </div>
                 <div className="cls-endpoints-list">
-                  {filteredEndpoints.map((endpoint) => (
+                  {filteredEndpoints.map((endpoint: any) => (
                     <button
                       key={endpoint.id}
                       onClick={() => {
@@ -301,7 +258,7 @@ export default function ApiDocDetail() {
                         </Button>
                       </div>
                       <p className="cls-endpoint-description">{currentEndpoint.description}</p>
-                      
+
                       <div className="cls-base-url">
                         <h4 className="cls-section-subtitle">Base URL</h4>
                         <code className="cls-code-block">{apiDoc.baseUrl}</code>
@@ -323,6 +280,9 @@ export default function ApiDocDetail() {
                           <span className="cls-info-label">Endpoint:</span>
                           <code>{currentEndpoint.path}</code>
                         </div>
+                        <pre className="cls-code-block">
+                          <code>{currentEndpoint.requests[selectedResponse]?.example || "{}"}</code>
+                        </pre>
                       </div>
                     </div>
                   </TabsContent>
@@ -347,7 +307,7 @@ export default function ApiDocDetail() {
                           </SelectContent>
                         </Select>
                       </div>
-                      
+
                       <div className="cls-response-body">
                         <div className="cls-code-header">
                           <span className="cls-code-label">Response Body</span>
