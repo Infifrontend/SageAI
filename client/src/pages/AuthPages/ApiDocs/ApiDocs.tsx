@@ -57,28 +57,18 @@ const apiCollectionsData: ApiCollection[] = [
     version: "1.0.0",
     status: "active",
     description:
-      "ClearTrip API provides endpoints for authentication, user management, ancillary services, policy...",
+      "GRM API provides endpoints for authentication, user management, ancillary services, policy management, help desk, and more.",
     createdBy: "admin@sage.co",
     createdDate: "July 20th, 2024",
   },
-  // {
-  //   id: "2",
-  //   name: "Sample API",
-  //   version: "1.0.0",
-  //   status: "inactive",
-  //   description: "A sample API to illustrate OpenAPI concepts.",
-  //   createdBy: "admin@sage.co",
-  //   createdDate: "July 22nd, 2024",
-  // },
   {
-    id: "3",
+    id: "2",
     name: "Payment Gateway API",
-    version: "2.1.0",
+    version: "1.0.0",
     status: "active",
-    description:
-      "Secure payment processing API with support for multiple payment methods and currencies.",
+    description: "A sample API to illustrate OpenAPI concepts.",
     createdBy: "admin@sage.co",
-    createdDate: "August 5th, 2024",
+    createdDate: "July 22nd, 2024",
   },
   // {
   //   id: "4",

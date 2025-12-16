@@ -27,15 +27,14 @@ import {
   ExternalLink,
 } from "lucide-react";
 import "./ApiDocDetail.scss";
-import { apiCollectionsData } from "./ApiDocsSample";
 
-// Mock data for API collections with YAML file paths
+// API collections metadata with YAML file paths
 const apiCollectionsMetadata: Record<string, { yamlPath?: string }> = {
   "1": {
-    yamlPath: undefined // GRM API uses mock data
+    yamlPath: "/api-specs/grm-api.yaml" // ClearTrip API (GRM API)
   },
   "2": {
-    yamlPath: "/api-specs/simple-api.yaml" // Sample API uses YAML
+    yamlPath: "/api-specs/sample-api.yaml" // Payment Gateway API
   }
 };
 
@@ -56,33 +55,64 @@ export default function ApiDocDetail() {
       if (metadata?.yamlPath) {
         try {
           const response = await fetch(metadata.yamlPath);
+          if (!response.ok) {
+            throw new Error(`Failed to fetch YAML file: ${response.statusText}`);
+          }
           const yamlText = await response.text();
           const parsedYaml: any = yaml.load(yamlText);
 
+          if (!parsedYaml || !parsedYaml.paths) {
+            throw new Error("Invalid YAML structure");
+          }
+
           // Transform OpenAPI spec to our format
           const endpoints = Object.entries(parsedYaml.paths || {}).flatMap(([path, methods]: [string, any]) => {
-            return Object.entries(methods).map(([method, details]: [string, any]) => {
-              const responses: any = {};
-              Object.entries(details.responses || {}).forEach(([code, responseData]: [string, any]) => {
-                responses[code] = {
-                  description: responseData.description || "",
-                  example: JSON.stringify(
-                    responseData.content?.["application/json"]?.examples?.foo?.value || {},
-                    null,
-                    2
-                  )
+            return Object.entries(methods)
+              .filter(([method]) => ['get', 'post', 'put', 'delete', 'patch'].includes(method.toLowerCase()))
+              .map(([method, details]: [string, any]) => {
+                const responses: any = {};
+                
+                // Parse responses with better handling
+                Object.entries(details.responses || {}).forEach(([code, responseData]: [string, any]) => {
+                  let exampleValue = {};
+                  
+                  // Try to get example from various possible locations
+                  if (responseData.content?.["application/json"]?.examples?.foo?.value) {
+                    exampleValue = responseData.content["application/json"].examples.foo.value;
+                  } else if (responseData.content?.["application/json"]?.example) {
+                    exampleValue = responseData.content["application/json"].example;
+                  } else if (responseData.content?.["application/json"]?.schema?.example) {
+                    exampleValue = responseData.content["application/json"].schema.example;
+                  }
+                  
+                  responses[code] = {
+                    description: responseData.description || `Response ${code}`,
+                    example: JSON.stringify(exampleValue, null, 2)
+                  };
+                });
+
+                // Parse request body if exists
+                let requestExample = "{}";
+                if (details.requestBody?.content?.["application/json"]?.schema) {
+                  const schema = details.requestBody.content["application/json"].schema;
+                  requestExample = JSON.stringify(schema.example || {}, null, 2);
+                }
+
+                return {
+                  id: details.operationId || `${method}-${path.replace(/\//g, '-')}`,
+                  name: details.summary || `${method.toUpperCase()} ${path}`,
+                  method: method.toUpperCase(),
+                  path: path,
+                  description: details.description || details.summary || `${method.toUpperCase()} ${path}`,
+                  tags: details.tags || [],
+                  responses,
+                  requests: {
+                    "200": {
+                      example: requestExample
+                    }
+                  }
                 };
               });
-
-              return {
-                id: details.operationId || `${method}-${path}`,
-                name: details.summary || `${method.toUpperCase()} ${path}`,
-                method: method.toUpperCase(),
-                path: path,
-                description: details.summary || details.description || "",
-                responses
-              };
-            });
           });
 
           setApiDoc({
@@ -103,12 +133,9 @@ export default function ApiDocDetail() {
           setApiDoc(null);
         }
       } else {
-        // Use mock data
-        const mockData = apiCollectionsData[id as keyof typeof apiCollectionsData];
-        setApiDoc(mockData);
-        if (mockData?.endpoints?.length > 0) {
-          setSelectedEndpoint(mockData.endpoints[0].id);
-        }
+        // No YAML path configured
+        console.error("No YAML path configured for this API");
+        setApiDoc(null);
       }
 
       setIsLoading(false);
