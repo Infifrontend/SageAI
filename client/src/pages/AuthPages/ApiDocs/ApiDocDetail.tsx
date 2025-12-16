@@ -59,10 +59,17 @@ export default function ApiDocDetail() {
             throw new Error(`Failed to fetch YAML file: ${response.statusText}`);
           }
           const yamlText = await response.text();
-          const parsedYaml: any = yaml.load(yamlText);
+          
+          let parsedYaml: any;
+          try {
+            parsedYaml = yaml.load(yamlText);
+          } catch (yamlError) {
+            console.error("YAML parsing error:", yamlError);
+            throw new Error("Invalid YAML format");
+          }
 
           if (!parsedYaml || !parsedYaml.paths) {
-            throw new Error("Invalid YAML structure");
+            throw new Error("Invalid YAML structure - missing paths");
           }
 
           // Transform OpenAPI spec to our format
@@ -74,20 +81,26 @@ export default function ApiDocDetail() {
                 
                 // Parse responses with better handling
                 Object.entries(details.responses || {}).forEach(([code, responseData]: [string, any]) => {
-                  let exampleValue = {};
+                  let exampleValue: any = null;
                   
                   // Try to get example from various possible locations
-                  if (responseData.content?.["application/json"]?.examples?.foo?.value) {
-                    exampleValue = responseData.content["application/json"].examples.foo.value;
+                  if (responseData.content?.["application/json"]?.examples) {
+                    const examplesObj = responseData.content["application/json"].examples;
+                    const firstExampleKey = Object.keys(examplesObj)[0];
+                    if (firstExampleKey && examplesObj[firstExampleKey]?.value) {
+                      exampleValue = examplesObj[firstExampleKey].value;
+                    }
                   } else if (responseData.content?.["application/json"]?.example) {
                     exampleValue = responseData.content["application/json"].example;
                   } else if (responseData.content?.["application/json"]?.schema?.example) {
                     exampleValue = responseData.content["application/json"].schema.example;
+                  } else if (responseData.content?.["application/json"]?.schema) {
+                    exampleValue = { schema: "See API specification for schema details" };
                   }
                   
                   responses[code] = {
                     description: responseData.description || `Response ${code}`,
-                    example: JSON.stringify(exampleValue, null, 2)
+                    example: exampleValue ? JSON.stringify(exampleValue, null, 2) : "{}"
                   };
                 });
 
@@ -95,7 +108,11 @@ export default function ApiDocDetail() {
                 let requestExample = "{}";
                 if (details.requestBody?.content?.["application/json"]?.schema) {
                   const schema = details.requestBody.content["application/json"].schema;
-                  requestExample = JSON.stringify(schema.example || {}, null, 2);
+                  if (schema.example) {
+                    requestExample = JSON.stringify(schema.example, null, 2);
+                  } else if (schema.properties) {
+                    requestExample = JSON.stringify({ info: "See schema for request structure" }, null, 2);
+                  }
                 }
 
                 return {
@@ -284,7 +301,7 @@ export default function ApiDocDetail() {
                           <Copy size={16} />
                         </Button>
                       </div>
-                      <p className="cls-endpoint-description">{currentEndpoint.description}</p>
+                      <div className="cls-endpoint-description">{currentEndpoint.description}</div>
 
                       <div className="cls-base-url">
                         <h4 className="cls-section-subtitle">Base URL</h4>
