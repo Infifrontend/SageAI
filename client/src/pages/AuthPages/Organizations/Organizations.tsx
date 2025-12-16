@@ -194,16 +194,16 @@ export default function Organizations() {
   };
 
   // Map sampleResponse to match the Organization interface
-  const mappedOrganizations: Organization[] = sampleResponse.results.map((org) => ({
+  const mappedOrganizations: any[] = sampleResponse.results.map((org) => ({
     id: org.id,
     name: org.name,
     email: org.api_keys[0]?.key || "N/A",
-    subscriptionPlan: "Enterprise",
-    userCount: 1,
-    apiUsage: { percentage: 0, used: 0, total: 1000000 },
+    // subscriptionPlan: "Enterprise",
+    // userCount: 1,
+    // apiUsage: { percentage: 0, used: 0, total: 1000000 },
     status: "Active" as const,
     lastActive: new Date(org.created_at).toLocaleDateString(),
-    billingStatus: "Pending" as const,
+    // billingStatus: "Pending" as const,
     lastBillDate: new Date(org.created_at).toLocaleDateString(),
   }));
 
