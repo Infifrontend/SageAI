@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AppLayout from "@/components/layout/AppLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -52,6 +51,7 @@ import {
 } from "lucide-react";
 import OrganizationForm from "./OrganizationForm/OrganizationForm";
 import "./Organizations.scss";
+import { useLazyGetOrganisationDataQuery } from "@/service/organisation/organisation";
 
 interface Organization {
   id: number;
@@ -75,9 +75,105 @@ export default function Organizations() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(6);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-  const [editingOrganization, setEditingOrganization] = useState<Organization | null>(null);
+  const [editingOrganization, setEditingOrganization] =
+    useState<Organization | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [orgToDelete, setOrgToDelete] = useState<number | null>(null);
+
+  const sampleResponse = {
+    count: 11,
+    next: "http://corporate-test.infinitisoftware.net/api/management/organizations/?page=2",
+    previous: null,
+    results: [
+      {
+        id: 1,
+        name: "Cyber-Aju Tech solutions",
+        created_at: "2025-12-08T12:58:40.814615Z",
+        api_keys: [
+          {
+            environment: "DEV",
+            key: "DEV_d3fa683536b7df801f17ab802cb5d92908e879665b40d618",
+            created_at: "2025-12-08T12:58:40.818226Z",
+          },
+        ],
+      },
+      {
+        id: 2,
+        name: "Infiniti Software solutions",
+        created_at: "2025-12-08T14:23:38.801787Z",
+        api_keys: [
+          {
+            environment: "DEV",
+            key: "DEV_57b0a131a6f9e9379cd56b8eeef11fb7bb737c5bb6dc6187",
+            created_at: "2025-12-08T14:23:38.806463Z",
+          },
+        ],
+      },
+      {
+        id: 3,
+        name: "PDRM BUKIT AMAN",
+        created_at: "2025-12-09T07:31:26.944001Z",
+        api_keys: [
+          {
+            environment: "DEV",
+            key: "DEV_ab8e733cf37dd38537eb3dfa1fc86046dcd2add367f925fb",
+            created_at: "2025-12-09T07:31:26.947943Z",
+          },
+        ],
+      },
+      {
+        id: 4,
+        name: "KEMENTERIAN PEMBANGUNAN WANITA NEGERI PERAK",
+        created_at: "2025-12-09T07:32:57.171992Z",
+        api_keys: [
+          {
+            environment: "DEV",
+            key: "DEV_bb786df03633eaabe1a5b5e2b94ba264de231c4fe86af48d",
+            created_at: "2025-12-09T07:32:57.175618Z",
+          },
+        ],
+      },
+      {
+        id: 5,
+        name: "JABATAN AKAUN KPLB",
+        created_at: "2025-12-09T07:33:40.996445Z",
+        api_keys: [
+          {
+            environment: "DEV",
+            key: "DEV_d78da3b9cf0f43f1813d2b6ed517e778c2232f12386fe5e5",
+            created_at: "2025-12-09T07:33:40.999275Z",
+          },
+        ],
+      },
+      {
+        id: 6,
+        name: "Infiniti Software solutions",
+        created_at: "2025-12-09T08:56:49.565172Z",
+        api_keys: [
+          {
+            environment: "DEV",
+            key: "DEV_2081da109c1aeab0904d57f0a60f217ff5218691090a8971",
+            created_at: "2025-12-09T08:56:49.571304Z",
+          },
+        ],
+      },
+    ],
+  };
+
+  // The following line is used to define the service for getting the list of organisation
+  const [organisationList, organisationListResponse] =
+    useLazyGetOrganisationDataQuery();
+
+  // The following useEffect is used to triggered the list service at initial rendering
+  useEffect(() => {
+    organisationList({});
+  }, []);
+
+  // The following useEffect is used to set the response from the API.
+  useEffect(() => {
+    if (organisationListResponse?.isSuccess)
+      console.log(organisationListResponse?.data);
+  }, [organisationListResponse]);
 
   // Column visibility state
   const [columnVisibility, setColumnVisibility] = useState({
@@ -103,7 +199,7 @@ export default function Organizations() {
       name: "UAT ClearTrip Solutions",
       email: "uatcleartripteam@infinitisoftware.net",
       subscriptionPlan: "Enterprise",
-      userCount: 1  ,
+      userCount: 1,
       apiUsage: { percentage: 85.0, used: 850000, total: 1000000 },
       status: "Active",
       lastActive: "2 hours ago",
@@ -246,24 +342,24 @@ export default function Organizations() {
 
   const totalOrganizations = organizations.length;
   const activeOrganizations = organizations.filter(
-    (org) => org.status === "Active"
+    (org) => org.status === "Active",
   ).length;
   const enterprisePlans = organizations.filter(
-    (org) => org.subscriptionPlan === "Enterprise"
+    (org) => org.subscriptionPlan === "Enterprise",
   ).length;
   const highApiUsage = organizations.filter(
-    (org) => org.apiUsage.percentage > 70
+    (org) => org.apiUsage.percentage > 70,
   ).length;
 
   const filteredOrganizations = organizations.filter((org) =>
-    org.name.toLowerCase().includes(searchQuery.toLowerCase())
+    org.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const totalPages = Math.ceil(filteredOrganizations.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedOrganizations = filteredOrganizations.slice(
     startIndex,
-    startIndex + itemsPerPage
+    startIndex + itemsPerPage,
   );
 
   const handleEditOrganization = (org: Organization) => {
@@ -460,7 +556,10 @@ export default function Organizations() {
                 </PopoverContent>
               </Popover>
 
-              <Button className="cls-create-btn" onClick={handleCreateOrganization}>
+              <Button
+                className="cls-create-btn"
+                onClick={handleCreateOrganization}
+              >
                 <Plus size={18} />
                 New Organization
               </Button>
@@ -472,9 +571,13 @@ export default function Organizations() {
               <TableHeader>
                 <TableRow>
                   <TableHead className="cls-th-sno">S.No.</TableHead>
-                  <TableHead className="cls-th-name">Organization Name</TableHead>
+                  <TableHead className="cls-th-name">
+                    Organization Name
+                  </TableHead>
                   {columnVisibility.plan && (
-                    <TableHead className="cls-th-plan">Subscription Plan</TableHead>
+                    <TableHead className="cls-th-plan">
+                      Subscription Plan
+                    </TableHead>
                   )}
                   {columnVisibility.users && (
                     <TableHead className="cls-th-users">User Count</TableHead>
@@ -489,10 +592,14 @@ export default function Organizations() {
                     <TableHead className="cls-th-active">Last Active</TableHead>
                   )}
                   {columnVisibility.billingStatus && (
-                    <TableHead className="cls-th-billing">Billing Status</TableHead>
+                    <TableHead className="cls-th-billing">
+                      Billing Status
+                    </TableHead>
                   )}
                   {columnVisibility.lastBillDate && (
-                    <TableHead className="cls-th-date">Last Bill Date</TableHead>
+                    <TableHead className="cls-th-date">
+                      Last Bill Date
+                    </TableHead>
                   )}
                   <TableHead className="cls-th-actions">Actions</TableHead>
                 </TableRow>
@@ -524,7 +631,8 @@ export default function Organizations() {
                         <TableCell className="cls-td-usage">
                           <div className="cls-usage-container">
                             <span className="cls-usage-text">
-                              {org.apiUsage.percentage}% {org.apiUsage.used.toLocaleString()} / used{" "}
+                              {org.apiUsage.percentage}%{" "}
+                              {org.apiUsage.used.toLocaleString()} / used{" "}
                               {org.apiUsage.total.toLocaleString()}
                             </span>
                             <div className="cls-usage-bar">
@@ -539,7 +647,9 @@ export default function Organizations() {
                       {columnVisibility.status && (
                         <TableCell className="cls-td-status">
                           <Badge
-                            variant={org.status === "Active" ? "default" : "secondary"}
+                            variant={
+                              org.status === "Active" ? "default" : "secondary"
+                            }
                             className={
                               org.status === "Active"
                                 ? "cls-badge-active"
@@ -603,18 +713,18 @@ export default function Organizations() {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell 
+                    <TableCell
                       colSpan={
-                        2 + 
-                        (columnVisibility.plan ? 1 : 0) + 
-                        (columnVisibility.users ? 1 : 0) + 
-                        (columnVisibility.usage ? 1 : 0) + 
-                        (columnVisibility.status ? 1 : 0) + 
-                        (columnVisibility.lastActive ? 1 : 0) + 
-                        (columnVisibility.billingStatus ? 1 : 0) + 
-                        (columnVisibility.lastBillDate ? 1 : 0) + 
+                        2 +
+                        (columnVisibility.plan ? 1 : 0) +
+                        (columnVisibility.users ? 1 : 0) +
+                        (columnVisibility.usage ? 1 : 0) +
+                        (columnVisibility.status ? 1 : 0) +
+                        (columnVisibility.lastActive ? 1 : 0) +
+                        (columnVisibility.billingStatus ? 1 : 0) +
+                        (columnVisibility.lastBillDate ? 1 : 0) +
                         1
-                      } 
+                      }
                       className="cls-no-results"
                     >
                       No organizations found matching your search.
@@ -657,9 +767,12 @@ export default function Organizations() {
               </div>
             </div>
             <AlertDialogHeader>
-              <AlertDialogTitle className="text-center">Warning!</AlertDialogTitle>
+              <AlertDialogTitle className="text-center">
+                Warning!
+              </AlertDialogTitle>
               <AlertDialogDescription className="text-center">
-                Do you want to delete this organization? This action cannot be undone.
+                Do you want to delete this organization? This action cannot be
+                undone.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
