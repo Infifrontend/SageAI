@@ -89,8 +89,8 @@ export default function Organizations() {
 
   // The following useEffect is used to triggered the list service at initial rendering
   useEffect(() => {
-    organisationList({ page: currentPage });
-  }, [currentPage]);
+    organisationList({ page: currentPage, page_size: itemsPerPage });
+  }, [currentPage, itemsPerPage]);
 
   // The following useEffect is used to set the response from the API.
   useEffect(() => {
