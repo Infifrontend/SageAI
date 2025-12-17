@@ -80,89 +80,12 @@ export default function Organizations() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [orgToDelete, setOrgToDelete] = useState<number | null>(null);
 
-  const sampleResponse = {
-    count: 11,
-    next: "http://corporate-test.infinitisoftware.net/api/management/organizations/?page=2",
-    previous: null,
-    results: [
-      {
-        id: 1,
-        name: "Cyber-Aju Tech solutions",
-        created_at: "2025-12-08T12:58:40.814615Z",
-        api_keys: [
-          {
-            environment: "DEV",
-            key: "DEV_d3fa683536b7df801f17ab802cb5d92908e879665b40d618",
-            created_at: "2025-12-08T12:58:40.818226Z",
-          },
-        ],
-      },
-      {
-        id: 2,
-        name: "Infiniti Software solutions",
-        created_at: "2025-12-08T14:23:38.801787Z",
-        api_keys: [
-          {
-            environment: "DEV",
-            key: "DEV_57b0a131a6f9e9379cd56b8eeef11fb7bb737c5bb6dc6187",
-            created_at: "2025-12-08T14:23:38.806463Z",
-          },
-        ],
-      },
-      {
-        id: 3,
-        name: "PDRM BUKIT AMAN",
-        created_at: "2025-12-09T07:31:26.944001Z",
-        api_keys: [
-          {
-            environment: "DEV",
-            key: "DEV_ab8e733cf37dd38537eb3dfa1fc86046dcd2add367f925fb",
-            created_at: "2025-12-09T07:31:26.947943Z",
-          },
-        ],
-      },
-      {
-        id: 4,
-        name: "KEMENTERIAN PEMBANGUNAN WANITA NEGERI PERAK",
-        created_at: "2025-12-09T07:32:57.171992Z",
-        api_keys: [
-          {
-            environment: "DEV",
-            key: "DEV_bb786df03633eaabe1a5b5e2b94ba264de231c4fe86af48d",
-            created_at: "2025-12-09T07:32:57.175618Z",
-          },
-        ],
-      },
-      {
-        id: 5,
-        name: "JABATAN AKAUN KPLB",
-        created_at: "2025-12-09T07:33:40.996445Z",
-        api_keys: [
-          {
-            environment: "DEV",
-            key: "DEV_d78da3b9cf0f43f1813d2b6ed517e778c2232f12386fe5e5",
-            created_at: "2025-12-09T07:33:40.999275Z",
-          },
-        ],
-      },
-      {
-        id: 6,
-        name: "Infiniti Software solutions",
-        created_at: "2025-12-09T08:56:49.565172Z",
-        api_keys: [
-          {
-            environment: "DEV",
-            key: "DEV_2081da109c1aeab0904d57f0a60f217ff5218691090a8971",
-            created_at: "2025-12-09T08:56:49.571304Z",
-          },
-        ],
-      },
-    ],
-  };
-
   // The following line is used to define the service for getting the list of organisation
   const [organisationList, organisationListResponse] =
     useLazyGetOrganisationDataQuery();
+
+  // State to hold organization data from API
+  const [organizationData, setOrganizationData] = useState<any>(null);
 
   // The following useEffect is used to triggered the list service at initial rendering
   useEffect(() => {
@@ -171,8 +94,10 @@ export default function Organizations() {
 
   // The following useEffect is used to set the response from the API.
   useEffect(() => {
-    if (organisationListResponse?.isSuccess)
-      console.log(organisationListResponse?.data);
+    if (organisationListResponse?.isSuccess && organisationListResponse?.data) {
+      console.log("Organization API Response:", organisationListResponse?.data);
+      setOrganizationData(organisationListResponse?.data);
+    }
   }, [organisationListResponse]);
 
   // Column visibility state
@@ -194,8 +119,8 @@ export default function Organizations() {
     }));
   };
 
-  // Map sampleResponse to match the Organization interface
-  const mappedOrganizations: any[] = sampleResponse.results.map((org) => ({
+  // Map API response to match the Organization interface
+  const mappedOrganizations: any[] = organizationData?.results?.map((org: any) => ({
     id: org.id,
     name: org.name,
     apiKey: org.api_keys[0]?.key || "N/A",
@@ -206,9 +131,9 @@ export default function Organizations() {
     // apiUsage: { percentage: 0, used: 0, total: 1000000 },
     // status: "Active" as const,
     // billingStatus: "Pending" as const,
-  }));
+  })) || [];
 
-  const totalOrganizations = sampleResponse.count;
+  const totalOrganizations = organizationData?.count || 0;
   const activeOrganizations = mappedOrganizations.length;
   const enterprisePlans = 0; // Will be calculated when subscriptionPlan is available
   const highApiUsage = 0; // Will be calculated when apiUsage is available
