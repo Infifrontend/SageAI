@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AppLayout from "@/components/layout/AppLayout";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -49,6 +49,7 @@ import {
 } from "lucide-react";
 import RolesForm from "./RolesForm/RolesForm";
 import "./Roles.scss";
+import { useCreateRolesMutation, useLazyGetRolesListQuery } from "@/service/roles/roles";
 
 interface Role {
   id: number;
@@ -57,6 +58,7 @@ interface Role {
   permissions: number;
   status: "Active" | "Inactive";
 }
+// import { useNotification } from "@/components/notification/NotificationProvider";
 
 export default function Roles() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -66,6 +68,20 @@ export default function Roles() {
   const [editingRole, setEditingRole] = useState<Role | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [roleToDelete, setRoleToDelete] = useState<number | null>(null);
+  // const { notify } = useNotification();
+  const [roles, setRolesData] = useState<any[]>([]);
+  const [rolesCount, setRolesCount] = useState<number>(0);
+
+  const defaultFilterData = {
+    page: 1,
+    page_size: 6,
+  };
+
+  // The following line is used to set the filter option for the group list
+  const [filterData, setFilterData] = useState<any>(defaultFilterData);
+
+  const [getRolesList, getRolesListStatus] = useLazyGetRolesListQuery();
+  const [createRoles , createRolesStatus ] = useCreateRolesMutation();
 
   // Column visibility state
   const [columnVisibility, setColumnVisibility] = useState({
@@ -80,93 +96,6 @@ export default function Roles() {
       [column]: !prev[column],
     }));
   };
-
-  const roles: Role[] = [
-    {
-      id: 1,
-      name: "Admin",
-      description: "Full access to all features",
-      permissions: 13,
-      status: "Active",
-    },
-    {
-      id: 2,
-      name: "Developer",
-      description: "Can manage API keys and view usage",
-      permissions: 7,
-      status: "Active",
-    },
-    {
-      id: 3,
-      name: "Billing Manager",
-      description: "Can view and manage billing information",
-      permissions: 3,
-      status: "Active",
-    },
-    {
-      id: 4,
-      name: "Viewer",
-      description: "Read-only access to dashboards",
-      permissions: 2,
-      status: "Active",
-    },
-    {
-      id: 5,
-      name: "Support Engineer",
-      description: "Access to user information for support",
-      permissions: 4,
-      status: "Inactive",
-    },
-    {
-      id: 6,
-      name: "Content Manager",
-      description: "Can create and manage content",
-      permissions: 5,
-      status: "Active",
-    },
-    {
-      id: 7,
-      name: "API Manager",
-      description: "Manage API keys and documentation",
-      permissions: 6,
-      status: "Active",
-    },
-    {
-      id: 8,
-      name: "Analytics Viewer",
-      description: "View analytics and reports",
-      permissions: 3,
-      status: "Active",
-    },
-    {
-      id: 9,
-      name: "User Manager",
-      description: "Manage users and permissions",
-      permissions: 8,
-      status: "Active",
-    },
-    {
-      id: 10,
-      name: "Subscription Manager",
-      description: "Handle subscription plans and billing",
-      permissions: 4,
-      status: "Inactive",
-    },
-    {
-      id: 11,
-      name: "Security Admin",
-      description: "Manage security settings and policies",
-      permissions: 10,
-      status: "Active",
-    },
-    {
-      id: 12,
-      name: "Guest",
-      description: "Limited read-only access",
-      permissions: 1,
-      status: "Active",
-    },
-  ];
 
   const filteredRoles = roles.filter((role) =>
     role.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -203,14 +132,44 @@ export default function Roles() {
     }
   };
 
-  const handleToggleStatus = (roleId: number, currentStatus: string) => {
+  const handleToggleStatus = (roleId: number, currentStatus: boolean) => {
     console.log("Toggle status for role:", roleId, currentStatus);
+    createRoles({id : roleId, is_active: currentStatus})
     // Add status toggle logic here
   };
 
   const handleSubmit = (formData: any) => {
     console.log("Role form submitted:", formData);
+    const data = {
+      "id": editingRole?.id,
+      "name": formData?.roleName,
+      "description": formData?.description,
+      "permissions": formData?.permissions,
+      "is_active": formData?.status === "Active" ? true : false
+    };
+    createRoles(data);
   };
+
+  // To get the roles list 
+  useEffect(() => {
+    getRolesList(filterData);
+  }, [filterData]);
+
+  //To sets the roles list.
+  useEffect(() => {
+    if (getRolesListStatus.isSuccess) {
+      // Handle successful data fetching
+      setRolesData((getRolesListStatus as any)?.data?.results || []);
+      setRolesCount((getRolesListStatus as any)?.data?.count);
+    }
+  }, [getRolesListStatus]);
+
+  // useEffect(()=>{
+  //   if(createRolesStatus?.isSuccess){
+  //     // notify("success", "Role created", "The role has been added successfully");
+  //   }
+  // },[createRolesStatus]);
+
 
   return (
     <AppLayout
@@ -237,7 +196,7 @@ export default function Roles() {
                   className="cls-search-input"
                 />
               </div>
-              
+
               <Popover>
                 <PopoverTrigger asChild>
                   <Button variant="outline" className="cls-customize-button">
@@ -308,7 +267,7 @@ export default function Roles() {
               </TableHeader>
               <TableBody>
                 {paginatedRoles.length > 0 ? (
-                  paginatedRoles.map((role, index) => (
+                  paginatedRoles.map((role : any, index) => (
                     <TableRow key={role.id} className="cls-table-row">
                       <TableCell className="cls-td-sno">
                         {startIndex + index + 1}
@@ -324,31 +283,31 @@ export default function Roles() {
                       {columnVisibility.permissions && (
                         <TableCell className="cls-td-permissions">
                           <Badge variant="secondary" className="cls-permissions-badge">
-                            {role.permissions} permission{role.permissions !== 1 ? "s" : ""}
+                            {Object.keys(role?.permissions ?? {})?.length} permission{Object.keys(role?.permissions ?? {})?.length !== 1 ? "s" : ""}
                           </Badge>
+
                         </TableCell>
                       )}
-                      {columnVisibility.status && (
+                      {
                         <TableCell className="cls-td-status">
                           <div className="cls-status-switch">
                             <Switch
-                              checked={role.status === "Active"}
+                              checked={role?.is_active === true}
                               onCheckedChange={() =>
-                                handleToggleStatus(role.id, role.status)
+                                handleToggleStatus(role.id, !role?.is_active)
                               }
                             />
                             <span
-                              className={`cls-status-label ${
-                                role.status === "Active"
-                                  ? "cls-active"
-                                  : "cls-inactive"
-                              }`}
+                              className={`cls-status-label ${role?.is_active === true
+                                ? "cls-active"
+                                : "cls-inactive"
+                                }`}
                             >
-                              {role.status}
+                              {role?.is_active}
                             </span>
                           </div>
                         </TableCell>
-                      )}
+                      }
                       <TableCell className="cls-td-actions">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
@@ -382,14 +341,14 @@ export default function Roles() {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell 
+                    <TableCell
                       colSpan={
-                        2 + 
-                        (columnVisibility.description ? 1 : 0) + 
-                        (columnVisibility.permissions ? 1 : 0) + 
-                        (columnVisibility.status ? 1 : 0) + 
+                        2 +
+                        (columnVisibility.description ? 1 : 0) +
+                        (columnVisibility.permissions ? 1 : 0) +
+                        (columnVisibility.status ? 1 : 0) +
                         1
-                      } 
+                      }
                       className="cls-no-results"
                     >
                       No roles found matching your search.
@@ -401,17 +360,14 @@ export default function Roles() {
           </div>
 
           <TablePagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            itemsPerPage={itemsPerPage}
-            totalItems={filteredRoles.length}
+            currentPage={filterData?.page}
+            totalPages={Math.ceil(rolesCount / filterData?.page_size || 6)}
+            itemsPerPage={filterData?.page_size}
+            totalItems={rolesCount}
             startIndex={startIndex}
-            endIndex={startIndex + itemsPerPage}
-            onPageChange={setCurrentPage}
-            onItemsPerPageChange={(value) => {
-              setItemsPerPage(value);
-              setCurrentPage(1);
-            }}
+            endIndex={startIndex + filterData?.page_size}
+            onPageChange={(page: any) => { setFilterData({ ...filterData, page }); }}
+            onItemsPerPageChange={(page_size: any) => { setFilterData({ ...filterData, page_size }); }}
           />
         </Card>
       </div>

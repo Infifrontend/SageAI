@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AppLayout from "@/components/layout/AppLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -63,6 +63,7 @@ import {
 } from "lucide-react";
 import { TablePagination } from "@/components/ui/table-pagination";
 import "./Users.scss";
+import { useLazyGetUsersListQuery } from "@/service/users/users";
 
 interface User {
   id: string;
@@ -75,109 +76,6 @@ interface User {
   lastActive: string;
 }
 
-const usersData: User[] = [
-  {
-    id: "1",
-    name: "Mr. Uatcleartripteam Travels",
-    email: "uatcleartripteam@infinitisoftware.net",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=John",
-    organization: "ClearTrip Solutions",
-    role: "Admin",
-    status: "Active",
-    lastActive: "2 hours ago",
-  },
-  // {
-  //   id: "2",
-  //   name: "Sarah Johnson",
-  //   email: "sarah.j@company.com",
-  //   avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
-  //   organization: "DataFlow Systems",
-  //   role: "Developer",
-  //   status: "Active",
-  //   lastActive: "1 day ago",
-  // },
-  // {
-  //   id: "3",
-  //   name: "Mike Davis",
-  //   email: "mike.davis@company.com",
-  //   avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mike",
-  //   organization: "TechCorp Solutions",
-  //   role: "Billing Manager",
-  //   status: "Suspended",
-  //   lastActive: "3 hours ago",
-  // },
-  // {
-  //   id: "4",
-  //   name: "Emily Chen",
-  //   email: "emily.chen@company.com",
-  //   avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily",
-  //   organization: "Cloudify Inc.",
-  //   role: "Viewer",
-  //   status: "Active",
-  //   lastActive: "5 minutes ago",
-  // },
-  // {
-  //   id: "5",
-  //   name: "Alex Rodriguez",
-  //   email: "alex.r@company.com",
-  //   avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
-  //   organization: "DataFlow Systems",
-  //   role: "Developer",
-  //   status: "Pending",
-  //   lastActive: "Never",
-  // },
-  // {
-  //   id: "6",
-  //   name: "Jessica Taylor",
-  //   email: "jessica.t@company.com",
-  //   avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jessica",
-  //   organization: "TechCorp Solutions",
-  //   role: "Admin",
-  //   status: "Active",
-  //   lastActive: "30 minutes ago",
-  // },
-  // {
-  //   id: "7",
-  //   name: "David Brown",
-  //   email: "david.brown@company.com",
-  //   avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=David",
-  //   organization: "Infiniti Software Solutions",
-  //   role: "Developer",
-  //   status: "Active",
-  //   lastActive: "1 hour ago",
-  // },
-  // {
-  //   id: "8",
-  //   name: "Lisa Anderson",
-  //   email: "lisa.a@company.com",
-  //   avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Lisa",
-  //   organization: "Cloudify Inc.",
-  //   role: "Billing Manager",
-  //   status: "Active",
-  //   lastActive: "2 days ago",
-  // },
-  // {
-  //   id: "9",
-  //   name: "Robert Wilson",
-  //   email: "robert.w@company.com",
-  //   avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Robert",
-  //   organization: "DataFlow Systems",
-  //   role: "Viewer",
-  //   status: "Pending",
-  //   lastActive: "Never",
-  // },
-  // {
-  //   id: "10",
-  //   name: "Michelle Lee",
-  //   email: "michelle.lee@company.com",
-  //   avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Michelle",
-  //   organization: "TechCorp Solutions",
-  //   role: "Developer",
-  //   status: "Suspended",
-  //   lastActive: "5 days ago",
-  // },
-];
-
 export default function UsersPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
@@ -189,6 +87,18 @@ export default function UsersPage() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<string | null>(null);
+  const [usersData, setUsersData] = useState<User[]>([]);
+  const [usersCount, setUsersCount] = useState<number>(0);
+
+  const defaultFilterData = {
+    page: 1,
+    page_size: 6,
+  };
+
+  // The following line is used to set the filter option for the group list
+  const [filterData, setFilterData] = useState<any>(defaultFilterData);
+
+  const [getUsersList, getUsersListStatus] = useLazyGetUsersListQuery();
 
   // Column visibility state
   const [columnVisibility, setColumnVisibility] = useState({
@@ -206,10 +116,10 @@ export default function UsersPage() {
   };
 
   // Filter users based on search, role, and status
-  const filteredUsers = usersData.filter((user) => {
+  const filteredUsers = usersData.filter((user: any) => {
     const matchesSearch =
-      user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchQuery.toLowerCase());
+      user?.first_name?.toLowerCase()?.includes(searchQuery?.toLowerCase()) ||
+      user?.email_id.toLowerCase()?.includes(searchQuery?.toLowerCase());
     const matchesRole = roleFilter === "all" || user.role === roleFilter;
     const matchesStatus =
       statusFilter === "all" || user.status === statusFilter;
@@ -217,11 +127,11 @@ export default function UsersPage() {
   });
 
   // Calculate stats
-  const totalUsers = usersData.length;
-  const activeUsers = usersData.filter((u) => u.status === "Active").length;
-  const pendingUsers = usersData.filter((u) => u.status === "Pending").length;
+  const totalUsers = usersCount;
+  const activeUsers = usersData.filter((u: any) => u.r_status === 1).length;
+  const pendingUsers = usersData.filter((u: any) => u.r_status === 2).length;
   const suspendedUsers = usersData.filter(
-    (u) => u.status === "Suspended",
+    (u: any) => u.r_status === 3,
   ).length;
 
   // Pagination
@@ -238,6 +148,22 @@ export default function UsersPage() {
 
   const handleCreateUser = (userData: any) => {
     console.log(isEditMode ? "User updated:" : "User created:", userData);
+    const data = {
+      "email_id": userData?.email_id,
+      "password": userData?.password,
+      "first_name": userData?.first_name,
+      "last_name": userData?.last_name,
+      "phone_number": userData?.phone_number || "",
+      "is_active": userData?.is_active,
+      "organization_id": userData?.organization_id,
+      "role_id": userData?.role_id,
+      "address": userData?.address,
+      "enforce_rate_limits": false,
+      "allow_emails": false,
+      "allow_api_access": false,
+      "r_user_type": null,
+      "r_status": null
+    };
     if (isEditMode) {
       // TODO: Update user in list
       console.log("Updating user:", editUser?.id);
@@ -278,9 +204,9 @@ export default function UsersPage() {
 
   const handleExport = () => {
     // Prepare data for export
-    const exportData = filteredUsers.map((user, index) => ({
+    const exportData = filteredUsers.map((user: any, index: any) => ({
       "S.No.": index + 1,
-      "Name": user.name,
+      "Name": user?.first_name,
       "Email": user.email,
       "Organization": user.organization,
       "Role": user.role,
@@ -296,6 +222,18 @@ export default function UsersPage() {
     // Generate Excel file and download
     XLSX.writeFile(wb, `users-export-${new Date().toISOString().split('T')[0]}.xlsx`);
   };
+
+  useEffect(() => {
+    getUsersList(filterData);
+  }, [filterData]);
+
+  useEffect(() => {
+    if (getUsersListStatus.isSuccess) {
+      // Handle successful data fetching
+      setUsersData((getUsersListStatus as any)?.data?.results || []);
+      setUsersCount((getUsersListStatus as any)?.data?.count)
+    }
+  }, [getUsersListStatus]);
 
   return (
     <AppLayout title="Users" subtitle="Manage users and their permissions">
@@ -508,63 +446,64 @@ export default function UsersPage() {
                     )}
                     {columnVisibility.role && <TableHead>Role</TableHead>}
                     {columnVisibility.status && <TableHead>Status</TableHead>}
-                    {columnVisibility.lastActive && (
+                    {/* {columnVisibility.lastActive && (
                       <TableHead>Last Active</TableHead>
-                    )}
+                    )} */}
                     <TableHead className="cls-actions-head"></TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {paginatedUsers.map((user, index) => (
-                    <TableRow key={user.id}>
+                  {paginatedUsers.map((user: any, index: any) => (
+                    <TableRow key={user?.id}>
                       <TableCell className="cls-sno-cell">
                         {startIndex + index + 1}
                       </TableCell>
                       <TableCell>
                         <div className="cls-user-cell">
-                          <img
+                          {/* <img
                             src={user.avatar}
                             alt={user.name}
                             className="cls-user-avatar"
-                          />
+                          /> */}
                           <div className="cls-user-info">
-                            <p className="cls-user-name">{user.name}</p>
-                            <p className="cls-user-email">{user.email}</p>
+                            <p className="cls-user-name">{user?.first_name}</p>
+                            <p className="cls-user-email">{user?.email_id}</p>
                           </div>
                         </div>
                       </TableCell>
-                      {columnVisibility.organization && (
-                        <TableCell>
-                          <span className="cls-organization">
-                            {user.organization}
-                          </span>
-                        </TableCell>
-                      )}
-                      {columnVisibility.role && (
-                        <TableCell>
-                          <Badge
-                            className={`cls-role-badge cls-role-${user.role.toLowerCase().replace(" ", "-")}`}
-                          >
-                            {user.role}
-                          </Badge>
-                        </TableCell>
-                      )}
-                      {columnVisibility.status && (
-                        <TableCell>
-                          <Badge
-                            className={`cls-status-badge cls-status-${user.status.toLowerCase()}`}
-                          >
-                            {user.status}
-                          </Badge>
-                        </TableCell>
-                      )}
-                      {columnVisibility.lastActive && (
+                      {/* {columnVisibility.organization && ( */}
+                      <TableCell>
+                        {user?.organization_details?.name ? <span className="cls-organization">
+                          {user?.organization_details?.name}
+                        </span> : "-"}
+                      </TableCell>
+                      {/* )} */}
+                      {/* {columnVisibility.role && ( */}
+                      <TableCell>
+                        {user?.role_details?.name ? <Badge
+                          className={`${user?.role_details?.name !== null && "cls-role-badge"} cls-role-${user?.role_details?.name?.toLowerCase()}`}
+                        >
+                          {user?.role_details?.name}
+                        </Badge> : "-"}
+                      </TableCell>
+                      {/* )} */}
+                      {/* {columnVisibility.status && ( */}
+                      <TableCell>
+                        <Badge
+                          className={`cls-status-badge cls-status-${user?.r_status === 1 ? "active" : "in-active"}`}
+                        >
+                          {user?.r_status === 1 ? "Active" : "In-Active"}
+                          {/* {user?.r_status?.toUpperCase()} */}
+                        </Badge>
+                      </TableCell>
+                      {/* )} */}
+                      {/* {columnVisibility.lastActive && (
                         <TableCell>
                           <span className="cls-last-active">
                             {user.lastActive}
                           </span>
                         </TableCell>
-                      )}
+                      )} */}
                       <TableCell>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
@@ -604,12 +543,12 @@ export default function UsersPage() {
 
         {/* Pagination */}
         <TablePagination
-          currentPage={currentPage}
-          totalPages={totalPages}
+          currentPage={filterData?.page || 1}
+          totalPages={Math.ceil(usersCount / (filterData?.page_size || 1))}
           totalItems={filteredUsers.length}
-          itemsPerPage={itemsPerPage}
-          onPageChange={setCurrentPage}
-          onItemsPerPageChange={setItemsPerPage}
+          itemsPerPage={filterData?.page_size || 6}
+          onPageChange={(page: any) => { setFilterData({ ...filterData, page }); }}
+          onItemsPerPageChange={(page_size: any) => { setFilterData({ ...filterData, page_size }); }}
           startIndex={startIndex}
           endIndex={endIndex}
         />

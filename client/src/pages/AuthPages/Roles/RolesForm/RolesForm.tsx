@@ -111,6 +111,7 @@ export default function RolesForm({
   });
 
   const [expandedGroups, setExpandedGroups] = useState<string[]>([]);
+  const isSubmitDisabled = !formData.roleName.trim() || !formData.status;
 
   useEffect(() => {
     if (editData && isEdit) {
@@ -175,7 +176,7 @@ export default function RolesForm({
     setFormData((prev) => ({
       ...prev,
       permissions: checked
-        ? [...new Set([...prev.permissions, ...allIds])]
+        ? [...new Set([...prev?.permissions, ...allIds])]
         : prev.permissions.filter((id) => !allIds.includes(id)),
     }));
   };
@@ -360,7 +361,11 @@ export default function RolesForm({
           <Button variant="outline" onClick={handleClose}>
             Cancel
           </Button>
-          <Button onClick={handleSubmit}>
+          <Button
+            onClick={handleSubmit}
+            disabled={isSubmitDisabled}
+            className={isSubmitDisabled ? "opacity-50 cursor-not-allowed" : ""}
+          >
             {isEdit ? "Update Role" : "Save Role"}
           </Button>
         </div>
