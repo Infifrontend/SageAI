@@ -89,8 +89,8 @@ export default function Organizations() {
 
   // The following useEffect is used to triggered the list service at initial rendering
   useEffect(() => {
-    organisationList({});
-  }, []);
+    organisationList({ page: currentPage });
+  }, [currentPage]);
 
   // The following useEffect is used to set the response from the API.
   useEffect(() => {
@@ -138,16 +138,17 @@ export default function Organizations() {
   const enterprisePlans = 0; // Will be calculated when subscriptionPlan is available
   const highApiUsage = 0; // Will be calculated when apiUsage is available
 
+  // Filter organizations based on search query (client-side filtering for current page)
   const filteredOrganizations = mappedOrganizations.filter((org) =>
     org.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  const totalPages = Math.ceil(filteredOrganizations.length / itemsPerPage);
+  // Calculate total pages based on API count and items per page
+  const totalPages = Math.ceil(totalOrganizations / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedOrganizations = filteredOrganizations.slice(
-    startIndex,
-    startIndex + itemsPerPage,
-  );
+  
+  // Use filtered organizations for display (already paginated from API)
+  const paginatedOrganizations = filteredOrganizations;
 
   const handleEditOrganization = (org: Organization) => {
     setEditingOrganization(org);
@@ -430,10 +431,12 @@ export default function Organizations() {
             currentPage={currentPage}
             totalPages={totalPages}
             itemsPerPage={itemsPerPage}
-            totalItems={filteredOrganizations.length}
+            totalItems={totalOrganizations}
             startIndex={startIndex}
-            endIndex={startIndex + itemsPerPage}
-            onPageChange={setCurrentPage}
+            endIndex={Math.min(startIndex + itemsPerPage, totalOrganizations)}
+            onPageChange={(page) => {
+              setCurrentPage(page);
+            }}
             onItemsPerPageChange={(value) => {
               setItemsPerPage(value);
               setCurrentPage(1);
