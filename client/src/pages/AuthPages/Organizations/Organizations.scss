@@ -283,6 +283,24 @@
   color: #6b7280;
 }
 
+.cls-th-apikey {
+  min-width: 350px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.cls-th-environment {
+  min-width: 120px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.cls-th-created {
+  min-width: 140px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
 .cls-td-sno {
   font-weight: 500;
   color: #6b7280;
@@ -300,10 +318,31 @@
     color: #111827;
   }
 
-  .cls-org-email {
+  .cls-org-id {
     font-size: 0.875rem;
     color: #6b7280;
   }
+}
+
+.cls-td-apikey {
+  .cls-api-key-code {
+    font-family: monospace;
+    font-size: 0.8125rem;
+    color: #374151;
+    background-color: #f3f4f6;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    display: inline-block;
+  }
+}
+
+.cls-td-environment {
+  color: #374151;
+}
+
+.cls-td-created {
+  color: #374151;
+  font-weight: 500;
 }
 
 .cls-td-plan {

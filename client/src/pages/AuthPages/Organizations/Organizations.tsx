@@ -177,13 +177,14 @@ export default function Organizations() {
 
   // Column visibility state
   const [columnVisibility, setColumnVisibility] = useState({
-    plan: true,
-    users: true,
-    usage: true,
-    status: true,
-    lastActive: true,
-    billingStatus: true,
-    lastBillDate: true,
+    apiKey: true,
+    environment: true,
+    createdAt: true,
+    // plan: true,
+    // users: true,
+    // usage: true,
+    // status: true,
+    // billingStatus: true,
   });
 
   const toggleColumn = (column: keyof typeof columnVisibility) => {
@@ -197,26 +198,20 @@ export default function Organizations() {
   const mappedOrganizations: any[] = sampleResponse.results.map((org) => ({
     id: org.id,
     name: org.name,
-    email: org.api_keys[0]?.key || "N/A",
+    apiKey: org.api_keys[0]?.key || "N/A",
+    environment: org.api_keys[0]?.environment || "N/A",
+    createdAt: new Date(org.created_at).toLocaleDateString(),
     // subscriptionPlan: "Enterprise",
     // userCount: 1,
     // apiUsage: { percentage: 0, used: 0, total: 1000000 },
-    status: "Active" as const,
-    lastActive: new Date(org.created_at).toLocaleDateString(),
+    // status: "Active" as const,
     // billingStatus: "Pending" as const,
-    lastBillDate: new Date(org.created_at).toLocaleDateString(),
   }));
 
   const totalOrganizations = sampleResponse.count;
-  const activeOrganizations = mappedOrganizations.filter(
-    (org) => org.status === "Active",
-  ).length;
-  const enterprisePlans = mappedOrganizations.filter(
-    (org) => org.subscriptionPlan === "Enterprise",
-  ).length;
-  const highApiUsage = mappedOrganizations.filter(
-    (org) => org.apiUsage.percentage > 70,
-  ).length;
+  const activeOrganizations = mappedOrganizations.length;
+  const enterprisePlans = 0; // Will be calculated when subscriptionPlan is available
+  const highApiUsage = 0; // Will be calculated when apiUsage is available
 
   const filteredOrganizations = mappedOrganizations.filter((org) =>
     org.name.toLowerCase().includes(searchQuery.toLowerCase()),
@@ -365,59 +360,27 @@ export default function Organizations() {
                   <div className="cls-column-options">
                     <div className="cls-column-option">
                       <Checkbox
-                        id="col-plan"
-                        checked={columnVisibility.plan}
-                        onCheckedChange={() => toggleColumn("plan")}
+                        id="col-apikey"
+                        checked={columnVisibility.apiKey}
+                        onCheckedChange={() => toggleColumn("apiKey")}
                       />
-                      <Label htmlFor="col-plan">Subscription Plan</Label>
+                      <Label htmlFor="col-apikey">API Key</Label>
                     </div>
                     <div className="cls-column-option">
                       <Checkbox
-                        id="col-users"
-                        checked={columnVisibility.users}
-                        onCheckedChange={() => toggleColumn("users")}
+                        id="col-environment"
+                        checked={columnVisibility.environment}
+                        onCheckedChange={() => toggleColumn("environment")}
                       />
-                      <Label htmlFor="col-users">User Count</Label>
+                      <Label htmlFor="col-environment">Environment</Label>
                     </div>
                     <div className="cls-column-option">
                       <Checkbox
-                        id="col-usage"
-                        checked={columnVisibility.usage}
-                        onCheckedChange={() => toggleColumn("usage")}
+                        id="col-created"
+                        checked={columnVisibility.createdAt}
+                        onCheckedChange={() => toggleColumn("createdAt")}
                       />
-                      <Label htmlFor="col-usage">API Usage</Label>
-                    </div>
-                    <div className="cls-column-option">
-                      <Checkbox
-                        id="col-status"
-                        checked={columnVisibility.status}
-                        onCheckedChange={() => toggleColumn("status")}
-                      />
-                      <Label htmlFor="col-status">Status</Label>
-                    </div>
-                    <div className="cls-column-option">
-                      <Checkbox
-                        id="col-lastactive"
-                        checked={columnVisibility.lastActive}
-                        onCheckedChange={() => toggleColumn("lastActive")}
-                      />
-                      <Label htmlFor="col-lastactive">Last Active</Label>
-                    </div>
-                    <div className="cls-column-option">
-                      <Checkbox
-                        id="col-billing"
-                        checked={columnVisibility.billingStatus}
-                        onCheckedChange={() => toggleColumn("billingStatus")}
-                      />
-                      <Label htmlFor="col-billing">Billing Status</Label>
-                    </div>
-                    <div className="cls-column-option">
-                      <Checkbox
-                        id="col-billdate"
-                        checked={columnVisibility.lastBillDate}
-                        onCheckedChange={() => toggleColumn("lastBillDate")}
-                      />
-                      <Label htmlFor="col-billdate">Last Bill Date</Label>
+                      <Label htmlFor="col-created">Created Date</Label>
                     </div>
                   </div>
                 </PopoverContent>
@@ -441,31 +404,17 @@ export default function Organizations() {
                   <TableHead className="cls-th-name">
                     Organization Name
                   </TableHead>
-                  {columnVisibility.plan && (
-                    <TableHead className="cls-th-plan">
-                      Subscription Plan
+                  {columnVisibility.apiKey && (
+                    <TableHead className="cls-th-apikey">API Key</TableHead>
+                  )}
+                  {columnVisibility.environment && (
+                    <TableHead className="cls-th-environment">
+                      Environment
                     </TableHead>
                   )}
-                  {columnVisibility.users && (
-                    <TableHead className="cls-th-users">User Count</TableHead>
-                  )}
-                  {columnVisibility.usage && (
-                    <TableHead className="cls-th-usage">API Usage</TableHead>
-                  )}
-                  {columnVisibility.status && (
-                    <TableHead className="cls-th-status">Status</TableHead>
-                  )}
-                  {columnVisibility.lastActive && (
-                    <TableHead className="cls-th-active">Last Active</TableHead>
-                  )}
-                  {columnVisibility.billingStatus && (
-                    <TableHead className="cls-th-billing">
-                      Billing Status
-                    </TableHead>
-                  )}
-                  {columnVisibility.lastBillDate && (
-                    <TableHead className="cls-th-date">
-                      Last Bill Date
+                  {columnVisibility.createdAt && (
+                    <TableHead className="cls-th-created">
+                      Created Date
                     </TableHead>
                   )}
                   <TableHead className="cls-th-actions">Actions</TableHead>
@@ -481,70 +430,24 @@ export default function Organizations() {
                       <TableCell className="cls-td-name">
                         <div className="cls-org-info">
                           <span className="cls-org-name">{org.name}</span>
-                          <span className="cls-org-email">{org.email}</span>
+                          <span className="cls-org-id">ID: {org.id}</span>
                         </div>
                       </TableCell>
-                      {columnVisibility.plan && (
-                        <TableCell className="cls-td-plan">
-                          {org.subscriptionPlan}
+                      {columnVisibility.apiKey && (
+                        <TableCell className="cls-td-apikey">
+                          <code className="cls-api-key-code">
+                            {org.apiKey}
+                          </code>
                         </TableCell>
                       )}
-                      {columnVisibility.users && (
-                        <TableCell className="cls-td-users">
-                          {org.userCount}
+                      {columnVisibility.environment && (
+                        <TableCell className="cls-td-environment">
+                          <Badge variant="outline">{org.environment}</Badge>
                         </TableCell>
                       )}
-                      {columnVisibility.usage && (
-                        <TableCell className="cls-td-usage">
-                          <div className="cls-usage-container">
-                            <span className="cls-usage-text">
-                              {org.apiUsage.percentage}%{" "}
-                              {org.apiUsage.used.toLocaleString()} / used{" "}
-                              {org.apiUsage.total.toLocaleString()}
-                            </span>
-                            <div className="cls-usage-bar">
-                              <div
-                                className="cls-usage-fill"
-                                style={{ width: `${org.apiUsage.percentage}%` }}
-                              />
-                            </div>
-                          </div>
-                        </TableCell>
-                      )}
-                      {columnVisibility.status && (
-                        <TableCell className="cls-td-status">
-                          <Badge
-                            variant={
-                              org.status === "Active" ? "default" : "secondary"
-                            }
-                            className={
-                              org.status === "Active"
-                                ? "cls-badge-active"
-                                : "cls-badge-inactive"
-                            }
-                          >
-                            {org.status}
-                          </Badge>
-                        </TableCell>
-                      )}
-                      {columnVisibility.lastActive && (
-                        <TableCell className="cls-td-active">
-                          {org.lastActive}
-                        </TableCell>
-                      )}
-                      {columnVisibility.billingStatus && (
-                        <TableCell className="cls-td-billing">
-                          <Badge
-                            variant="secondary"
-                            className={`cls-badge-billing cls-badge-${org.billingStatus.toLowerCase()}`}
-                          >
-                            {org.billingStatus}
-                          </Badge>
-                        </TableCell>
-                      )}
-                      {columnVisibility.lastBillDate && (
-                        <TableCell className="cls-td-date">
-                          {org.lastBillDate}
+                      {columnVisibility.createdAt && (
+                        <TableCell className="cls-td-created">
+                          {org.createdAt}
                         </TableCell>
                       )}
                       <TableCell className="cls-td-actions">
@@ -583,13 +486,9 @@ export default function Organizations() {
                     <TableCell
                       colSpan={
                         2 +
-                        (columnVisibility.plan ? 1 : 0) +
-                        (columnVisibility.users ? 1 : 0) +
-                        (columnVisibility.usage ? 1 : 0) +
-                        (columnVisibility.status ? 1 : 0) +
-                        (columnVisibility.lastActive ? 1 : 0) +
-                        (columnVisibility.billingStatus ? 1 : 0) +
-                        (columnVisibility.lastBillDate ? 1 : 0) +
+                        (columnVisibility.apiKey ? 1 : 0) +
+                        (columnVisibility.environment ? 1 : 0) +
+                        (columnVisibility.createdAt ? 1 : 0) +
                         1
                       }
                       className="cls-no-results"
