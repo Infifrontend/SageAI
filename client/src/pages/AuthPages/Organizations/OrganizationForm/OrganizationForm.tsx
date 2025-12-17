@@ -187,7 +187,34 @@ export default function OrganizationForm({
   };
 
   const handleSubmit = () => {
-    console.log("Creating organization:", formData);
+    console.log("=== ORGANIZATION FORM SUBMISSION ===");
+    console.log("Complete Form Data:", formData);
+    console.log("\n--- Organization Details ---");
+    console.log("Organization Name:", formData.organizationName);
+    console.log("Owner Email:", formData.ownerEmail);
+    console.log("\n--- Subscription & API Limits ---");
+    console.log("Subscription Plan:", formData.subscriptionPlan);
+    console.log("Use Default Limit:", formData.useDefaultLimit);
+    console.log("Custom API Limit:", formData.customApiLimit || "N/A");
+    console.log("Effective API Limit:", getApiLimit());
+    console.log("\n--- Account Settings ---");
+    console.log("Send Invitation:", formData.sendInvitation);
+    console.log("Require Password Reset:", formData.requirePasswordReset);
+    console.log("Notes:", formData.notes || "No notes");
+    console.log("\n--- Activity & Status ---");
+    console.log("Number of Users:", formData.numberOfUsers);
+    console.log("Last Active:", formData.lastActive);
+    console.log("Status:", formData.status);
+    console.log("Billing Status:", formData.billingStatus);
+    console.log("\n--- Selected Plan Details ---");
+    if (selectedPlan) {
+      console.log("Plan Name:", selectedPlan.name);
+      console.log("Plan Price:", selectedPlan.price);
+      console.log("Plan API Calls:", selectedPlan.apiCalls);
+      console.log("Plan Overage:", selectedPlan.overage);
+    }
+    console.log("====================================\n");
+    
     if (onSubmit) {
       onSubmit(formData);
     }
