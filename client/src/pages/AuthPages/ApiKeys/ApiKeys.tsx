@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AppLayout from "@/components/layout/AppLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -66,6 +66,7 @@ import {
 } from "lucide-react";
 import { TablePagination } from "@/components/ui/table-pagination";
 import "./ApiKeys.scss";
+import { useLazyGetApiKeysListQuery } from "@/service/apiKeys/apiKeys";
 
 interface ApiKey {
   id: string;
@@ -294,6 +295,19 @@ export default function ApiKeys() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [keyToDelete, setKeyToDelete] = useState<string | null>(null);
 
+    const defaultFilterData = {
+      page: 1,
+      page_size: 6,
+    };
+  
+    // The following line is used to set the filter option for the group list
+    const [filterData, setFilterData] = useState<any>(defaultFilterData);
+
+    const [getApiKeysList, getApiKeysListStatus] = useLazyGetApiKeysListQuery();
+
+    const [apiKeysData, setApiKeysData] = useState<any[]>([]);
+    const [apiKeysCount, setApiKeysCount] = useState<number>(0);
+
   // Available endpoint permissions for each API collection
   const apiCollectionEndpoints: Record<string, any[]> = {
     "GRM-API": [
@@ -514,6 +528,19 @@ export default function ApiKeys() {
     setApiCollections([]);
   };
 
+
+   useEffect(() => {
+      getApiKeysList(filterData);
+    }, [filterData]);
+  
+    useEffect(() => {
+      if (getApiKeysListStatus.isSuccess) {
+        // Handle successful data fetching
+        setApiKeysData((getApiKeysListStatus as any)?.data?.results || []);
+        setApiKeysCount((getApiKeysListStatus as any)?.data?.count)
+      }
+    }, [getApiKeysListStatus]);
+
   return (
     <AppLayout
       title="API Keys"
@@ -703,10 +730,10 @@ export default function ApiKeys() {
                       <TableCell>
                         <div className="cls-api-key-cell">
                           <code className="cls-api-key-code">
-                            {apiKey.apiKey}
+                            {apiKey.key}
                           </code>
                           <button
-                            onClick={() => handleCopyKey(apiKey.apiKey)}
+                            onClick={() => handleCopyKey(apiKey.key)}
                             className="cls-copy-button"
                             title="Copy API Key"
                           >
@@ -726,9 +753,9 @@ export default function ApiKeys() {
                       {columnVisibility.status && (
                         <TableCell>
                           <Badge
-                            className={`cls-status-badge cls-status-${apiKey.status}`}
+                            className={`cls-status-badge cls-status-${apiKey.is_active === true ? "active" : "inactive"}`}
                           >
-                            {apiKey.status}
+                            {apiKey.is_active === true ? "Active" : "Inactive"}
                           </Badge>
                         </TableCell>
                       )}
@@ -760,7 +787,7 @@ export default function ApiKeys() {
                         <TableCell>
                           <div className="cls-last-used-cell">
                             <Clock size={14} className="cls-clock-icon" />
-                            <span>{apiKey.lastUsed}</span>
+                            <span>{apiKey.created_at}</span>
                           </div>
                         </TableCell>
                       )}
@@ -777,7 +804,7 @@ export default function ApiKeys() {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem
-                              onClick={() => handleCopyKey(apiKey.apiKey)}
+                              onClick={() => handleCopyKey(apiKey.key)}
                               className="cls-menu-item"
                             >
                               <Copy size={16} />
@@ -810,12 +837,12 @@ export default function ApiKeys() {
 
         {/* Pagination */}
         <TablePagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          totalItems={filteredKeys.length}
-          itemsPerPage={itemsPerPage}
-          onPageChange={setCurrentPage}
-          onItemsPerPageChange={setItemsPerPage}
+          currentPage={filterData?.page}
+          totalPages={Math.ceil(apiKeysCount / filterData?.page_size||6)}
+          totalItems={apiKeysCount}
+          itemsPerPage={filterData?.page_size}
+          onPageChange={(page: any) => { setFilterData({ ...filterData, page }); }}
+          onItemsPerPageChange={(page_size: any) => { setFilterData({ ...filterData, page_size }); }}
           startIndex={startIndex}
           endIndex={endIndex}
         />
